@@ -50,6 +50,11 @@ public class XmlDataSetWriter implements IDataSetConsumer
     private static final String NULL = "null";
     private static final String NONE = "none";
 
+    static char[] CDATA_DETECTION_CHARS = new char[] {
+        0x20, '\n', '\r', '\t',     // whitespace
+        '&', '<',                   // forbiden char
+    };
+
     private XmlWriter _xmlWriter;
     private ITableMetaData _activeMetaData;
 
@@ -70,6 +75,27 @@ public class XmlDataSetWriter implements IDataSetConsumer
         DataSetProducerAdapter provider = new DataSetProducerAdapter(dataSet);
         provider.setConsumer(this);
         provider.produce();
+    }
+
+    boolean needsCData(String text)
+    {
+        if (text == null)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < text.length(); i++)
+        {
+            char c = text.charAt(i);
+            for (int j = 0; j < CDATA_DETECTION_CHARS.length; j++)
+            {
+                if (CDATA_DETECTION_CHARS[j] == c)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -168,7 +194,7 @@ public class XmlDataSetWriter implements IDataSetConsumer
                         String stringValue = DataType.asString(value);
 
                         _xmlWriter.writeElement(VALUE);
-                        if (stringValue.startsWith(" ") || stringValue.endsWith(" "))
+                        if (needsCData(stringValue))
                         {
                             _xmlWriter.writeCData(stringValue);
                         }
