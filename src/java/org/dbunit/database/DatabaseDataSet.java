@@ -134,7 +134,7 @@ public class DatabaseDataSet extends AbstractDataSet
                         throw new AmbiguousTableNameException(tableName);
                     }
                     nameList.add(tableName);
-                    _tableMap.put(tableName, null);
+                    _tableMap.put(tableName.toUpperCase(), null);
                 }
 
                 _nameList = nameList;
@@ -163,9 +163,8 @@ public class DatabaseDataSet extends AbstractDataSet
     {
         initialize();
 
-        String upperTableName = tableName.toUpperCase();
-
         // Verify if table exist in the database
+        String upperTableName = tableName.toUpperCase();
         if (!_tableMap.containsKey(upperTableName))
         {
             throw new NoSuchTableException(tableName);
@@ -197,6 +196,8 @@ public class DatabaseDataSet extends AbstractDataSet
 
     public ITable getTable(String tableName) throws DataSetException
     {
+        initialize();
+
         try
         {
             ITableMetaData metaData = getTableMetaData(tableName);
