@@ -52,10 +52,10 @@
         <li><a href="#generatedtd">How to generate a DTD representing your database
           schema</a></li>
         <li><a href="#assertdata">How to verify that your database contains expected
-          data</a> <font color="#FF0000">(updated)</font></li>
+          data</a> <font color="#FF0000"></font></li>
         <li><a href="#multipleschema">How to export data from or import data to
           multiple database schemas</a></li>
-        <li><a href="#canoo">How to Use DbUnit with Canoo WebTest </a> <font color="#FF0000">(new)</font></li>
+        <li><a href="#canoo">How to Use DbUnit with Canoo WebTest </a> <font color="#FF0000"></font></li>
       </ul>
       <hr>
       <a name="createtest">
@@ -260,7 +260,7 @@ public class DatabaseExportSample
         ITable expectedTable = expectedDataSet.getTable(&quot;TABLE_NAME&quot;);
 
         // Assert actual database table match expected table
-        Assertion.assertEquals(expectedTable, databaseTable);
+        Assertion.assertEquals(expectedTable, actualTable);
     }
 }</pre>
       <h3>Verifying the result of a database query </h3>
