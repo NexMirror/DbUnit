@@ -76,7 +76,7 @@ public class RefreshOperation extends DatabaseOperation
         {
             ITable table = iterator.getTable();
 
-            // Do not produce empty table
+            // Do not process empty table
             if (isEmpty(table))
             {
                 continue;

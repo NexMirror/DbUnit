@@ -206,7 +206,7 @@ public class IncludeTableFilter extends AbstractTableFilter implements ITableFil
             return true;
         }
 
-        // produce pattern between stars. padIdxStart and patIdxEnd point
+        // process pattern between stars. padIdxStart and patIdxEnd point
         // always to a '*'.
         while (patIdxStart != patIdxEnd && strIdxStart <= strIdxEnd)
         {
