@@ -43,6 +43,7 @@ public class AllTests
         suite.addTest(new TestSuite(ColumnTest.class));
         suite.addTest(new TestSuite(CompositeDataSetTest.class));
         suite.addTest(new TestSuite(CompositeTableTest.class));
+        suite.addTest(new TestSuite(DataSetProducerAdapterTest.class));
         suite.addTest(new TestSuite(DataSetUtilsTest.class));
         suite.addTest(new TestSuite(DefaultDataSetTest.class));
         suite.addTest(new TestSuite(DefaultReverseTableIteratorTest.class));

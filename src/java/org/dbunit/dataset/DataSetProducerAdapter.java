@@ -35,8 +35,10 @@ import org.dbunit.dataset.IDataSet;
  */
 public class DataSetProducerAdapter implements IDataSetProducer
 {
+    private static final IDataSetConsumer EMPTY_CONSUMER = new DefaultConsumer();
+
     private final ITableIterator _iterator;
-    private IDataSetConsumer _consumer;
+    private IDataSetConsumer _consumer = EMPTY_CONSUMER;
 
     public DataSetProducerAdapter(ITableIterator iterator)
     {
