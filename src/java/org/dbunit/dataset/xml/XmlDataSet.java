@@ -44,6 +44,11 @@ import electric.util.encoding.Encodings;
 public class XmlDataSet extends AbstractXmlDataSet
 {
     private static final String DEFAULT_XML_ENCODING = "UTF-8";
+    static char[] CDATA_DETECTION_CHARS = new char[] {
+        0x20, '\n', '\r', '\t',     // whitespace
+        '&', '<',                   // forbiden char
+    };
+
     private final ITable[] _tables;
 
     /**
@@ -199,16 +204,16 @@ public class XmlDataSet extends AbstractXmlDataSet
                     {
                         try
                         {
-                            String string = DataType.asString(value);
+                            String stringValue = DataType.asString(value);
 
                             Text text = null;
-                            if (string.startsWith(" ") || string.endsWith(""))
+                            if (needsCData(stringValue))
                             {
-                                text = new CData(string);
+                                text = new CData(stringValue);
                             }
                             else
                             {
-                                text = new Text(string);
+                                text = new Text(stringValue);
                             }
 
                             rowElem.addElement("value").setText(text);
@@ -225,6 +230,27 @@ public class XmlDataSet extends AbstractXmlDataSet
             }
         }
         return document;
+    }
+
+    static boolean needsCData(String text)
+    {
+        if (text == null)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < text.length(); i++)
+        {
+            char c = text.charAt(i);
+            for (int j = 0; j < CDATA_DETECTION_CHARS.length; j++)
+            {
+                if (CDATA_DETECTION_CHARS[j] == c)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     ////////////////////////////////////////////////////////////////////////////
