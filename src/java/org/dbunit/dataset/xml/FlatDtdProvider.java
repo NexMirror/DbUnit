@@ -26,8 +26,8 @@ import org.dbunit.dataset.DefaultTableMetaData;
 import org.dbunit.dataset.IDataSetConsumer;
 import org.dbunit.dataset.IDataSetProvider;
 import org.dbunit.dataset.datatype.DataType;
+import org.dbunit.util.xml.BaseHandler;
 
-import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
@@ -52,8 +52,8 @@ import java.util.StringTokenizer;
  * @since Apr 27, 2003
  * @version $Revision$
  */
-public class FlatDtdProvider
-        implements IDataSetProvider, EntityResolver, DeclHandler, LexicalHandler
+public class FlatDtdProvider extends BaseHandler
+        implements IDataSetProvider, DeclHandler, LexicalHandler
 {
     private static final String XML_CONTENT =
             "<?xml version=\"1.0\"?>\n<!DOCTYPE dataset SYSTEM \"urn:/dummy.dtd\">\n<dataset/>";
@@ -65,12 +65,16 @@ public class FlatDtdProvider
     private static final String REQUIRED = "#REQUIRED";
     private static final String IMPLIED = "#IMPLIED";
 
-    private final InputSource _inputSource;
+    private InputSource _inputSource;
     private IDataSetConsumer _consumer;
 
     private String _rootName;
     private String _rootModel;
     private final Map _columnListMap = new HashMap();
+
+    public FlatDtdProvider()
+    {
+    }
 
     public FlatDtdProvider(InputSource inputSource)
     {
@@ -128,7 +132,7 @@ public class FlatDtdProvider
     // EntityResolver interface
 
     public InputSource resolveEntity(String publicId, String systemId)
-            throws SAXException, IOException
+            throws SAXException
     {
         return _inputSource;
     }
@@ -163,17 +167,6 @@ public class FlatDtdProvider
         columnList.add(column);
     }
 
-    public void internalEntityDecl(String name, String value) throws SAXException
-    {
-        // Not used!
-    }
-
-    public void externalEntityDecl(String name, String publicId,
-            String systemId) throws SAXException
-    {
-        // Not used!
-    }
-
     ////////////////////////////////////////////////////////////////////////////
     // LexicalHandler interface
 
@@ -195,28 +188,31 @@ public class FlatDtdProvider
     {
         try
         {
-            // Remove enclosing model parenthesis
-            String rootModel = _rootModel.substring(1, _rootModel.length() - 1);
-
-            // Parse the root element model to determine the table sequence.
-            // This implementation does not support choices yet and will never
-            // support mixed model.
-            StringTokenizer tokenizer = new StringTokenizer(rootModel, ",");
-            while (tokenizer.hasMoreTokens())
+            if (_rootModel != null)
             {
-                String tableName = tokenizer.nextToken();
+                // Remove enclosing model parenthesis
+                String rootModel = _rootModel.substring(1, _rootModel.length() - 1);
 
-                // Prune ending occurrence operator
-                if (tableName.endsWith("*") || tableName.endsWith("?") || tableName.endsWith("+"))
+                // Parse the root element model to determine the table sequence.
+                // This implementation does not support choices yet and will never
+                // support mixed model.
+                StringTokenizer tokenizer = new StringTokenizer(rootModel, ",");
+                while (tokenizer.hasMoreTokens())
                 {
-                    tableName = tableName.substring(0, tableName.length() - 1);
+                    String tableName = tokenizer.nextToken();
+
+                    // Prune ending occurrence operator
+                    if (tableName.endsWith("*") || tableName.endsWith("?") || tableName.endsWith("+"))
+                    {
+                        tableName = tableName.substring(0, tableName.length() - 1);
+                    }
+
+                    List columnList = (List)_columnListMap.get(tableName);
+                    Column[] columns = (Column[])columnList.toArray(new Column[0]);
+
+                    _consumer.startTable(new DefaultTableMetaData(tableName, columns));
+                    _consumer.endTable();
                 }
-
-                List columnList = (List)_columnListMap.get(tableName);
-                Column[] columns = (Column[])columnList.toArray(new Column[0]);
-
-                _consumer.startTable(new DefaultTableMetaData(tableName, columns));
-                _consumer.endTable();
             }
 
             _consumer.endDataSet();
@@ -225,30 +221,5 @@ public class FlatDtdProvider
         {
             throw new SAXException(e);
         }
-    }
-
-    public void startEntity(String name) throws SAXException
-    {
-        // Not used!
-    }
-
-    public void endEntity(String name) throws SAXException
-    {
-        // Not used!
-    }
-
-    public void startCDATA() throws SAXException
-    {
-        // Not used!
-    }
-
-    public void endCDATA() throws SAXException
-    {
-        // Not used!
-    }
-
-    public void comment(char ch[], int start, int length) throws SAXException
-    {
-        // Not used!
     }
 }

@@ -32,9 +32,13 @@ public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer
 {
     private ITable[] _tables;
 
-    private List _tableList = new ArrayList();
+    private List _tableList;
     private ITableMetaData _activeMetaData;
     private List _activeRowList;
+
+    public CachedDataSet()
+    {
+    }
 
     public CachedDataSet(IDataSet dataSet) throws DataSetException
     {
@@ -67,6 +71,8 @@ public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer
 
     public void startDataSet() throws DataSetException
     {
+        _tableList = new ArrayList();
+        _tables = null;
     }
 
     public void endDataSet() throws DataSetException
