@@ -23,6 +23,7 @@
 package org.dbunit.database;
 
 import org.dbunit.dataset.*;
+import org.dbunit.dataset.datatype.DataType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -51,13 +52,31 @@ public class CachedResultSetTable extends DefaultTable
             Object[] row = new Object[columns.length];
             for (int i = 0; i < columns.length; i++)
             {
-                Object value = resultSet.getObject(columns[i].getColumnName());
+                Column column = columns[i];
+                int columnIndex = getColumnIndex(column.getColumnName(), metaData) + 1;
+                DataType columnDataType = column.getDataType();
+                Object value = columnDataType.getSqlValue(columnIndex, resultSet);
                 row[i] = value;
             }
 
             list.add(row);
         }
         return list;
+    }
+
+    private static int getColumnIndex(String columnName, ITableMetaData metaData) throws DataSetException
+    {
+        Column[] columns = metaData.getColumns();
+        for (int i = 0; i < columns.length; i++)
+        {
+            Column column = columns[i];
+            if (column.getColumnName().equalsIgnoreCase(columnName))
+            {
+                return i;
+            }
+        }
+
+        throw new NoSuchColumnException(metaData.getTableName() + "." + columnName);
     }
 
 }

@@ -21,7 +21,10 @@
 
 package org.dbunit.dataset.datatype;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Types;
+import java.sql.SQLException;
 
 
 /**
@@ -103,6 +106,18 @@ public abstract class DataType
      * number.
      */
     public abstract boolean isNumber();
+
+    /**
+     * Returns the specified column value from the specified resultset object.
+     */
+    public abstract Object getSqlValue(int column, ResultSet resultSet)
+            throws SQLException, TypeCastException;
+
+    /**
+     * Set the specified value to the specified prepared statement object.
+     */
+    public abstract void setSqlValue(Object value, int column,
+            PreparedStatement statement) throws SQLException, TypeCastException;
 
     /**
      * Typecast the specified value to string.

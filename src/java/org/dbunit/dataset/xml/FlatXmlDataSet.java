@@ -22,9 +22,22 @@
 
 package org.dbunit.dataset.xml;
 
-import org.dbunit.dataset.*;
+import org.dbunit.dataset.Column;
+import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ITable;
+import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.TypeCastException;
+
+import electric.util.encoding.Encodings;
+import electric.util.io.FastBufferedReader;
+import electric.xml.DocType;
+import electric.xml.Document;
+import electric.xml.Element;
+import electric.xml.Elements;
+import electric.xml.ParseException;
+import electric.xml.XMLDecl;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -32,16 +45,14 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import electric.xml.*;
-
 /**
  * @author Manuel Laflamme
  * @version $Revision$
  */
-public class FlatXmlDataSet extends AbstractDataSet
+public class FlatXmlDataSet extends AbstractXmlDataSet
 {
     private static final String SYSTEM = "SYSTEM '";
-    private static final String DEFAULT_ENCODING = "UTF-8";
+    private static final String DEFAULT_XML_ENCODING = "UTF-8";
 
     private final ITable[] _tables;
 
@@ -66,24 +77,43 @@ public class FlatXmlDataSet extends AbstractDataSet
     public FlatXmlDataSet(File xmlFile, boolean dtdMetadata)
             throws IOException, DataSetException
     {
+        this(xmlFile.toURL(), dtdMetadata);
+    }
+
+    /**
+     * Creates an FlatXmlDataSet object with the specifed xml URL.
+     * Relative DOCTYPE uri are resolved from the xml file path.
+     *
+     * @param xmlURL the xml URL
+     */
+    public FlatXmlDataSet(URL xmlURL) throws IOException, DataSetException
+    {
+        this(xmlURL, true);
+    }
+
+    /**
+     * Creates an FlatXmlDataSet object with the specifed xml URL.
+     * Relative DOCTYPE uri are resolved from the xml file path.
+     *
+     * @param xmlURL the xml URL
+     * @param dtdMetadata if <code>false</code> do not use DTD as metadata
+     */
+    public FlatXmlDataSet(URL xmlURL, boolean dtdMetadata)
+            throws IOException, DataSetException
+    {
         try
         {
-            Document document = new Document(new BufferedReader(new FileReader(xmlFile)));
-
+            Document document = new Document(new BufferedReader(new InputStreamReader(xmlURL.openStream())));
             IDataSet metaDataSet = null;
 
             // Create metadata from dtd if defined
             String dtdUri = getDocTypeUri(document);
             if (dtdMetadata && dtdUri != null)
             {
-                File dtdFile = new File(dtdUri);
-                if (!dtdFile.isAbsolute())
-                {
-                    dtdFile = new File(xmlFile.getParent(), dtdUri);
-                }
-                metaDataSet = new FlatDtdDataSet(new FileReader(dtdFile));
+                URL dtdFileURL = new URL(xmlURL, dtdUri);
+//                System.out.println("The DTD URL is : " + dtdFileURL);
+                metaDataSet = new FlatDtdDataSet(new InputStreamReader(dtdFileURL.openStream()));
             }
-
             _tables = getTables(document, metaDataSet);
         }
         catch (ParseException e)
@@ -115,7 +145,7 @@ public class FlatXmlDataSet extends AbstractDataSet
     {
         try
         {
-            Document document = new Document(new BufferedReader(xmlReader));
+            Document document = new Document(new FastBufferedReader(xmlReader));
 
             // Create metadata from dtd if defined
             IDataSet metaDataSet = null;
@@ -165,7 +195,8 @@ public class FlatXmlDataSet extends AbstractDataSet
     {
         try
         {
-            _tables = getTables(new Document(new BufferedReader(xmlReader)), metaDataSet);
+            xmlReader = new FastBufferedReader(xmlReader);
+            _tables = getTables(new Document(xmlReader), metaDataSet);
         }
         catch (ParseException e)
         {
@@ -178,7 +209,6 @@ public class FlatXmlDataSet extends AbstractDataSet
      * Relative DOCTYPE uri are resolved from the current working dicrectory.
      *
      * @param xmlStream the xml input stream
-     * @deprecated Use Reader overload instead
      */
     public FlatXmlDataSet(InputStream xmlStream) throws IOException, DataSetException
     {
@@ -191,13 +221,12 @@ public class FlatXmlDataSet extends AbstractDataSet
      *
      * @param xmlStream the xml input stream
      * @param dtdMetadata if <code>false</code> do not use DTD as metadata
-     * @deprecated Use Reader overload instead
      *
      */
     public FlatXmlDataSet(InputStream xmlStream, boolean dtdMetadata)
             throws IOException, DataSetException
     {
-        this(new InputStreamReader(xmlStream), dtdMetadata);
+        this(getReader(xmlStream), dtdMetadata);
     }
 
     /**
@@ -206,7 +235,6 @@ public class FlatXmlDataSet extends AbstractDataSet
      *
      * @param xmlStream the xml input stream
      * @param dtdStream the dtd input stream
-     * @deprecated Use Reader overload instead
      */
     public FlatXmlDataSet(InputStream xmlStream, InputStream dtdStream)
             throws IOException, DataSetException
@@ -219,14 +247,14 @@ public class FlatXmlDataSet extends AbstractDataSet
      *
      * @param xmlStream the xml input stream
      * @param metaDataSet the dataset used as metadata source.
-     * @deprecated Use Reader overload instead
      */
     public FlatXmlDataSet(InputStream xmlStream, IDataSet metaDataSet)
             throws IOException, DataSetException
     {
         try
         {
-            _tables = getTables(new Document(xmlStream), metaDataSet);
+            Reader xmlReader = new FastBufferedReader(getReader(xmlStream));
+            _tables = getTables(new Document(xmlReader), metaDataSet);
         }
         catch (ParseException e)
         {
@@ -240,11 +268,13 @@ public class FlatXmlDataSet extends AbstractDataSet
     public static void write(IDataSet dataSet, OutputStream out)
             throws IOException, DataSetException
     {
-        Document document = buildDocument(dataSet, DEFAULT_ENCODING);
+        Writer writer = new OutputStreamWriter(out,
+                Encodings.getJavaEncoding(DEFAULT_XML_ENCODING));
+        Document document = buildDocument(dataSet, DEFAULT_XML_ENCODING);
 
         // write xml document
-        document.write(out);
-        out.flush();
+        document.write(writer);
+        writer.flush();
     }
 
     /**
@@ -253,7 +283,13 @@ public class FlatXmlDataSet extends AbstractDataSet
     public static void write(IDataSet dataSet, Writer out)
             throws IOException, DataSetException
     {
-        Document document = buildDocument(dataSet, DEFAULT_ENCODING);
+        String xmlEncoding = null;
+        if (out instanceof OutputStreamWriter)
+        {
+            String javaEncoding = ((OutputStreamWriter)out).getEncoding();
+            xmlEncoding = Encodings.getXMLEncoding(javaEncoding);
+        }
+        Document document = buildDocument(dataSet, xmlEncoding);
 
         // write xml document
         document.write(out);
@@ -289,7 +325,10 @@ public class FlatXmlDataSet extends AbstractDataSet
         ITable[] tables = dataSet.getTables();
 
         Document document = new Document();
-        document.addChild(new XMLDecl("1.0", encoding));
+        if (encoding != null)
+        {
+            document.addChild(new XMLDecl("1.0", encoding));
+        }
 
         // dataset
         Element rootElem = document.addElement("dataset");

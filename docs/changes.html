@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link href="stylesheet.css" rel="stylesheet" type="text/css">
 <!-- #BeginEditable "doctitle" --> 
-<title>The Dbunit Framework - News &amp; Changes History</title>
+<title>The Dbunit Framework - History of Changes</title>
 <!-- #EndEditable --> 
 </head>
 <body>
@@ -42,8 +42,60 @@
       <div align="center"><a href="http://www.silphid.com/"><img alt="Silphid Creations" 
       src="images/silphid.gif" border=0></a></div>
     </td>
-    <td class="body" valign="top"> <!-- #BeginEditable "body" --> <a name="1.5"> 
-      <h2>Changes in version 1.5 from 1.4</h2>
+    <td class="body" valign="top"> <!-- #BeginEditable "body" --> 
+      <h2>History of Changes</h2>
+      <a name="1.5.5"> 
+      <h3>Version 1.5.5 (July 16, 2003)</h3>
+      </a> 
+      <ul>
+        <li>Changes: </li>
+        <ul>
+          <li>DatabaseDataSet improvements: faster access to metadata cache and keep original database table ordering.</li>
+          <li>Better handling of the various data types in general. <b>WARNING!</b> New abstract methods have been added to the DataType class. This change may break your environment if you have implemented your own data types.</li>
+          <li>Do not enable batched statement by default anymore. Many JDBC drivers have problems with this feature.</li>
+          <li>New FlatXmlDataSet constructors that take an URL.</li>
+        </ul>
+        <li>Multiple bugfixes:</li>
+        <ul>
+          <li>Fixed table name issue with case sensitive database.</li>
+          <li>
+          <a href="http://sourceforge.net/tracker/index.php?func=detail&aid=615636&group_id=47439&atid=449491">615636</a> & <a href="http://sourceforge.net/tracker/index.php?func=detail&aid=735095&group_id=47439&atid=449491">735095</a> 
+            - Incorrect XML encoding. Better handling of the XML encoding while writing and reading XML datasets. InputStream and OutputStream methods in XML dataset implementations are no more deprecated.
+          </li>
+          <li>
+          <a href="http://sourceforge.net/tracker/index.php?func=detail&aid=736439&group_id=47439&atid=449491">736439</a> 
+            - Problems with InsertOperation and triggers.
+          </li>
+          <li>
+          <a href="http://sourceforge.net/tracker/index.php?func=detail&aid=736967&group_id=47439&atid=449491">736967</a> 
+            - Wrong scale for numeric value with the jConnect driver for Sybase ASE.
+          </li>
+        </ul>
+      </ul>
+      <a name="1.5.1"> 
+      <h3>Version 1.5.1 (Apr 4, 2003)</h3>
+      </a> 
+      <ul>
+        <li>Multiple bugfixes:</li>
+        <ul>
+          <li>Fixed DELETE operation that was not deleting tables in reverse order 
+            as expected.</li>
+          <li><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=712329&group_id=47439&atid=449491">712329</a> 
+            - setObject fails on BEA JDriver for MS-SQL.</li>
+<!-- 
+          <li> Fixed NullPointerException with some version of the Oracle driver 
+            when batched statement is enabled. </li>
+--> 
+          <li> Fixed DbUnitTask &quot;supportBatchStatement&quot; flag. </li>
+        </ul>
+        <li>Optimizations: </li>
+        <ul>
+          <li>DbUnitTask DTD export. </li>
+          <li>REFRESH operation.</li>
+        </ul>
+      </ul>
+      <a name="1.5"> 
+      <h3>Version 1.5 (Mar 1, 2003)</h3>
       </a> 
       <ul>
         <li>New features:</li>
@@ -64,15 +116,13 @@
           <li>New <a class=code>SortedTable</a> and <a class="code">SortedDataSet</a> 
             decorator classes.</li>
         </ul>
-        <li>Ant Task:</li>
         <ul>
           <li><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=645691&group_id=47439&atid=449491">645691</a> 
             - Added the <a class=code>&lt;classpath&gt;</a> nested element in 
-            <a class=code> &lt;dbunit&gt;</a> ant task; used to load the JDBC 
-            classes.</li>
-          <li>Added <a class=code>&lt;query&gt;</a> nested element in <a class=code>&lt;export&gt;</a>. 
-            Allows exporting the result of a SELECT as a table of a dataset. See 
-            <a href="anttask.html">ant task documentation</a>.</li>
+            <a class=code> DbUnitTask</a> ant task; used to load the JDBC classes.</li>
+          <li>Added <a class=code>&lt;query&gt;</a> nested element in <a class=code>DbUnitTask 
+            &lt;export&gt;</a>. Allows exporting the result of a SELECT as a table 
+            of a dataset. See <a href="anttask.html">ant task documentation</a>.</li>
         </ul>
         <li>New <a href="http://webtest.canoo.com/">Canoo Webtest</a> integration 
           <a href="howto.html#canoo">guide</a>.</li>
@@ -81,7 +131,7 @@
         <li>Multiple bugfixes.</li>
       </ul>
       <a name="1.4"> 
-      <h2>Changes in version 1.4 from 1.3</h2>
+      <h3>Version 1.4 (Jul 17, 2002)</h3>
       </a> 
       <ul>
         <li>Moved the Base64 class to the <a class="code">org.dbunit.util</a> 
@@ -101,8 +151,8 @@
             Rows are sorted by primary keys.</li>
           <li><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=554249&group_id=47439&atid=449494">554249</a> 
             - None column values.</li>
-          <li><strong><em>Ant Task</em></strong> contributed by Timothy Ruppert 
-            and Ben Cox.</li>
+          <li><strong><em>DbUnitTask</em></strong> for Ant contributed by Timothy 
+            Ruppert and Ben Cox.</li>
           <li>Support for BLOB and CLOB data types.</li>
         </ul>
         <li>Multiple bugfixes:</li>
@@ -121,7 +171,7 @@
         </ul>
       </ul>
       <a name="1.3"> 
-      <h2>Changes in version 1.3 from 1.2.4</h2>
+      <h3>Version 1.3 (Apr 4, 2002)</h3>
       </a> 
       <ul>
         <li>Added support for binary data types: BINARY, VARBINARY and LONGVARBINARY. 
@@ -136,11 +186,11 @@
           <li><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=534757&group_id=47439&atid=449491">533537</a> 
             - Problem with single quotes.</li>
           <li><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=534810&group_id=47439&atid=449491">534810</a> 
-            - Problem when primary key included all columns</li>
+            - Problem when primary key include all columns</li>
         </ul>
       </ul>
       <a name="1.2.4"> 
-      <h2>Changes in version 1.2.4 from 1.2</h2>
+      <h3>Version 1.2.4 (Mar 19, 2003)</h3>
       </a> 
       <ul>
         <li>Added support for multiple schemas per connection. See <a href="howto.html#multipleschema">How 
@@ -154,7 +204,7 @@
         </li>
       </ul>
       <a name="1.2"> 
-      <h2>Changes in version 1.2 from 1.1</h2>
+      <h3>Version 1.2 (Mar 15, 2002)</h3>
       </a> 
       <ul>
         <li>Added the flat xml dataset format. See the <a href="components.html#FlatXmlDataSet">FlatXmlDataSet</a> 
@@ -165,7 +215,7 @@
         <li>Updated Electric XML to version 3.2.</li>
       </ul>
       <a name="1.1"> 
-      <h2>Changes in version 1.1 from 1.0</h2>
+      <h3>Version 1.1 (Mar 10, 2002)</h3>
       </a> 
       <ul>
         <li>Changes that could break older environments: 
@@ -190,6 +240,12 @@
           <li>Fixed bug <a href="http://sourceforge.net/tracker/index.php?func=detail&aid=526235&group_id=47439&atid=449491">526235</a> 
             - Cannot export tables (jdbc-odbc with MS-SQL 7).</li>
         </ul>
+      </ul>
+      <a name="1.0"> 
+      <h3>Version 1.0 (Feb 27, 2002)</h3>
+      </a> 
+      <ul>
+        <li>Initial public release.</li>
       </ul>
       <!-- #EndEditable --> 
       <hr>

@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import electric.xml.*;
+import electric.util.io.FastBufferedReader;
+import electric.util.encoding.Encodings;
 
 /**
  * Provides persistence support to read from and write to the dbunit xml format.
@@ -39,9 +41,14 @@ import electric.xml.*;
  * @author Manuel Laflamme
  * @version $Revision$
  */
-public class XmlDataSet extends AbstractDataSet
+public class XmlDataSet extends AbstractXmlDataSet
 {
-    private static final String DEFAULT_ENCODING = "UTF-8";
+    private static final String DEFAULT_XML_ENCODING = "UTF-8";
+    static char[] CDATA_DETECTION_CHARS = new char[] {
+        0x20, '\n', '\r', '\t',     // whitespace
+        '&', '<',                   // forbiden char
+    };
+
     private final ITable[] _tables;
 
     /**
@@ -51,7 +58,7 @@ public class XmlDataSet extends AbstractDataSet
     {
         try
         {
-            Document document = new Document(new BufferedReader(in));
+            Document document = new Document(new FastBufferedReader(in));
             _tables = getTables(document);
         }
         catch (ParseException e)
@@ -62,28 +69,19 @@ public class XmlDataSet extends AbstractDataSet
 
     /**
      * Creates an XmlDataSet with the specified xml input stream.
-     *
-     * @deprecated Use Reader overload instead
      */
     public XmlDataSet(InputStream in) throws DataSetException
     {
         try
         {
-            Document document = new Document(in);
+            Document document = new Document(new FastBufferedReader(getReader(in)));
             _tables = getTables(document);
-//            Elements tableElems = document.getElement("dataset").getElements("table");
-//
-//            List tableList = new ArrayList();
-//            while (tableElems.hasMoreElements())
-//            {
-//                Element tableElem = (Element)tableElems.nextElement();
-//                ITable table = new XmlTable(tableElem);
-//                tableList.add(table);
-//            }
-//
-//            _tables = (ITable[])tableList.toArray(new ITable[0]);
         }
         catch (ParseException e)
+        {
+            throw new DataSetException(e);
+        }
+        catch (IOException e)
         {
             throw new DataSetException(e);
         }
@@ -110,11 +108,13 @@ public class XmlDataSet extends AbstractDataSet
     public static void write(IDataSet dataSet, OutputStream out)
             throws IOException, DataSetException
     {
-        Document document = buildDocument(dataSet, DEFAULT_ENCODING);
+        Writer writer = new OutputStreamWriter(out,
+                Encodings.getJavaEncoding(DEFAULT_XML_ENCODING));
+        Document document = buildDocument(dataSet, DEFAULT_XML_ENCODING);
 
         // write xml document
-        document.write(out);
-        out.flush();
+        document.write(writer);
+        writer.flush();
     }
 
     /**
@@ -123,7 +123,13 @@ public class XmlDataSet extends AbstractDataSet
     public static void write(IDataSet dataSet, Writer out)
             throws IOException, DataSetException
     {
-        Document document = buildDocument(dataSet, DEFAULT_ENCODING);
+        String xmlEncoding = null;
+        if (out instanceof OutputStreamWriter)
+        {
+            String javaEncoding = ((OutputStreamWriter)out).getEncoding();
+            xmlEncoding = Encodings.getXMLEncoding(javaEncoding);
+        }
+        Document document = buildDocument(dataSet, xmlEncoding);
 
         // write xml document
         document.write(out);
@@ -149,7 +155,10 @@ public class XmlDataSet extends AbstractDataSet
         ITable[] tables = dataSet.getTables();
 
         Document document = new Document();
-        document.addChild(new XMLDecl("1.0", encoding));
+        if (encoding != null)
+        {
+            document.addChild(new XMLDecl("1.0", encoding));
+        }
 
         // dataset
         Element rootElem = document.addElement("dataset");
@@ -195,16 +204,16 @@ public class XmlDataSet extends AbstractDataSet
                     {
                         try
                         {
-                            String string = DataType.asString(value);
+                            String stringValue = DataType.asString(value);
 
                             Text text = null;
-                            if (string.startsWith(" ") || string.endsWith(""))
+                            if (needsCData(stringValue))
                             {
-                                text = new CData(string);
+                                text = new CData(stringValue);
                             }
                             else
                             {
-                                text = new Text(string);
+                                text = new Text(stringValue);
                             }
 
                             rowElem.addElement("value").setText(text);
@@ -221,6 +230,27 @@ public class XmlDataSet extends AbstractDataSet
             }
         }
         return document;
+    }
+
+    static boolean needsCData(String text)
+    {
+        if (text == null)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < text.length(); i++)
+        {
+            char c = text.charAt(i);
+            for (int j = 0; j < CDATA_DETECTION_CHARS.length; j++)
+            {
+                if (CDATA_DETECTION_CHARS[j] == c)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     ////////////////////////////////////////////////////////////////////////////

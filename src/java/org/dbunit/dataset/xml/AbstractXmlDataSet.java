@@ -1,5 +1,4 @@
 /*
- * CompoundStatement.java   Feb 20, 2002
  *
  * The DbUnit Database Testing Framework
  * Copyright (C)2002, Manuel Laflamme
@@ -19,54 +18,37 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+package org.dbunit.dataset.xml;
 
-package org.dbunit.database.statement;
+import org.dbunit.dataset.AbstractDataSet;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import electric.util.io.Streams;
+import electric.util.encoding.Encodings;
+
+import java.io.Reader;
+import java.io.InputStream;
+import java.io.IOException;
+import java.io.BufferedInputStream;
+import java.io.InputStreamReader;
 
 /**
  * @author Manuel Laflamme
+ * @since Jun 15, 2003
  * @version $Revision$
  */
-public class SimpleStatement extends AbstractBatchStatement
+public abstract class AbstractXmlDataSet extends AbstractDataSet
 {
-    private final List _list = new ArrayList();
-
-    SimpleStatement(Connection connection) throws SQLException
+    protected static Reader getReader(InputStream input) throws IOException
     {
-        super(connection);
-    }
-
-    public void addBatch(String sql) throws SQLException
-    {
-        _list.add(sql);
-    }
-
-    public int executeBatch() throws SQLException
-    {
-        int result = 0;
-        for (int i = 0; i < _list.size(); i++)
+        if (!(input instanceof BufferedInputStream))
         {
-            String sql = (String)_list.get(i);
-            boolean r = _statement.execute(sql);
-            if(!r)
-            {
-                result += _statement.getUpdateCount();
-            }
+            input = new BufferedInputStream(input);
         }
-        return result;
-    }
 
-    public void clearBatch() throws SQLException
-    {
-        _list.clear();
+        input.mark(100);
+        byte[] header = Streams.readUpTo(input, 100);
+        input.reset();
+        String encoding = Encodings.getJavaEncoding(header);
+        return new InputStreamReader(input, encoding);
     }
 }
-
-
-
-
-

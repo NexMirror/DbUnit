@@ -23,7 +23,7 @@ public abstract class AbstractStatementFactory implements IStatementFactory
     protected boolean supportBatchStatement(IDatabaseConnection connection)
             throws SQLException
     {
-        if (System.getProperty(SUPPORT_BATCH_STATEMENT, "true").equals("true"))
+        if (System.getProperty(SUPPORT_BATCH_STATEMENT, "false").equals("true"))
         {
             return connection.getConnection().getMetaData().supportsBatchUpdates();
         }
