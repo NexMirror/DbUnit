@@ -158,6 +158,31 @@ public class Column
 //        return _columnName;
     }
 
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (!(o instanceof Column)) return false;
+
+        final Column column = (Column)o;
+
+        if (!_columnName.equals(column._columnName)) return false;
+        if (!_dataType.equals(column._dataType)) return false;
+        if (!_nullable.equals(column._nullable)) return false;
+        if (!_sqlTypeName.equals(column._sqlTypeName)) return false;
+
+        return true;
+    }
+
+    public int hashCode()
+    {
+        int result;
+        result = _columnName.hashCode();
+        result = 29 * result + _dataType.hashCode();
+        result = 29 * result + _sqlTypeName.hashCode();
+        result = 29 * result + _nullable.hashCode();
+        return result;
+    }
+
     public static class Nullable
     {
 
