@@ -26,9 +26,12 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.DatabaseDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.dataset.xml.XmlDataSet;
+import org.dbunit.dataset.xml.FlatXmlWriter;
 import org.dbunit.dataset.excel.XlsDataSet;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.ITableIterator;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.operation.DatabaseOperation;
 
 import electric.xml.Document;
 
@@ -48,11 +51,18 @@ public class Main
 
         IDatabaseConnection connection =
                 DatabaseEnvironment.getInstance().getConnection();
-        ITableIterator iterator = connection.createDataSet().iterator();
-        while(iterator.next())
-        {
-            System.out.println(iterator.getTableMetaData().getTableName());
-        }
+        IDataSet dataSet = new FlatXmlDataSet(new File("src/xml/flatXmlDataSetTest.xml"));
+        DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
+
+        FileWriter writer = new FileWriter("writerTest.xml");
+//        FlatXmlDataSet.write(connection.createDataSet(), writer);
+        new FlatXmlWriter().write(connection.createDataSet(), writer);
+        writer.close();
+//        ITableIterator iterator = connection.createDataSet().iterator();
+//        while(iterator.next())
+//        {
+//            System.out.println(iterator.getTableMetaData().getTableName());
+//        }
 //        oldMain();
 //        testWrite();
 //        writeXls();
