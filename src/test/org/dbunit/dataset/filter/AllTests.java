@@ -36,6 +36,7 @@ public class AllTests
         suite.addTest(new TestSuite(ExcludeTableFilterTest.class));
         suite.addTest(new TestSuite(IncludeTableFilterTest.class));
         suite.addTest(new TestSuite(SequenceTableFilterTest.class));
+        suite.addTest(new TestSuite(SequenceTableIteratorTest.class));
 
         return suite;
     }

@@ -37,8 +37,6 @@ public class AllTests
         suite.addTest(org.dbunit.database.statement.AllTests.suite());
         suite.addTest(new TestSuite(DatabaseConnectionTest.class));
         suite.addTest(new TestSuite(DatabaseDataSetTest.class));
-        suite.addTest(new TestSuite(DatabaseReverseTableIteratorTest.class));
-        suite.addTest(new TestSuite(DatabaseTableIteratorTest.class));
         suite.addTest(new TestSuite(DatabaseTableMetaDataTest.class));
         suite.addTest(new TestSuite(QueryDataSetTest.class));
         suite.addTest(new TestSuite(ResultsetTableTest.class));

@@ -18,22 +18,25 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.dbunit.database;
+package org.dbunit.dataset.filter;
 
 import org.dbunit.dataset.AbstractTableIteratorTest;
 import org.dbunit.dataset.ITableIterator;
+import org.dbunit.dataset.filter.SequenceTableIterator;
 import org.dbunit.DatabaseEnvironment;
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.database.DatabaseDataSet;
 
 /**
  * @author Manuel Laflamme
  * @since Apr 6, 2003
  * @version $Revision$
  */
-public class DatabaseTableIteratorTest extends AbstractTableIteratorTest
+public class SequenceTableIteratorTest extends AbstractTableIteratorTest
 {
     protected IDatabaseConnection _connection;
 
-    public DatabaseTableIteratorTest(String s)
+    public SequenceTableIteratorTest(String s)
     {
         super(s);
     }
@@ -67,7 +70,7 @@ public class DatabaseTableIteratorTest extends AbstractTableIteratorTest
 
     protected ITableIterator getEmptyIterator() throws Exception
     {
-        return new DatabaseTableIterator(new String[0],
+        return new SequenceTableIterator(new String[0],
                 (DatabaseDataSet)_connection.createDataSet());
     }
 }
