@@ -37,7 +37,7 @@ public class SimplePreparedStatement extends AbstractPreparedBatchStatement
     private int _index;
     private int _result;
 
-    SimplePreparedStatement(String sql, Connection connection)
+    public SimplePreparedStatement(String sql, Connection connection)
             throws SQLException
     {
         super(sql, connection);
@@ -51,6 +51,29 @@ public class SimplePreparedStatement extends AbstractPreparedBatchStatement
     public void addValue(Object value, DataType dataType)
             throws TypeCastException, SQLException
     {
+        // Special NULL handling
+        if (value == null)
+        {
+            _statement.setNull(++_index, dataType.getSqlType());
+            return;
+        }
+
+        // Special BLOB handling
+        if (dataType == DataType.CLOB)
+        {
+            _statement.setObject(++_index, dataType.typeCast(value),
+                    DataType.LONGVARCHAR.getSqlType());
+            return;
+        }
+
+        // Special CLOB handling
+        if (dataType == DataType.BLOB)
+        {
+            _statement.setObject(++_index, dataType.typeCast(value),
+                    DataType.LONGVARBINARY.getSqlType());
+            return;
+        }
+
         _statement.setObject(++_index, dataType.typeCast(value), dataType.getSqlType());
     }
 
