@@ -33,6 +33,9 @@ import java.sql.PreparedStatement;
  */
 public class NumberDataType extends AbstractDataType
 {
+    private static final Number TRUE = new BigDecimal(1);
+    private static final Number FALSE = new BigDecimal(0);
+
     NumberDataType(String name, int sqlType)
     {
         super(name, sqlType, BigDecimal.class, true);
@@ -51,6 +54,11 @@ public class NumberDataType extends AbstractDataType
         if (value instanceof BigDecimal)
         {
             return value;
+        }
+
+        if (value instanceof Boolean)
+        {
+            return ((Boolean)value).booleanValue() ? TRUE : FALSE;
         }
 
         try
