@@ -1,5 +1,4 @@
 /*
- * AllTests.java   Feb 19, 2002
  *
  * The DbUnit Database Testing Framework
  * Copyright (C)2002, Manuel Laflamme
@@ -19,36 +18,30 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-
 package org.dbunit.database;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.dbunit.dataset.ITableIterator;
+import org.dbunit.dataset.DataSetUtils;
 
 /**
  * @author Manuel Laflamme
+ * @since Apr 6, 2003
  * @version $Revision$
  */
-public class AllTests
+public class DatabaseReverseTableIteratorTest extends DatabaseTableIteratorTest
 {
-    public static Test suite()
+    public DatabaseReverseTableIteratorTest(String s)
     {
-        TestSuite suite = new TestSuite();
-        suite.addTest(org.dbunit.database.statement.AllTests.suite());
-        suite.addTest(new TestSuite(DatabaseConnectionTest.class));
-        suite.addTest(new TestSuite(DatabaseDataSetTest.class));
-        suite.addTest(new TestSuite(DatabaseReverseTableIteratorTest.class));
-        suite.addTest(new TestSuite(DatabaseTableIteratorTest.class));
-        suite.addTest(new TestSuite(DatabaseTableMetaDataTest.class));
-        suite.addTest(new TestSuite(QueryDataSetTest.class));
-        suite.addTest(new TestSuite(ResultsetTableTest.class));
+        super(s);
+    }
 
-        return suite;
+    protected String[] getExpectedNames() throws Exception
+    {
+        return DataSetUtils.reverseStringArray(super.getExpectedNames());
+    }
+
+    protected ITableIterator getIterator() throws Exception
+    {
+        return _connection.createDataSet().reverseIterator();
     }
 }
-
-
-
-
-
-

@@ -29,12 +29,8 @@ import org.dbunit.dataset.Column;
 import org.dbunit.dataset.DataSetUtils;
 import org.dbunit.dataset.DefaultTableMetaData;
 import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.dataset.datatype.DataType;
-
-import java.util.Arrays;
-import java.util.Comparator;
 
 /**
  * @author Manuel Laflamme
