@@ -11,20 +11,11 @@
 package org.dbunit.dataset.xml;
 
 import org.dbunit.dataset.*;
-import org.dbunit.dataset.datatype.DataType;
 
-import com.wutka.dtd.DTD;
-import com.wutka.dtd.DTDAttlist;
-import com.wutka.dtd.DTDAttribute;
-import com.wutka.dtd.DTDContainer;
-import com.wutka.dtd.DTDDecl;
-import com.wutka.dtd.DTDItem;
-import com.wutka.dtd.DTDName;
-import com.wutka.dtd.DTDParser;
+import org.xml.sax.InputSource;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -35,52 +26,40 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 /**
  * @author Manuel Laflamme
  * @version $Revision$
  */
-public class FlatDtdDataSet extends AbstractDataSet
+public class FlatDtdDataSet extends AbstractDataSet implements IDataSetConsumer
 {
     private static final List EMPTY_LIST = Arrays.asList(new Object[0]);
+
     private final List _tableNames = new ArrayList();
     private final Map _tableMap = new HashMap();
+    private boolean _ready = false;
+
+    public FlatDtdDataSet()
+    {
+    }
 
     /**
      * @deprecated Use Reader overload instead
      */
-    public FlatDtdDataSet(InputStream in) throws IOException
+    public FlatDtdDataSet(InputStream in) throws DataSetException, IOException
     {
-        this(new InputStreamReader(in));
+        this(new FlatDtdProducer(new InputSource(in)));
     }
 
-    public FlatDtdDataSet(Reader in) throws IOException
+    public FlatDtdDataSet(Reader reader) throws DataSetException, IOException
     {
-        DTDParser dtdParser = new DTDParser(in);
-        DTD dtd = dtdParser.parse(true);
+        this(new FlatDtdProducer(new InputSource(reader)));
+    }
 
-        // table names
-        DTDContainer contents = (DTDContainer)dtd.rootElement.getContent();
-        DTDItem[] items = contents.getItems();
-
-        for (int i = 0; i < items.length; i++)
-        {
-            DTDName tableName = (DTDName)items[i];
-            _tableNames.add(tableName.getValue());
-        }
-
-        // table metadata
-        Vector attrLists = dtd.getItemsByType(DTDAttlist.class);
-        for (int i = 0; i < attrLists.size(); i++)
-        {
-            DTDAttlist attrList = (DTDAttlist)attrLists.elementAt(i);
-            if (_tableNames.contains(attrList.getName()))
-            {
-                _tableMap.put(attrList.getName(), new DefaultTable(
-                        createTableMetaData(attrList), EMPTY_LIST));
-            }
-        }
+    public FlatDtdDataSet(IDataSetProducer producer) throws DataSetException
+    {
+        producer.setConsumer(this);
+        producer.produce();
     }
 
     /**
@@ -150,28 +129,18 @@ public class FlatDtdDataSet extends AbstractDataSet
         printOut.flush();
     }
 
-    private ITableMetaData createTableMetaData(DTDAttlist attrList)
-    {
-        DTDAttribute[] attributes = attrList.getAttribute();
-        Column[] columns = new Column[attributes.length];
-        for (int i = 0; i < attributes.length; i++)
-        {
-            DTDAttribute attribute = attributes[i];
-            Column.Nullable nullable = (attribute.getDecl() == DTDDecl.REQUIRED) ?
-                    Column.NO_NULLS : Column.NULLABLE;
-            columns[i] = new Column(attribute.getName(), DataType.UNKNOWN,
-                    nullable);
-        }
-
-        return new DefaultTableMetaData(attrList.getName(), columns);
-    }
-
     ////////////////////////////////////////////////////////////////////////////
     // AbstractDataSet class
 
     protected ITableIterator createIterator(boolean reversed)
             throws DataSetException
     {
+        // Verify producer notifications completed
+        if (!_ready)
+        {
+            throw new IllegalStateException("Not ready!");
+        }
+
         String[] names = (String[])_tableNames.toArray(new String[0]);
         ITable[] tables = new ITable[names.length];
         for (int i = 0; i < names.length; i++)
@@ -194,8 +163,80 @@ public class FlatDtdDataSet extends AbstractDataSet
 
     public String[] getTableNames() throws DataSetException
     {
+        // Verify producer notifications completed
+        if (!_ready)
+        {
+            throw new IllegalStateException("Not ready!");
+        }
+
         return (String[])_tableNames.toArray(new String[0]);
     }
+
+    public ITableMetaData getTableMetaData(String tableName) throws DataSetException
+    {
+        // Verify producer notifications completed
+        if (!_ready)
+        {
+            throw new IllegalStateException("Not ready!");
+        }
+
+        String upperTableName = tableName.toUpperCase();
+        if (_tableMap.containsKey(upperTableName))
+        {
+            ITable table = (ITable)_tableMap.get(upperTableName);
+            return table.getTableMetaData();
+        }
+
+        throw new NoSuchTableException(tableName);
+    }
+
+    public ITable getTable(String tableName) throws DataSetException
+    {
+        // Verify producer notifications completed
+        if (!_ready)
+        {
+            throw new IllegalStateException("Not ready!");
+        }
+
+        String upperTableName = tableName.toUpperCase();
+        if (_tableMap.containsKey(upperTableName))
+        {
+            return (ITable)_tableMap.get(upperTableName);
+        }
+
+        throw new NoSuchTableException(tableName);
+    }
+
+    ////////////////////////////////////////////////////////////////////////
+    // IDataSetConsumer interface
+
+    public void startDataSet() throws DataSetException
+    {
+        _ready = false;
+    }
+
+    public void endDataSet() throws DataSetException
+    {
+        _ready = true;
+    }
+
+    public void startTable(ITableMetaData metaData) throws DataSetException
+    {
+        String tableName = metaData.getTableName();
+        _tableNames.add(tableName);
+        _tableMap.put(tableName.toUpperCase(), new DefaultTable(metaData, EMPTY_LIST));
+    }
+
+    public void endTable() throws DataSetException
+    {
+        // no op
+    }
+
+    public void row(Object[] values) throws DataSetException
+    {
+        // no op
+    }
+
 }
 
 

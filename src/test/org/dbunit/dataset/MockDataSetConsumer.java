@@ -20,7 +20,6 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
 
     private final ExpectationList _expectedList = new ExpectationList("");
     private String _actualTableName;
-    private int _actualTableRow = 0;
 
     public void addExpectedStartDataSet() throws Exception
     {
@@ -47,6 +46,12 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
         _expectedList.addExpected(new StartTableEvent(tableName, true));
     }
 
+    public void addExpectedEmptyTable(String tableName, Column[] columns) throws Exception
+    {
+        addExpectedStartTable(tableName, columns);
+        addExpectedEndTable(tableName);
+    }
+
     public void addExpectedEmptyTableIgnoreColumns(String tableName) throws Exception
     {
         addExpectedStartTableIgnoreColumns(tableName);
@@ -58,9 +63,9 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
         _expectedList.addExpected(new EndTableEvent(tableName));
     }
 
-    public void addExpectedRow(String tableName, int row, Object[] values) throws Exception
+    public void addExpectedRow(String tableName, Object[] values) throws Exception
     {
-        _expectedList.addExpected(new RowEvent(tableName, row, values));
+        _expectedList.addExpected(new RowEvent(tableName, values));
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -88,21 +93,18 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
     {
         _expectedList.addActual(new StartTableEvent(metaData, false));
         _actualTableName = metaData.getTableName();
-        _actualTableRow = 0;
     }
 
     public void endTable() throws DataSetException
     {
         _expectedList.addActual(new EndTableEvent(_actualTableName));
         _actualTableName = null;
-        _actualTableRow = 0;
     }
 
     public void row(Object[] values) throws DataSetException
     {
         _expectedList.addActual(
-                new RowEvent(_actualTableName, _actualTableRow, values));
-        _actualTableRow++;
+                new RowEvent(_actualTableName, values));
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -236,14 +238,12 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
     private static class RowEvent extends ProducerEvent
     {
         private final String _tableName;
-        private final int _row;
         private final Object[] _values;
 
-        public RowEvent(String tableName, int row, Object[] values)
+        public RowEvent(String tableName, Object[] values)
         {
             super("row()");
             _tableName = tableName;
-            _row = row;
             _values = values;
         }
 
@@ -255,7 +255,6 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
 
             final RowEvent rowItem = (RowEvent)o;
 
-            if (_row != rowItem._row) return false;
             if (!_tableName.equals(rowItem._tableName)) return false;
 // Probably incorrect - comparing Object[] arrays with Arrays.equals
             if (!Arrays.equals(_values, rowItem._values)) return false;
@@ -267,14 +266,12 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
         {
             int result = super.hashCode();
             result = 29 * result + _tableName.hashCode();
-            result = 29 * result + _row;
             return result;
         }
 
         public String toString()
         {
-            return _name + ": table=" + _tableName + ", row=" + _row +
-                    ", values=" + Arrays.asList(_values);
+            return _name + ": table=" + _tableName + ", values=" + Arrays.asList(_values);
         }
 
     }

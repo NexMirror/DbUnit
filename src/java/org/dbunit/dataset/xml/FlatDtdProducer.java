@@ -22,10 +22,10 @@ package org.dbunit.dataset.xml;
 
 import org.dbunit.dataset.Column;
 import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.DefaultConsumer;
 import org.dbunit.dataset.DefaultTableMetaData;
 import org.dbunit.dataset.IDataSetConsumer;
 import org.dbunit.dataset.IDataSetProducer;
-import org.dbunit.dataset.DefaultConsumer;
 import org.dbunit.dataset.datatype.DataType;
 
 import org.xml.sax.EntityResolver;
@@ -56,8 +56,11 @@ import java.util.StringTokenizer;
 public class FlatDtdProducer implements IDataSetProducer, EntityResolver, DeclHandler, LexicalHandler
 {
     private static final IDataSetConsumer EMPTY_CONSUMER = new DefaultConsumer();
+
     private static final String XML_CONTENT =
-            "<?xml version=\"1.0\"?>\n<!DOCTYPE dataset SYSTEM \"urn:/dummy.dtd\">\n<dataset/>";
+            "<?xml version=\"1.0\"?>" +
+            "<!DOCTYPE dataset SYSTEM \"urn:/dummy.dtd\">" +
+            "<dataset/>";
     private static final String DECL_HANDLER_PROPERTY_NAME =
             "http://xml.org/sax/properties/declaration-handler";
     private static final String LEXICAL_HANDLER_PROPERTY_NAME =
@@ -92,6 +95,11 @@ public class FlatDtdProducer implements IDataSetProducer, EntityResolver, DeclHa
             throws SAXNotRecognizedException, SAXNotSupportedException
     {
         xmlReader.setProperty(LEXICAL_HANDLER_PROPERTY_NAME, handler);
+    }
+
+    private List createColumnList()
+    {
+        return new LinkedList();
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -149,10 +157,9 @@ public class FlatDtdProducer implements IDataSetProducer, EntityResolver, DeclHa
             // The root model defines the table sequence. Keep it for later used!
             _rootModel = model;
         }
-        // Other elements
-        else
+        else if (!_columnListMap.containsKey(name))
         {
-            _columnListMap.put(name, new LinkedList());
+            _columnListMap.put(name, createColumnList());
         }
     }
 
@@ -164,6 +171,10 @@ public class FlatDtdProducer implements IDataSetProducer, EntityResolver, DeclHa
                 Column.NO_NULLS : Column.NULLABLE;
         Column column = new Column(attributeName, DataType.UNKNOWN, nullable);
 
+        if (!_columnListMap.containsKey(elementName))
+        {
+            _columnListMap.put(elementName, createColumnList());
+        }
         List columnList = (List)_columnListMap.get(elementName);
         columnList.add(column);
     }

@@ -20,7 +20,6 @@
  */
 package org.dbunit.dataset.xml;
 
-import org.dbunit.dataset.CachedDataSet;
 import org.dbunit.dataset.Column;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.DefaultTableMetaData;
@@ -28,6 +27,7 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.IDataSetConsumer;
 import org.dbunit.dataset.IDataSetProducer;
 import org.dbunit.dataset.ITableMetaData;
+import org.dbunit.dataset.DefaultConsumer;
 import org.dbunit.dataset.datatype.DataType;
 
 import org.xml.sax.Attributes;
@@ -35,6 +35,7 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -51,25 +52,30 @@ import java.io.StringReader;
 public class FlatXmlProducer extends DefaultHandler
         implements IDataSetProducer, ContentHandler
 {
+    private static final IDataSetConsumer EMPTY_CONSUMER = new DefaultConsumer();
     private static final String DATASET = "dataset";
 
     private final InputSource _inputSource;
+    private final EntityResolver _resolver;
+    private final boolean _ignoreDtd;
     private XMLReader _xmlReader;
     private IDataSet _metaDataSet;
-    boolean _ignoreDtd = false;
 
-    private IDataSetConsumer _consumer;
+    private IDataSetConsumer _consumer = EMPTY_CONSUMER;
     private ITableMetaData _activeMetaData;
 
     public FlatXmlProducer(InputSource xmlSource)
     {
         _inputSource = xmlSource;
+        _ignoreDtd = false;
+        _resolver = this;
     }
 
     public FlatXmlProducer(InputSource xmlSource, boolean ignoreDtd)
     {
         _inputSource = xmlSource;
         _ignoreDtd = ignoreDtd;
+        _resolver = this;
     }
 
     public FlatXmlProducer(InputSource xmlSource, IDataSet metaDataSet)
@@ -77,6 +83,14 @@ public class FlatXmlProducer extends DefaultHandler
         _inputSource = xmlSource;
         _metaDataSet = metaDataSet;
         _ignoreDtd = true;
+        _resolver = this;
+    }
+
+    public FlatXmlProducer(InputSource xmlSource, EntityResolver resolver)
+    {
+        _inputSource = xmlSource;
+        _ignoreDtd = false;
+        _resolver = resolver;
     }
 
 //    public FlatXmlProducer(InputSource inputSource, XMLReader xmlReader)
@@ -130,7 +144,7 @@ public class FlatXmlProducer extends DefaultHandler
             }
 
             _xmlReader.setContentHandler(this);
-            _xmlReader.setEntityResolver(this);
+            _xmlReader.setEntityResolver(_resolver);
             _xmlReader.parse(_inputSource);
         }
         catch (ParserConfigurationException e)
@@ -248,7 +262,7 @@ public class FlatXmlProducer extends DefaultHandler
             try
             {
                 // Cache the DTD content to use it as metadata
-                CachedDataSet metaDataSet = new CachedDataSet();
+                FlatDtdDataSet metaDataSet = new FlatDtdDataSet();
                 this.setConsumer(metaDataSet);
                 _metaDataSet = metaDataSet;
 

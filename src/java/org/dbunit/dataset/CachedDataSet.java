@@ -51,10 +51,10 @@ public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer
         _tables = (ITable[])tableList.toArray(new ITable[0]);
     }
 
-    public CachedDataSet(IDataSetProducer provider) throws DataSetException
+    public CachedDataSet(IDataSetProducer producer) throws DataSetException
     {
-        provider.setConsumer(this);
-        provider.produce();
+        producer.setConsumer(this);
+        producer.produce();
     }
 
     ////////////////////////////////////////////////////////////////////////////
