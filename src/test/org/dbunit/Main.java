@@ -59,14 +59,15 @@ public class Main
         IDatabaseConnection connection =
                 DatabaseEnvironment.getInstance().getConnection();
 
-        InputSource source = new InputSource(new FileReader("src/xml/flatXmlDataSetTest.xml"));
+        InputSource source = new InputSource(new File("src/xml/flatXmlProducerTest.xml").toURL().toString());
         IDataSet dataSet = new CachedDataSet(new FlatXmlProducer(source));
-        DatabaseOperation.INSERT.execute(connection, dataSet);
+//        DatabaseOperation.INSERT.execute(connection, dataSet);
 
-        FileWriter writer = new FileWriter("writerTest.xml");
+        XmlDataSet.write(dataSet, new FileWriter("writerTest.xml"));
+//        FileWriter writer = new FileWriter("writerTest.xml");
 //        FlatXmlDataSet.write(connection.createDataSet(), writer);
-        new FlatXmlWriter().write(connection.createDataSet(), writer);
-        writer.close();
+//        new FlatXmlWriter().write(connection.createDataSet(), writer);
+//        writer.close();
 //        ITableIterator iterator = connection.createDataSet().iterator();
 //        while(iterator.next())
 //        {
