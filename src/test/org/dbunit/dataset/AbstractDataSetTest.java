@@ -88,11 +88,12 @@ public abstract class AbstractDataSetTest extends AbstractTest
     protected IDataSet createMultipleCaseDuplicateDataSet() throws Exception
     {
         IDataSet dataSet = createDuplicateDataSet();
-        ITable lowerTable = dataSet.getTables()[0];
+        ITable[] tables = DataSetUtils.getTables(dataSet.iterator());
+        ITable lowerTable = tables[0];
         dataSet = new DefaultDataSet(new ITable[]{
             new CompositeTable(getDuplicateTableName().toLowerCase(), lowerTable),
-            dataSet.getTables()[1],
-            dataSet.getTables()[2],
+            tables[1],
+            tables[2],
         });
         return dataSet;
     }

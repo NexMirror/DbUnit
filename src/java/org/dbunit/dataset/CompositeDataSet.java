@@ -100,6 +100,21 @@ public class CompositeDataSet extends AbstractDataSet
     }
 
     /**
+     * Creates a composite dataset that combines dsuplicate tables of the specified dataset.
+     *
+     * @param dataSet
+     *      the dataset
+     * @param combine
+     *      if <code>true</code>, tables having the same name are merged into
+     *      one table.
+     */
+    public CompositeDataSet(IDataSet dataSet, boolean combine)
+            throws DataSetException
+    {
+        this(new IDataSet[]{dataSet}, combine);
+    }
+
+    /**
      * Creates a composite dataset that combines tables having identical name.
      * Tables having the same name are merged into one table.
      */

@@ -30,7 +30,7 @@ import java.util.ArrayList;
 
 /**
  * This abstract class provides the basic implementation of the IDataSet
- * interface. Subclass are only required to implement the {@link #getTables}
+ * interface. Subclass are only required to implement the {@link #createIterator}
  * method.
  *
  * @author Manuel Laflamme
