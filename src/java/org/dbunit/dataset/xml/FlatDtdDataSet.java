@@ -29,12 +29,9 @@ public class FlatDtdDataSet extends AbstractDataSet
     private final List _tableNames = new ArrayList();
     private final Map _tableMap = new HashMap();
 
-    /**
-     * @deprecated Use Reader overload instead
-     */
     public FlatDtdDataSet(InputStream in) throws IOException
     {
-        this(new InputStreamReader(in));
+        this(new BufferedReader(new InputStreamReader(in)));
     }
 
     public FlatDtdDataSet(Reader in) throws IOException
