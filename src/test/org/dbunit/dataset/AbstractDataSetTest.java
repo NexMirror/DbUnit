@@ -101,19 +101,6 @@ public abstract class AbstractDataSetTest extends AbstractTest
 
     protected abstract IDataSet createDuplicateDataSet() throws Exception;
 
-    /**
-     * Many tests in this class assume a known sequence of table. For some
-     * IDataSet implemntation (like DatabaseDataSet) we can't predict
-     * any specific order. For supporting them, this method is called for both
-     * the expected names and dataset names before comparing them.
-     * <p>
-     * This method should do nothing for implemntation supporting ordered names.
-     * Others should sort the specified array.
-     */
-    protected void sort(Object[] array)
-    {
-    }
-
     protected void assertEqualsTableName(String mesage, String expected,
             String actual)
     {
@@ -123,11 +110,11 @@ public abstract class AbstractDataSetTest extends AbstractTest
     public void testGetTableNames() throws Exception
     {
         String[] expected = getExpectedNames();
-        sort(expected);
+        assertContainsIgnoreCase("minimal names subset",
+                super.getExpectedNames(), expected);
 
-        IDataSet dataSet = removeExtraTestTables(createDataSet());
+        IDataSet dataSet = createDataSet();
         String[] names = dataSet.getTableNames();
-        sort(names);
 
         assertEquals("table count", expected.length, names.length);
         for (int i = 0; i < expected.length; i++)
@@ -176,13 +163,8 @@ public abstract class AbstractDataSetTest extends AbstractTest
     public void testGetTableMetaData() throws Exception
     {
         String[] expected = getExpectedNames();
-//        sort(expected);
 
         IDataSet dataSet = createDataSet();
-//        String[] names = dataSet.getTableNames();
-//        sort(names);
-//        assertEquals("table count",
-//                expected.length, dataSet.getTableNames().length);
         for (int i = 0; i < expected.length; i++)
         {
             ITableMetaData metaData = dataSet.getTableMetaData(expected[i]);
@@ -206,13 +188,11 @@ public abstract class AbstractDataSetTest extends AbstractTest
     public void testGetTables() throws Exception
     {
         String[] expected = getExpectedNames();
-        sort(expected);
+        assertContainsIgnoreCase("minimal names subset",
+                super.getExpectedNames(), expected);
 
-        IDataSet dataSet = removeExtraTestTables(createDataSet());
-        String[] names = dataSet.getTableNames();
-        sort(names);
+        IDataSet dataSet = createDataSet();
         ITable[] tables = dataSet.getTables();
-        sort(tables);
 
         assertEquals("table count", expected.length, tables.length);
         for (int i = 0; i < expected.length; i++)
@@ -350,6 +330,43 @@ public abstract class AbstractDataSetTest extends AbstractTest
         {
         }
     }
+
+    public void testIterator() throws Exception
+    {
+        String[] expected = getExpectedNames();
+        assertContainsIgnoreCase("minimal names subset",
+                super.getExpectedNames(), expected);
+
+        int i = 0;
+        ITableIterator iterator = createDataSet().iterator();
+        while(iterator.next())
+        {
+            assertEqualsTableName("name " + i, expected[i],
+                    iterator.getTableMetaData().getTableName());
+            i++;
+        }
+
+        assertEquals("table count", expected.length, i);
+    }
+
+    public void testReverseIterator() throws Exception
+    {
+        String[] expected = DataSetUtils.reverseStringArray(getExpectedNames());
+        assertContainsIgnoreCase("minimal names subset",
+                super.getExpectedNames(), expected);
+
+        int i = 0;
+        ITableIterator iterator = createDataSet().reverseIterator();
+        while(iterator.next())
+        {
+            assertEqualsTableName("name " + i, expected[i],
+                    iterator.getTableMetaData().getTableName());
+            i++;
+        }
+
+        assertEquals("table count", expected.length, i);
+    }
+
 
 }
 

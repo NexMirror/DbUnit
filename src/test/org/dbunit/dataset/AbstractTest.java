@@ -22,6 +22,9 @@ package org.dbunit.dataset;
 
 import junit.framework.TestCase;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author Manuel Laflamme
  * @since Apr 6, 2003
@@ -79,4 +82,42 @@ public class AbstractTest extends TestCase
     {
         return AbstractTest.EXTRA_TABLE_NAME;
     }
+
+    public void assertEqualsIgnoreCase(String message, String expected, String actual)
+    {
+        if (!expected.equalsIgnoreCase(actual))
+        {
+            assertEquals(message, expected, actual);
+        }
+    }
+
+    public void assertContains(String message, Object[] expected, Object[] actual)
+    {
+        List expectedList = Arrays.asList(expected);
+        List actualList = Arrays.asList(actual);
+
+        if (!expectedList.containsAll(actualList))
+        {
+            fail(message + " expected contains:<" + expectedList + "> but was:<"
+                    + actualList + ">");
+        }
+    }
+
+    public void assertContainsIgnoreCase(String message, String[] expected, String[] actual)
+    {
+        String[] expectedLowerCase = new String[expected.length];
+        for (int i = 0; i < expected.length; i++)
+        {
+            expectedLowerCase[i] = expected[i].toLowerCase();
+        }
+
+        String[] actualLowerCase = new String[actual.length];
+        for (int i = 0; i < actual.length; i++)
+        {
+            actualLowerCase[i] = actual[i].toLowerCase();
+        }
+
+        assertContains(message, expectedLowerCase, actualLowerCase);
+    }
+
 }
