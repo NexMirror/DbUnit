@@ -26,8 +26,8 @@ import org.dbunit.dataset.DefaultTableMetaData;
 import org.dbunit.dataset.IDataSetConsumer;
 import org.dbunit.dataset.IDataSetProvider;
 import org.dbunit.dataset.datatype.DataType;
-import org.dbunit.util.xml.BaseHandler;
 
+import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
@@ -52,8 +52,7 @@ import java.util.StringTokenizer;
  * @since Apr 27, 2003
  * @version $Revision$
  */
-public class FlatDtdProvider extends BaseHandler
-        implements IDataSetProvider, DeclHandler, LexicalHandler
+public class FlatDtdProvider implements IDataSetProvider, EntityResolver, DeclHandler, LexicalHandler
 {
     private static final String XML_CONTENT =
             "<?xml version=\"1.0\"?>\n<!DOCTYPE dataset SYSTEM \"urn:/dummy.dtd\">\n<dataset/>";
@@ -167,6 +166,17 @@ public class FlatDtdProvider extends BaseHandler
         columnList.add(column);
     }
 
+    public void internalEntityDecl(String name, String value) throws SAXException
+    {
+        // Not used!
+    }
+
+    public void externalEntityDecl(String name, String publicId,
+            String systemId) throws SAXException
+    {
+        // Not used!
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     // LexicalHandler interface
 
@@ -221,5 +231,30 @@ public class FlatDtdProvider extends BaseHandler
         {
             throw new SAXException(e);
         }
+    }
+
+    public void startEntity(String name) throws SAXException
+    {
+        // Not used!
+    }
+
+    public void endEntity(String name) throws SAXException
+    {
+        // Not used!
+    }
+
+    public void startCDATA() throws SAXException
+    {
+        // Not used!
+    }
+
+    public void endCDATA() throws SAXException
+    {
+        // Not used!
+    }
+
+    public void comment(char ch[], int start, int length) throws SAXException
+    {
+        // Not used!
     }
 }
