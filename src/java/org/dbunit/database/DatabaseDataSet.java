@@ -171,6 +171,7 @@ public class DatabaseDataSet extends AbstractDataSet
     public String[] getTableNames() throws DataSetException
     {
         initialize();
+
         return (String[])_nameList.toArray(new String[0]);
     }
 
@@ -178,9 +179,8 @@ public class DatabaseDataSet extends AbstractDataSet
     {
         initialize();
 
-        String upperTableName = tableName.toUpperCase();
-
         // Verify if table exist in the database
+        String upperTableName = tableName.toUpperCase();
         if (!_tableMap.containsKey(upperTableName))
         {
             throw new NoSuchTableException(tableName);
@@ -212,6 +212,8 @@ public class DatabaseDataSet extends AbstractDataSet
 
     public ITable getTable(String tableName) throws DataSetException
     {
+        initialize();
+
         try
         {
             ITableMetaData metaData = getTableMetaData(tableName);
