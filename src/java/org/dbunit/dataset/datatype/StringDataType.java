@@ -23,7 +23,11 @@ package org.dbunit.dataset.datatype;
 
 import org.dbunit.util.Base64;
 
-import java.sql.*;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * @author Manuel Laflamme
@@ -108,6 +112,26 @@ public class StringDataType extends AbstractDataType
         }
 
         throw new TypeCastException(value.toString());
+    }
+
+    public Object getSqlValue(int column, ResultSet resultSet)
+            throws SQLException, TypeCastException
+    {
+        return resultSet.getString(column);
+    }
+
+    public void setSqlValue(Object value, int column, PreparedStatement statement)
+            throws SQLException, TypeCastException
+    {
+        // Special CLOB handling
+        if (this == DataType.CLOB)
+        {
+            statement.setObject(column, typeCast(value),
+                    DataType.LONGVARCHAR.getSqlType());
+            return;
+        }
+
+        statement.setString(column, asString(value));
     }
 }
 

@@ -22,6 +22,9 @@
 package org.dbunit.dataset.datatype;
 
 import java.sql.Types;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
 
 /**
  * @author Manuel Laflamme
@@ -73,6 +76,18 @@ public class BooleanDataType extends AbstractDataType
         }
 
         throw new TypeCastException(value.toString());
+    }
+
+    public Object getSqlValue(int column, ResultSet resultSet)
+            throws SQLException, TypeCastException
+    {
+        return resultSet.getBoolean(column) ? Boolean.TRUE : Boolean.FALSE;
+    }
+
+    public void setSqlValue(Object value, int column, PreparedStatement statement)
+            throws SQLException, TypeCastException
+    {
+        statement.setBoolean(column, ((Boolean)typeCast(value)).booleanValue());
     }
 }
 
