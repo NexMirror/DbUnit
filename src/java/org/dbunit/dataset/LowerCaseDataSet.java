@@ -62,11 +62,12 @@ public class LowerCaseDataSet extends AbstractDataSet
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    // IDataSet interface
+    // AbstractDataSet class
 
-    public ITable[] getTables() throws DataSetException
+    protected ITableIterator createIterator(boolean reversed)
+            throws DataSetException
     {
-        return cloneTables(_tables);
+        return new DefaultTableIterator(_tables, reversed);
     }
 }
 

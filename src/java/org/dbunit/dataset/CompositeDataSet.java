@@ -108,7 +108,7 @@ public class CompositeDataSet extends AbstractDataSet
         _tables = combineTables(tables);
     }
 
-    private ITable[] combineTables(ITable[] tables) throws DataSetException
+    private ITable[] combineTables(ITable[] tables) //throws DataSetException
     {
         List tableList = new ArrayList();
 
@@ -151,11 +151,12 @@ public class CompositeDataSet extends AbstractDataSet
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    // IDataSet interface
+    // AbstractDataSet class
 
-    public ITable[] getTables() throws DataSetException
+    protected ITableIterator createIterator(boolean reversed)
+            throws DataSetException
     {
-        return cloneTables(_tables);
+        return new DefaultTableIterator(_tables, reversed);
     }
 }
 

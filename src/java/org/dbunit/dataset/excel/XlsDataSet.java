@@ -18,16 +18,26 @@
  */
 package org.dbunit.dataset.excel;
 
-import org.dbunit.dataset.*;
+import org.dbunit.dataset.AbstractDataSet;
+import org.dbunit.dataset.Column;
+import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ITable;
+import org.dbunit.dataset.ITableMetaData;
+import org.dbunit.dataset.ITableIterator;
+import org.dbunit.dataset.DefaultTableIterator;
 import org.dbunit.dataset.datatype.DataType;
 
-import electric.xml.Document;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * This dataset implementation can read and write MS Excel documents. Each
@@ -116,10 +126,11 @@ public class XlsDataSet extends AbstractDataSet
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    // IDataSet interface
+    // AbstractDataSet class
 
-    public ITable[] getTables() throws DataSetException
+    protected ITableIterator createIterator(boolean reversed)
+            throws DataSetException
     {
-        return cloneTables(_tables);
+        return new DefaultTableIterator(_tables, reversed);
     }
 }

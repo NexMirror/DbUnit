@@ -67,6 +67,9 @@ public interface IDataSet
      * name but different data may be returned.
      */
     public ITable[] getTables() throws DataSetException;
+
+    public ITableIterator iterator() throws DataSetException;
+    public ITableIterator reverseIterator() throws DataSetException;
 }
 
 

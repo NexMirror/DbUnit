@@ -101,6 +101,16 @@ public class FilteredDataSet implements IDataSet
         return _filter.getTables(_dataSet);
     }
 
+    public ITableIterator iterator() throws DataSetException
+    {
+        return new DefaultTableIterator(getTables());
+    }
+
+    public ITableIterator reverseIterator() throws DataSetException
+    {
+        return new DefaultTableIterator(getTables(), true);
+    }
+
 }
 
 

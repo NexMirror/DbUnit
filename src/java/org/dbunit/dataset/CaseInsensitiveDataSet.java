@@ -78,6 +78,17 @@ public class CaseInsensitiveDataSet implements IDataSet
     {
         return _dataSet.getTables();
     }
+
+    public ITableIterator iterator() throws DataSetException
+    {
+        return new DefaultTableIterator(getTables());
+    }
+
+    public ITableIterator reverseIterator() throws DataSetException
+    {
+        return new DefaultTableIterator(getTables(), true);
+    }
+
 }
 
 

@@ -238,6 +238,17 @@ public class DatabaseDataSet implements IDataSet
         }
         return (ITable[])tableList.toArray(new ITable[0]);
     }
+
+    public ITableIterator iterator() throws DataSetException
+    {
+        return new DefaultTableIterator(getTables());
+    }
+
+    public ITableIterator reverseIterator() throws DataSetException
+    {
+        return new DefaultTableIterator(getTables(), true);
+    }
+
 }
 
 

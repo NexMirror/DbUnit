@@ -22,9 +22,8 @@
 
 package org.dbunit.dataset;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -67,11 +66,13 @@ public class DefaultDataSet extends AbstractDataSet
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    // IDataSet interface
+    // AbstractDataSet class
 
-    public ITable[] getTables() throws DataSetException
+    protected ITableIterator createIterator(boolean reversed)
+            throws DataSetException
     {
-        return (ITable[])_tableList.toArray(new ITable[0]);
+        ITable[] tables = (ITable[])_tableList.toArray(new ITable[0]);
+        return new DefaultTableIterator(tables, reversed);
     }
 }
 
