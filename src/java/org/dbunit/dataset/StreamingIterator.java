@@ -28,7 +28,7 @@ import org.dbunit.dataset.ITableIterator;
 import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.dataset.RowOutOfBoundsException;
 import org.dbunit.dataset.IDataSetConsumer;
-import org.dbunit.dataset.IDataSetProvider;
+import org.dbunit.dataset.IDataSetProducer;
 
 import org.dbunit.util.concurrent.BoundedBuffer;
 import org.dbunit.util.concurrent.Channel;
@@ -49,7 +49,7 @@ public class StreamingIterator implements ITableIterator
     private Object _taken = null;
     private boolean _eod = false;
 
-    public StreamingIterator(IDataSetProvider source) throws DataSetException
+    public StreamingIterator(IDataSetProducer source) throws DataSetException
     {
         Channel channel = new BoundedBuffer(30);
         _channel = channel;
@@ -197,10 +197,10 @@ public class StreamingIterator implements ITableIterator
 
     private static class AsynchronousConsumer implements Runnable, IDataSetConsumer
     {
-        private final IDataSetProvider _producer;
+        private final IDataSetProducer _producer;
         private final Puttable _channel;
 
-        public AsynchronousConsumer(IDataSetProvider source, Puttable channel)
+        public AsynchronousConsumer(IDataSetProducer source, Puttable channel)
         {
             _producer = source;
             _channel = channel;
@@ -214,7 +214,7 @@ public class StreamingIterator implements ITableIterator
             try
             {
                 _producer.setConsumer(this);
-                _producer.process();
+                _producer.produce();
 //                System.out.println("End of thread! - " + System.currentTimeMillis());
             }
             catch (DataSetException e)

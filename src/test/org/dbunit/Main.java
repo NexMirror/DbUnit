@@ -27,15 +27,20 @@ import org.dbunit.database.DatabaseDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.dataset.xml.XmlDataSet;
 import org.dbunit.dataset.xml.FlatXmlWriter;
+import org.dbunit.dataset.xml.FlatXmlProducer;
 import org.dbunit.dataset.excel.XlsDataSet;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.ITableIterator;
 import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.StreamingDataSet;
+import org.dbunit.dataset.CachedDataSet;
 import org.dbunit.operation.DatabaseOperation;
 
 import electric.xml.Document;
 
 import java.io.*;
+
+import org.xml.sax.InputSource;
 
 /**
  * This class is a scratchpad used to try new features.
@@ -49,10 +54,14 @@ public class Main
     {
 //        System.setProperty("dbunit.qualified.table.names", "true");
 
+
+
         IDatabaseConnection connection =
                 DatabaseEnvironment.getInstance().getConnection();
-        IDataSet dataSet = new FlatXmlDataSet(new File("src/xml/flatXmlDataSetTest.xml"));
-        DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
+
+        InputSource source = new InputSource(new FileReader("src/xml/flatXmlDataSetTest.xml"));
+        IDataSet dataSet = new CachedDataSet(new FlatXmlProducer(source));
+        DatabaseOperation.INSERT.execute(connection, dataSet);
 
         FileWriter writer = new FileWriter("writerTest.xml");
 //        FlatXmlDataSet.write(connection.createDataSet(), writer);

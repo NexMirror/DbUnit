@@ -26,7 +26,7 @@ import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.DefaultTableMetaData;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.IDataSetConsumer;
-import org.dbunit.dataset.IDataSetProvider;
+import org.dbunit.dataset.IDataSetProducer;
 import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.dataset.datatype.DataType;
 
@@ -48,8 +48,8 @@ import java.io.StringReader;
  * @since Apr 18, 2003
  * @version $Revision$
  */
-public class FlatXmlProvider extends DefaultHandler
-        implements IDataSetProvider, ContentHandler
+public class FlatXmlProducer extends DefaultHandler
+        implements IDataSetProducer, ContentHandler
 {
     private static final String DATASET = "dataset";
 
@@ -61,25 +61,25 @@ public class FlatXmlProvider extends DefaultHandler
     private IDataSetConsumer _consumer;
     private ITableMetaData _activeMetaData;
 
-    public FlatXmlProvider(InputSource xmlSource)
+    public FlatXmlProducer(InputSource xmlSource)
     {
         _inputSource = xmlSource;
     }
 
-    public FlatXmlProvider(InputSource xmlSource, boolean ignoreDtd)
+    public FlatXmlProducer(InputSource xmlSource, boolean ignoreDtd)
     {
         _inputSource = xmlSource;
         _ignoreDtd = ignoreDtd;
     }
 
-    public FlatXmlProvider(InputSource xmlSource, IDataSet metaDataSet)
+    public FlatXmlProducer(InputSource xmlSource, IDataSet metaDataSet)
     {
         _inputSource = xmlSource;
         _metaDataSet = metaDataSet;
         _ignoreDtd = true;
     }
 
-//    public FlatXmlProvider(InputSource inputSource, XMLReader xmlReader)
+//    public FlatXmlProducer(InputSource inputSource, XMLReader xmlReader)
 //    {
 //        _inputSource = inputSource;
 //        _xmlReader = xmlReader;
@@ -105,14 +105,14 @@ public class FlatXmlProvider extends DefaultHandler
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    // IDataSetProvider interface
+    // IDataSetProducer interface
 
     public void setConsumer(IDataSetConsumer consumer) throws DataSetException
     {
         _consumer = consumer;
     }
 
-    public void process() throws DataSetException
+    public void produce() throws DataSetException
     {
         try
         {
@@ -233,7 +233,7 @@ public class FlatXmlProvider extends DefaultHandler
         }
     }
 
-    private class FlatDtdHandler extends FlatDtdProvider
+    private class FlatDtdHandler extends FlatDtdProducer
     {
         public FlatDtdHandler()
         {

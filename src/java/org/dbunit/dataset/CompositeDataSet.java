@@ -127,7 +127,7 @@ public class CompositeDataSet extends AbstractDataSet
     {
         List tableList = new ArrayList();
 
-        // process each table
+        // produce each table
         for (int j = 0; j < tables.length; j++)
         {
             // search table in list

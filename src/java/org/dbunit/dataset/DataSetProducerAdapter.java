@@ -33,30 +33,30 @@ import org.dbunit.dataset.IDataSet;
  * @since Apr 17, 2003
  * @version $Revision$
  */
-public class DefaultDataSetProvider implements IDataSetProvider
+public class DataSetProducerAdapter implements IDataSetProducer
 {
     private final ITableIterator _iterator;
     private IDataSetConsumer _consumer;
 
-    public DefaultDataSetProvider(ITableIterator iterator)
+    public DataSetProducerAdapter(ITableIterator iterator)
     {
         _iterator = iterator;
     }
 
-    public DefaultDataSetProvider(IDataSet dataSet) throws DataSetException
+    public DataSetProducerAdapter(IDataSet dataSet) throws DataSetException
     {
         _iterator = dataSet.iterator();
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    // IDataSetProvider interface
+    // IDataSetProducer interface
 
     public void setConsumer(IDataSetConsumer consumer) throws DataSetException
     {
         _consumer = consumer;
     }
 
-    public void process() throws DataSetException
+    public void produce() throws DataSetException
     {
         _consumer.startDataSet();
         while(_iterator.next())

@@ -125,7 +125,7 @@ public abstract class AbstractBatchOperation extends DatabaseOperation
         {
             ITable table = iterator.getTable();
 
-            // Do not process empty table
+            // Do not produce empty table
             if (isEmpty(table))
             {
                 continue;

@@ -24,7 +24,7 @@ import org.dbunit.dataset.Column;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.DefaultTableMetaData;
 import org.dbunit.dataset.IDataSetConsumer;
-import org.dbunit.dataset.IDataSetProvider;
+import org.dbunit.dataset.IDataSetProducer;
 import org.dbunit.dataset.datatype.DataType;
 
 import org.xml.sax.EntityResolver;
@@ -52,7 +52,7 @@ import java.util.StringTokenizer;
  * @since Apr 27, 2003
  * @version $Revision$
  */
-public class FlatDtdProvider implements IDataSetProvider, EntityResolver, DeclHandler, LexicalHandler
+public class FlatDtdProducer implements IDataSetProducer, EntityResolver, DeclHandler, LexicalHandler
 {
     private static final String XML_CONTENT =
             "<?xml version=\"1.0\"?>\n<!DOCTYPE dataset SYSTEM \"urn:/dummy.dtd\">\n<dataset/>";
@@ -71,11 +71,11 @@ public class FlatDtdProvider implements IDataSetProvider, EntityResolver, DeclHa
     private String _rootModel;
     private final Map _columnListMap = new HashMap();
 
-    public FlatDtdProvider()
+    public FlatDtdProducer()
     {
     }
 
-    public FlatDtdProvider(InputSource inputSource)
+    public FlatDtdProducer(InputSource inputSource)
     {
         _inputSource = inputSource;
     }
@@ -93,14 +93,14 @@ public class FlatDtdProvider implements IDataSetProvider, EntityResolver, DeclHa
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    // IDataSetProvider interface
+    // IDataSetProducer interface
 
     public void setConsumer(IDataSetConsumer consumer) throws DataSetException
     {
         _consumer = consumer;
     }
 
-    public void process() throws DataSetException
+    public void produce() throws DataSetException
     {
         try
         {

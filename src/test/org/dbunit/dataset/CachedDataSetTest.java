@@ -21,7 +21,7 @@
 package org.dbunit.dataset;
 
 import org.dbunit.dataset.xml.FlatXmlDataSet;
-import org.dbunit.dataset.xml.FlatXmlProvider;
+import org.dbunit.dataset.xml.FlatXmlProducer;
 
 import org.xml.sax.InputSource;
 
@@ -42,9 +42,9 @@ public class CachedDataSetTest extends AbstractDataSetTest
     protected IDataSet createDataSet() throws Exception
     {
         FileReader reader = new FileReader("src/xml/flatXmlDataSetTest.xml");
-        return new CachedDataSet(new FlatXmlProvider(new InputSource(reader)));
+        return new CachedDataSet(new FlatXmlProducer(new InputSource(reader)));
 //        return new CachedDataSet(
-//                new StreamingDataSet(new FlatXmlProvider(new InputSource(reader))));
+//                new StreamingDataSet(new FlatXmlProducer(new InputSource(reader))));
 //        return new CachedDataSet(new ForwardOnlyDataSet(new FlatXmlDataSet(reader)));
     }
 

@@ -20,12 +20,12 @@
  */
 package org.dbunit.dataset;
 
-import org.dbunit.dataset.DefaultDataSetProvider;
+import org.dbunit.dataset.DataSetProducerAdapter;
 import org.dbunit.dataset.ForwardOnlyDataSetTest;
 import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.IDataSetProvider;
+import org.dbunit.dataset.IDataSetProducer;
 import org.dbunit.dataset.StreamingDataSet;
-import org.dbunit.dataset.xml.FlatXmlProvider;
+import org.dbunit.dataset.xml.FlatXmlProducer;
 
 import org.xml.sax.InputSource;
 
@@ -45,16 +45,16 @@ public class StreamingDataSetTest extends ForwardOnlyDataSetTest
 
     protected IDataSet createDataSet() throws Exception
     {
-        IDataSetProvider source = new FlatXmlProvider(
+        IDataSetProducer source = new FlatXmlProducer(
                 new InputSource(new FileReader("src/xml/flatXmlDataSetTest.xml")));
         return new StreamingDataSet(source);
 //        return new StreamingDataSet(
-//                new DefaultDataSetProvider(super.createDataSet()));
+//                new DataSetProducerAdapter(super.createDataSet()));
     }
 
     protected IDataSet createDuplicateDataSet() throws Exception
     {
         return new StreamingDataSet(
-                new DefaultDataSetProvider(super.createDuplicateDataSet()));
+                new DataSetProducerAdapter(super.createDuplicateDataSet()));
     }
 }

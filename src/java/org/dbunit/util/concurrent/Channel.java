@@ -96,7 +96,7 @@ package org.dbunit.util.concurrent;
  *    for (;;) {
  *       Object item = channel.poll(0);
  *       if (item != null)
- *         process(item);
+ *         produce(item);
  *       else
  *         break;
  *    }
@@ -142,7 +142,7 @@ package org.dbunit.util.concurrent;
  *   if (x instanceof EndOfStream) 
  *     // special actions; perhaps terminate
  *   else
- *     // process normally
+ *     // produce normally
  * </pre>
  * <p>
  * In time-out based methods (poll(msecs) and offer(x, msecs), 

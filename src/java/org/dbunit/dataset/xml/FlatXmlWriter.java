@@ -25,7 +25,7 @@ import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.dataset.datatype.DataType;
-import org.dbunit.dataset.DefaultDataSetProvider;
+import org.dbunit.dataset.DataSetProducerAdapter;
 import org.dbunit.dataset.IDataSetConsumer;
 
 import org.dbunit.util.xml.DataWriter;
@@ -49,9 +49,9 @@ public class FlatXmlWriter
     {
         DataWriter dataWriter = new DataWriter(writer);
         dataWriter.setIndentStep(1);
-        DefaultDataSetProvider provider = new DefaultDataSetProvider(dataSet);
+        DataSetProducerAdapter provider = new DataSetProducerAdapter(dataSet);
         provider.setConsumer(new Consumer(dataWriter));
-        provider.process();
+        provider.produce();
     }
 
     private class Consumer implements IDataSetConsumer

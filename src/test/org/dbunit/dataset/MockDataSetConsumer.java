@@ -17,8 +17,10 @@ import junit.framework.Assert;
  */
 public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
 {
-    private static final Item START_DATASET = new Item("startDataSet()");
-    private static final Item END_DATASET = new Item("endDataSet()");
+    private static final ProducerEvent START_DATASET_EVENT =
+            new ProducerEvent("startDataSet()");
+    private static final ProducerEvent END_DATASET_EVENT =
+            new ProducerEvent("endDataSet()");
 
     private final ExpectationList _expectedList = new ExpectationList("");
     private String _actualTableName;
@@ -26,17 +28,17 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
 
     public void addExpectedStartDataSet() throws Exception
     {
-        _expectedList.addExpected(START_DATASET);
+        _expectedList.addExpected(START_DATASET_EVENT);
     }
 
     public void addExpectedEndDataSet() throws Exception
     {
-        _expectedList.addExpected(END_DATASET);
+        _expectedList.addExpected(END_DATASET_EVENT);
     }
 
     public void addExpectedStartTable(ITableMetaData metaData) throws Exception
     {
-        _expectedList.addExpected(new StartTableItem(metaData));
+        _expectedList.addExpected(new StartTableEvent(metaData));
     }
 
     public void addExpectedStartTable(String tableName, Column[] columns) throws Exception
@@ -46,12 +48,12 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
 
     public void addExpectedEndTable(String tableName) throws Exception
     {
-        _expectedList.addExpected(new EndTableItem(tableName));
+        _expectedList.addExpected(new EndTableEvent(tableName));
     }
 
     public void addExpectedRow(String tableName, int row, Object[] values) throws Exception
     {
-        _expectedList.addExpected(new RowItem(tableName, row, values));
+        _expectedList.addExpected(new RowEvent(tableName, row, values));
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -67,24 +69,24 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
 
     public void startDataSet() throws DataSetException
     {
-        _expectedList.addActual(START_DATASET);
+        _expectedList.addActual(START_DATASET_EVENT);
     }
 
     public void endDataSet() throws DataSetException
     {
-        _expectedList.addActual(END_DATASET);
+        _expectedList.addActual(END_DATASET_EVENT);
     }
 
     public void startTable(ITableMetaData metaData) throws DataSetException
     {
-        _expectedList.addActual(new StartTableItem(metaData));
+        _expectedList.addActual(new StartTableEvent(metaData));
         _actualTableName = metaData.getTableName();
         _actualTableRow = 0;
     }
 
     public void endTable() throws DataSetException
     {
-        _expectedList.addActual(new EndTableItem(_actualTableName));
+        _expectedList.addActual(new EndTableEvent(_actualTableName));
         _actualTableName = null;
         _actualTableRow = 0;
     }
@@ -92,18 +94,18 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
     public void row(Object[] values) throws DataSetException
     {
         _expectedList.addActual(
-                new RowItem(_actualTableName, _actualTableRow, values));
+                new RowEvent(_actualTableName, _actualTableRow, values));
         _actualTableRow++;
     }
 
     ////////////////////////////////////////////////////////////////////////////
     //
 
-    private static class Item
+    private static class ProducerEvent
     {
         protected final String _name;
 
-        public Item(String name)
+        public ProducerEvent(String name)
         {
             _name = name;
         }
@@ -111,9 +113,9 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
         public boolean equals(Object o)
         {
             if (this == o) return true;
-            if (!(o instanceof Item)) return false;
+            if (!(o instanceof ProducerEvent)) return false;
 
-            final Item item = (Item)o;
+            final ProducerEvent item = (ProducerEvent)o;
 
             if (!_name.equals(item._name)) return false;
 
@@ -131,12 +133,12 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
         }
     }
 
-    private static class StartTableItem extends Item
+    private static class StartTableEvent extends ProducerEvent
     {
         private final String _tableName;
         private final Column[] _columns;
 
-        public StartTableItem(ITableMetaData metaData) throws DataSetException
+        public StartTableEvent(ITableMetaData metaData) throws DataSetException
         {
             super("startTable()");
             _tableName = metaData.getTableName();
@@ -146,10 +148,10 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
         public boolean equals(Object o)
         {
             if (this == o) return true;
-            if (!(o instanceof StartTableItem)) return false;
+            if (!(o instanceof StartTableEvent)) return false;
             if (!super.equals(o)) return false;
 
-            final StartTableItem startTableItem = (StartTableItem)o;
+            final StartTableEvent startTableItem = (StartTableEvent)o;
 
             if (!Arrays.equals(_columns, startTableItem._columns)) return false;
             if (!_tableName.equals(startTableItem._tableName)) return false;
@@ -170,11 +172,11 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
         }
     }
 
-    private static class EndTableItem extends Item
+    private static class EndTableEvent extends ProducerEvent
     {
         private final String _tableName;
 
-        public EndTableItem(String tableName)
+        public EndTableEvent(String tableName)
         {
             super("endTable()");
             _tableName = tableName;
@@ -183,10 +185,10 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
         public boolean equals(Object o)
         {
             if (this == o) return true;
-            if (!(o instanceof EndTableItem)) return false;
+            if (!(o instanceof EndTableEvent)) return false;
             if (!super.equals(o)) return false;
 
-            final EndTableItem endTableItem = (EndTableItem)o;
+            final EndTableEvent endTableItem = (EndTableEvent)o;
 
             if (!_tableName.equals(endTableItem._tableName)) return false;
 
@@ -206,13 +208,13 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
         }
     }
 
-    private static class RowItem extends Item
+    private static class RowEvent extends ProducerEvent
     {
         private final String _tableName;
         private final int _row;
         private final Object[] _values;
 
-        public RowItem(String tableName, int row, Object[] values)
+        public RowEvent(String tableName, int row, Object[] values)
         {
             super("row()");
             _tableName = tableName;
@@ -223,10 +225,10 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
         public boolean equals(Object o)
         {
             if (this == o) return true;
-            if (!(o instanceof RowItem)) return false;
+            if (!(o instanceof RowEvent)) return false;
             if (!super.equals(o)) return false;
 
-            final RowItem rowItem = (RowItem)o;
+            final RowEvent rowItem = (RowEvent)o;
 
             if (_row != rowItem._row) return false;
             if (!_tableName.equals(rowItem._tableName)) return false;
