@@ -6,6 +6,7 @@ import org.dbunit.dataset.IDataSetProducer;
 import org.dbunit.dataset.MockDataSetConsumer;
 import org.dbunit.dataset.DefaultDataSet;
 import org.dbunit.dataset.DefaultTable;
+import org.dbunit.dataset.DataSetException;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.EntityResolver;
@@ -179,6 +180,33 @@ public class FlatXmlProducerTest extends AbstractProducerTest
 
         // Produce and verify consumer
         producer.produce();
+        consumer.verify();
+    }
+
+    public void testProduceNotWellFormedXml() throws Exception
+    {
+        // Setup consumer
+        MockDataSetConsumer consumer = new MockDataSetConsumer();
+        consumer.addExpectedStartDataSet();
+
+        // Setup producer
+        String content =
+                "<?xml version=\"1.0\"?>" +
+                "<dataset>";
+        InputSource source = new InputSource(new StringReader(content));
+        IDataSetProducer producer = new FlatXmlProducer(source);
+        producer.setConsumer(consumer);
+
+        // Produce and verify consumer
+        try
+        {
+            producer.produce();
+            fail("Should not be here!");
+        }
+        catch (DataSetException e)
+        {
+        }
+
         consumer.verify();
     }
 
