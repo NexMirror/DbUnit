@@ -31,15 +31,17 @@ import org.dbunit.dataset.datatype.DataType;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -49,7 +51,7 @@ import java.util.List;
  * @version $Revision$
  */
 public class XmlProducer extends DefaultHandler
-        implements IDataSetProducer, ContentHandler
+        implements IDataSetProducer, ContentHandler, ErrorHandler
 {
     private static final IDataSetConsumer EMPTY_CONSUMER = new DefaultConsumer();
 
@@ -62,7 +64,7 @@ public class XmlProducer extends DefaultHandler
     private static final String NULL = "null";
 
     private final InputSource _inputSource;
-    private XMLReader _xmlReader;
+    private boolean _validating = false;
 
     private IDataSetConsumer _consumer = EMPTY_CONSUMER;
     private String _activeTableName;
@@ -88,6 +90,11 @@ public class XmlProducer extends DefaultHandler
         return metaData;
     }
 
+    public void setValidating(boolean validating)
+    {
+        _validating = validating;
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     // IDataSetProducer interface
 
@@ -100,15 +107,14 @@ public class XmlProducer extends DefaultHandler
     {
         try
         {
-            if (_xmlReader == null)
-            {
-                SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
-                _xmlReader = saxParser.getXMLReader();
-            }
+            SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+            saxParserFactory.setValidating(_validating);
+            XMLReader xmlReader = saxParserFactory.newSAXParser().getXMLReader();
 
-            _xmlReader.setContentHandler(this);
-            _xmlReader.setEntityResolver(this);
-            _xmlReader.parse(_inputSource);
+            xmlReader.setContentHandler(this);
+            xmlReader.setEntityResolver(this);
+            xmlReader.setErrorHandler(this);
+            xmlReader.parse(_inputSource);
         }
         catch (ParserConfigurationException e)
         {
@@ -131,8 +137,9 @@ public class XmlProducer extends DefaultHandler
     public InputSource resolveEntity(String publicId, String systemId)
             throws SAXException
     {
-        // TODO - returns dataset.dtd contents...
-        return null;
+        InputStream in = getClass().getClassLoader().getResourceAsStream(
+                "org/dbunit/dataset/xml/dataset.dtd");
+        return (new InputSource(in));
     }
 
     ////////////////////////////////////////////////////////////////////////
@@ -265,10 +272,32 @@ public class XmlProducer extends DefaultHandler
     public void characters(char ch[], int start, int length)
             throws SAXException
     {
-        // TODO - remove when EntityResolver is implemented...
         if (_activeCharacters != null)
         {
             _activeCharacters.append(ch, start, length);
         }
     }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // ErrorHandler interface
+
+//    public void warning(SAXParseException e)
+//            throws SAXException
+//    {
+//        throw e;
+//    }
+
+    public void error(SAXParseException e)
+            throws SAXException
+    {
+        throw e;
+    }
+
+//    public void fatalError(SAXParseException e)
+//            throws SAXException
+//    {
+//        throw e;
+//    }
+
+
 }

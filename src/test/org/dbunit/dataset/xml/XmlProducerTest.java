@@ -52,7 +52,9 @@ public class XmlProducerTest extends AbstractProducerTest
         String uri = DATASET_FILE.getAbsoluteFile().toURL().toString();
         InputSource source = new InputSource(uri);
 
-        return new XmlProducer(source);
+        XmlProducer producer = new XmlProducer(source);
+        producer.setValidating(true);
+        return producer;
     }
 
     protected Column[] createExpectedColumns(Column.Nullable nullable) throws Exception
@@ -177,6 +179,35 @@ public class XmlProducerTest extends AbstractProducerTest
                 "<dataset>";
         InputSource source = new InputSource(new StringReader(content));
         IDataSetProducer producer = new XmlProducer(source);
+        producer.setConsumer(consumer);
+
+        // Produce and verify consumer
+        try
+        {
+            producer.produce();
+            fail("Should not be here!");
+        }
+        catch (DataSetException e)
+        {
+        }
+
+        consumer.verify();
+    }
+
+    public void testProduceInvalidXml() throws Exception
+    {
+        // Setup consumer
+        MockDataSetConsumer consumer = new MockDataSetConsumer();
+
+        // Setup producer
+        String content =
+                "<?xml version=\"1.0\"?>" +
+                "<!DOCTYPE dataset SYSTEM \"dataset.dtd\" >" +
+                "<invalid/>";
+        InputSource source = new InputSource(new StringReader(content));
+        source.setSystemId("http:/nowhere.to.go");
+        XmlProducer producer = new XmlProducer(source);
+        producer.setValidating(true);
         producer.setConsumer(consumer);
 
         // Produce and verify consumer

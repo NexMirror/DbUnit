@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE dataset SYSTEM "dataset.dtd" >
 <dataset>
   <table name='DUPLICATE_TABLE'>
     <column>COLUMN0</column>
