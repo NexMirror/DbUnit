@@ -71,7 +71,7 @@ public abstract class AbstractBatchOperation extends DatabaseOperation
             columnList.add(column);
         }
 
-        return new DefaultTableMetaData(tableName,
+        return new DefaultTableMetaData(databaseMetaData.getTableName(),
                 (Column[])columnList.toArray(new Column[0]),
                 databaseMetaData.getPrimaryKeys());
     }

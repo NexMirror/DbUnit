@@ -23,6 +23,7 @@
 package org.dbunit.database;
 
 import org.dbunit.dataset.*;
+import org.dbunit.dataset.filter.SequenceTableIterator;
 
 import java.sql.*;
 import java.util.*;
@@ -134,7 +135,7 @@ public class DatabaseDataSet extends AbstractDataSet
                         throw new AmbiguousTableNameException(tableName);
                     }
                     nameList.add(tableName);
-                    _tableMap.put(tableName, null);
+                    _tableMap.put(tableName.toUpperCase(), null);
                 }
 
                 _nameList = nameList;
@@ -162,7 +163,7 @@ public class DatabaseDataSet extends AbstractDataSet
             names = DataSetUtils.reverseStringArray(names);
         }
 
-        return new DatabaseTableIterator(names, this);
+        return new SequenceTableIterator(names, this);
     }
 
     ////////////////////////////////////////////////////////////////////////////
