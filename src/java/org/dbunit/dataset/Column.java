@@ -149,6 +149,16 @@ public class Column
         }
     }
 
+    /**
+     * Returns the appropriate Nullable constant.
+     *
+     * @param nullable <code>true</code> if null is allowed
+     */
+    public static Nullable nullableValue(boolean nullable)
+    {
+        return nullable ? NULLABLE : NO_NULLS;
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     // Object class
 

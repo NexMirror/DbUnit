@@ -25,6 +25,7 @@ import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.DefaultTableMetaData;
 import org.dbunit.dataset.IDataSetConsumer;
 import org.dbunit.dataset.IDataSetProducer;
+import org.dbunit.dataset.DefaultConsumer;
 import org.dbunit.dataset.datatype.DataType;
 
 import org.xml.sax.EntityResolver;
@@ -54,6 +55,7 @@ import java.util.StringTokenizer;
  */
 public class FlatDtdProducer implements IDataSetProducer, EntityResolver, DeclHandler, LexicalHandler
 {
+    private static final IDataSetConsumer EMPTY_CONSUMER = new DefaultConsumer();
     private static final String XML_CONTENT =
             "<?xml version=\"1.0\"?>\n<!DOCTYPE dataset SYSTEM \"urn:/dummy.dtd\">\n<dataset/>";
     private static final String DECL_HANDLER_PROPERTY_NAME =
@@ -65,7 +67,7 @@ public class FlatDtdProducer implements IDataSetProducer, EntityResolver, DeclHa
     private static final String IMPLIED = "#IMPLIED";
 
     private InputSource _inputSource;
-    private IDataSetConsumer _consumer;
+    private IDataSetConsumer _consumer = EMPTY_CONSUMER;
 
     private String _rootName;
     private String _rootModel;
@@ -204,9 +206,9 @@ public class FlatDtdProducer implements IDataSetProducer, EntityResolver, DeclHa
                 String rootModel = _rootModel.substring(1, _rootModel.length() - 1);
 
                 // Parse the root element model to determine the table sequence.
-                // This implementation does not support choices yet and will never
-                // support mixed model.
-                StringTokenizer tokenizer = new StringTokenizer(rootModel, ",");
+                // Support all sequence or choices model but not the mix of both.
+                String delim = (rootModel.indexOf(",") != -1) ? "," : "|";
+                StringTokenizer tokenizer = new StringTokenizer(rootModel, delim);
                 while (tokenizer.hasMoreTokens())
                 {
                     String tableName = tokenizer.nextToken();

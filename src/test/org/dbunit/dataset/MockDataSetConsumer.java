@@ -1,13 +1,9 @@
 package org.dbunit.dataset;
 
-import com.mockobjects.Verifiable;
 import com.mockobjects.ExpectationList;
+import com.mockobjects.Verifiable;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Arrays;
-
-import junit.framework.Assert;
 
 /**
  *
@@ -38,12 +34,23 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
 
     public void addExpectedStartTable(ITableMetaData metaData) throws Exception
     {
-        _expectedList.addExpected(new StartTableEvent(metaData));
+        _expectedList.addExpected(new StartTableEvent(metaData, false));
     }
 
     public void addExpectedStartTable(String tableName, Column[] columns) throws Exception
     {
         addExpectedStartTable(new DefaultTableMetaData(tableName, columns));
+    }
+
+    public void addExpectedStartTableIgnoreColumns(String tableName) throws Exception
+    {
+        _expectedList.addExpected(new StartTableEvent(tableName, true));
+    }
+
+    public void addExpectedEmptyTableIgnoreColumns(String tableName) throws Exception
+    {
+        addExpectedStartTableIgnoreColumns(tableName);
+        addExpectedEndTable(tableName);
     }
 
     public void addExpectedEndTable(String tableName) throws Exception
@@ -79,7 +86,7 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
 
     public void startTable(ITableMetaData metaData) throws DataSetException
     {
-        _expectedList.addActual(new StartTableEvent(metaData));
+        _expectedList.addActual(new StartTableEvent(metaData, false));
         _actualTableName = metaData.getTableName();
         _actualTableRow = 0;
     }
@@ -137,12 +144,22 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
     {
         private final String _tableName;
         private final Column[] _columns;
+        private final boolean _ignoreColumns;
 
-        public StartTableEvent(ITableMetaData metaData) throws DataSetException
+        public StartTableEvent(ITableMetaData metaData, boolean ignoreColumns) throws DataSetException
         {
             super("startTable()");
             _tableName = metaData.getTableName();
             _columns = metaData.getColumns();
+            _ignoreColumns = ignoreColumns;
+        }
+
+        public StartTableEvent(String tableName, boolean ignoreColumns) throws DataSetException
+        {
+            super("startTable()");
+            _tableName = tableName;
+            _columns = new Column[0];
+            _ignoreColumns = ignoreColumns;
         }
 
         public boolean equals(Object o)
@@ -153,8 +170,11 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
 
             final StartTableEvent startTableItem = (StartTableEvent)o;
 
-            if (!Arrays.equals(_columns, startTableItem._columns)) return false;
             if (!_tableName.equals(startTableItem._tableName)) return false;
+            if (!_ignoreColumns)
+            {
+                if (!Arrays.equals(_columns, startTableItem._columns)) return false;
+            }
 
             return true;
         }
@@ -168,7 +188,12 @@ public class MockDataSetConsumer implements Verifiable, IDataSetConsumer
 
         public String toString()
         {
-            return _name + ": table=" + _tableName + ", columns=" + Arrays.asList(_columns);
+            String string = _name + ": table=" + _tableName;
+            if (!_ignoreColumns)
+            {
+                string += ", columns=" + Arrays.asList(_columns);
+            }
+            return string;
         }
     }
 
