@@ -82,16 +82,17 @@ public class XlsDataSet extends AbstractDataSet
     {
         HSSFWorkbook workbook = new HSSFWorkbook();
 
-        ITable[] tables = dataSet.getTables();
-        for (int i = 0; i < tables.length; i++)
+        int index = 0;
+        ITableIterator iterator = dataSet.iterator();
+        while(iterator.next())
         {
             // create the table i.e. sheet
-            ITable table = tables[i];
+            ITable table = iterator.getTable();
             ITableMetaData metaData = table.getTableMetaData();
             HSSFSheet sheet = workbook.createSheet(metaData.getTableName());
 
             // write table metadata i.e. first row in sheet
-            workbook.setSheetName(i, metaData.getTableName());
+            workbook.setSheetName(index, metaData.getTableName());
 
             HSSFRow headerRow = sheet.createRow(0);
             Column[] columns = metaData.getColumns();
@@ -118,6 +119,7 @@ public class XlsDataSet extends AbstractDataSet
                 }
             }
 
+            index++;
         }
 
         // write xls document

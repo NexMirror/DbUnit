@@ -27,6 +27,8 @@ import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.TypeCastException;
 
 import java.util.StringTokenizer;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * This class contains various methods for manipulating datasets.
@@ -233,8 +235,13 @@ public class DataSetUtils
      */
     public static ITable[] getTables(IDataSet dataSet) throws DataSetException
     {
-//        return getTables(dataSet.getTableNames(), dataSet);
-        return dataSet.getTables();
+        List tableList = new ArrayList();
+        ITableIterator iterator = dataSet.iterator();
+        while(iterator.next())
+        {
+            tableList.add(iterator.getTable());
+        }
+        return (ITable[])tableList.toArray(new ITable[0]);
     }
 
     /**

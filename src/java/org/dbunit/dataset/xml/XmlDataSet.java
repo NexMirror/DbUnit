@@ -136,17 +136,16 @@ public class XmlDataSet extends AbstractDataSet
     private static Document buildDocument(IDataSet dataSet, String encoding)
             throws DataSetException
     {
-        ITable[] tables = dataSet.getTables();
-
         Document document = new Document();
         document.addChild(new XMLDecl("1.0", encoding));
 
         // dataset
         Element rootElem = document.addElement("dataset");
-        for (int i = 0; i < tables.length; i++)
+        ITableIterator iterator = dataSet.iterator();
+        while(iterator.next())
         {
-            ITable table = tables[i];
-            ITableMetaData metaData = tables[i].getTableMetaData();
+            ITable table = iterator.getTable();
+            ITableMetaData metaData = table.getTableMetaData();
             String tableName = metaData.getTableName();
 
             // table
