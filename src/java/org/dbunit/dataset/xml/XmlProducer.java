@@ -27,6 +27,7 @@ import org.dbunit.dataset.DefaultTableMetaData;
 import org.dbunit.dataset.IDataSetConsumer;
 import org.dbunit.dataset.IDataSetProducer;
 import org.dbunit.dataset.ITableMetaData;
+import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.datatype.DataType;
 
 import org.xml.sax.Attributes;
@@ -44,6 +45,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Arrays;
+import java.util.Iterator;
 
 /**
  * @author Manuel Laflamme
@@ -62,12 +65,17 @@ public class XmlProducer extends DefaultHandler
     private static final String ROW = "row";
     private static final String VALUE = "value";
     private static final String NULL = "null";
+    private static final String NONE = "none";
 
     private final InputSource _inputSource;
     private boolean _validating = false;
 
     private IDataSetConsumer _consumer = EMPTY_CONSUMER;
+
+
     private String _activeTableName;
+    private ITableMetaData _activeMetaData;
+
     private List _activeColumnNames;
     private StringBuffer _activeCharacters;
     private List _activeRowValues;
@@ -178,10 +186,11 @@ public class XmlProducer extends DefaultHandler
                 // End of metadata at first row
                 if (_activeColumnNames != null)
                 {
-                    ITableMetaData metaData =
-                            createMetaData(_activeTableName, _activeColumnNames);
-                    _consumer.startTable(metaData);
+                    _activeMetaData = createMetaData(_activeTableName,
+                            _activeColumnNames);
+                    _consumer.startTable(_activeMetaData);
                     _activeColumnNames = null;
+
                 }
 
                 _activeRowValues = new LinkedList();
@@ -199,6 +208,13 @@ public class XmlProducer extends DefaultHandler
             if (qName.equals(NULL))
             {
                 _activeRowValues.add(null);
+                return;
+            }
+
+            // none
+            if (qName.equals(NONE))
+            {
+                _activeRowValues.add(ITable.NO_VALUE);
                 return;
             }
         }
@@ -225,14 +241,15 @@ public class XmlProducer extends DefaultHandler
                 // End of metadata
                 if (_activeColumnNames != null)
                 {
-                    ITableMetaData metaData =
-                            createMetaData(_activeTableName, _activeColumnNames);
-                    _consumer.startTable(metaData);
+                    _activeMetaData = createMetaData(_activeTableName,
+                            _activeColumnNames);
+                    _consumer.startTable(_activeMetaData);
                     _activeColumnNames = null;
                 }
 
                 _consumer.endTable();
                 _activeTableName = null;
+                _activeMetaData = null;
                 return;
             }
 
@@ -241,13 +258,20 @@ public class XmlProducer extends DefaultHandler
             {
                 _activeColumnNames.add(_activeCharacters.toString());
                 _activeCharacters = null;
+                return;
             }
 
             // row
             if (qName.equals(ROW))
             {
-                _consumer.row(_activeRowValues.toArray());
+                Object[] values = new Object[_activeMetaData.getColumns().length];
+                for (int i = 0; i < values.length; i++)
+                {
+                    values[i] = (i >= _activeRowValues.size()) ? ITable.NO_VALUE : _activeRowValues.get(i);
+                }
+                _consumer.row(values);
                 _activeRowValues = null;
+                return;
             }
 
             // value
@@ -255,12 +279,21 @@ public class XmlProducer extends DefaultHandler
             {
                 _activeRowValues.add(_activeCharacters.toString());
                 _activeCharacters = null;
+                return;
             }
 
             // null
             if (qName.equals(NULL))
             {
                 // Nothing to do, already processed in startElement()
+                return;
+            }
+
+            // none
+            if (qName.equals(NONE))
+            {
+                // Nothing to do, already processed in startElement()
+                return;
             }
         }
         catch (DataSetException e)

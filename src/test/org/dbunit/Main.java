@@ -23,24 +23,28 @@
 package org.dbunit;
 
 import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.database.DatabaseDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSet;
-import org.dbunit.dataset.xml.XmlDataSet;
-import org.dbunit.dataset.xml.FlatXmlWriter;
-import org.dbunit.dataset.xml.FlatXmlProducer;
-import org.dbunit.dataset.excel.XlsDataSet;
 import org.dbunit.dataset.DataSetException;
-import org.dbunit.dataset.ITableIterator;
 import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.MockDataSetProducer;
 import org.dbunit.dataset.StreamingDataSet;
-import org.dbunit.dataset.CachedDataSet;
-import org.dbunit.operation.DatabaseOperation;
-
-import electric.xml.Document;
-
-import java.io.*;
+import org.dbunit.dataset.excel.XlsDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.dbunit.dataset.xml.FlatXmlProducer;
+import org.dbunit.dataset.xml.XmlDataSet;
+import org.dbunit.dataset.xml.XmlDataSetWriter;
+import org.dbunit.dataset.xml.XmlProducer;
 
 import org.xml.sax.InputSource;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
 
 /**
  * This class is a scratchpad used to try new features.
@@ -59,11 +63,29 @@ public class Main
         IDatabaseConnection connection =
                 DatabaseEnvironment.getInstance().getConnection();
 
-        InputSource source = new InputSource(new File("src/xml/flatXmlProducerTest.xml").toURL().toString());
-        IDataSet dataSet = new CachedDataSet(new FlatXmlProducer(source));
+//        IDataSet dataSet = new XmlDataSet(new FileReader("src/xml/dataSetTest.xml"));
+        InputSource source = new InputSource(new File("src/xml/xmlTableTest.xml").toURL().toString());
+//        InputSource source = new InputSource(new File("writerTest.xml").toURL().toString());
+        FlatXmlProducer flatXmlProducer = new FlatXmlProducer(source);
+        XmlProducer xmlProducer = new XmlProducer(source);
+        MockDataSetProducer producer = new MockDataSetProducer();
+        producer.setupColumnCount(4);
+        producer.setupRowCount(2);
+        producer.setupTableCount(3);
+        IDataSet dataSet = new StreamingDataSet(xmlProducer);
+//        IDataSet dataSet = new StreamingDataSet(xmlProducer);
+
+//        System.out.println(connection.createDataSet());
+
 //        DatabaseOperation.INSERT.execute(connection, dataSet);
 
-        XmlDataSet.write(dataSet, new FileWriter("writerTest.xml"));
+//        IDataSet dataSet = connection.createDataSet();
+//        OutputStream out = new FileOutputStream("c://writerTest.xml");
+        OutputStream out = System.out;
+//        FlatXmlWriter writer = new FlatXmlWriter(new OutputStreamWriter(out, "UTF8"));
+        XmlDataSetWriter writer = new XmlDataSetWriter(new OutputStreamWriter(out, "UTF8"));
+        writer.write(dataSet);
+
 //        FileWriter writer = new FileWriter("writerTest.xml");
 //        FlatXmlDataSet.write(connection.createDataSet(), writer);
 //        new FlatXmlWriter().write(connection.createDataSet(), writer);
@@ -83,14 +105,14 @@ public class Main
 //        cellTypes();
     }
 
-    private static void testWrite() throws Exception
-    {
-        Writer out = new FileWriter("test.xml");
-
-        Document document = new Document();
-        document.write(out);
-        out.flush();
-    }
+//    private static void testWrite() throws Exception
+//    {
+//        Writer out = new FileWriter("test.xml");
+//
+//        Document document = new Document();
+//        document.write(out);
+//        out.flush();
+//    }
 
     private static void oldMain() throws Exception
     {

@@ -43,9 +43,6 @@ public class FlatDtdDataSet extends AbstractDataSet implements IDataSetConsumer
     {
     }
 
-    /**
-     * @deprecated Use Reader overload instead
-     */
     public FlatDtdDataSet(InputStream in) throws DataSetException, IOException
     {
         this(new FlatDtdProducer(new InputSource(in)));
@@ -77,56 +74,8 @@ public class FlatDtdDataSet extends AbstractDataSet implements IDataSetConsumer
     public static void write(IDataSet dataSet, Writer out)
             throws IOException, DataSetException
     {
-        PrintWriter printOut = new PrintWriter(out);
-        String[] tableNames = dataSet.getTableNames();
-
-        // dataset element
-        printOut.println("<!ELEMENT dataset (");
-        for (int i = 0; i < tableNames.length; i++)
-        {
-            printOut.print("    ");
-            printOut.print(tableNames[i]);
-            printOut.print("*");
-            if (i + 1 < tableNames.length)
-            {
-                printOut.println(",");
-            }
-        }
-        printOut.println(")>");
-        printOut.println();
-
-        // tables
-        for (int i = 0; i < tableNames.length; i++)
-        {
-            // table element
-            String tableName = tableNames[i];
-            printOut.print("<!ELEMENT ");
-            printOut.print(tableName);
-            printOut.println(" EMPTY>");
-
-            // column attributes
-            printOut.print("<!ATTLIST ");
-            printOut.println(tableName);
-            Column[] columns = dataSet.getTableMetaData(tableName).getColumns();
-            for (int j = 0; j < columns.length; j++)
-            {
-                Column column = columns[j];
-                printOut.print("    ");
-                printOut.print(column.getColumnName());
-                if (column.getNullable() == Column.NULLABLE)
-                {
-                    printOut.println(" CDATA #IMPLIED");
-                }
-                else
-                {
-                    printOut.println(" CDATA #REQUIRED");
-                }
-            }
-            printOut.println(">");
-            printOut.println();
-        }
-
-        printOut.flush();
+        FlatDtdWriter datasetWriter = new FlatDtdWriter(out);
+        datasetWriter.write(dataSet);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -236,10 +185,4 @@ public class FlatDtdDataSet extends AbstractDataSet implements IDataSetConsumer
     {
         // no op
     }
-
 }
-
-
-
-
-

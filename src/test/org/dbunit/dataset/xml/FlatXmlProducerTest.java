@@ -118,12 +118,12 @@ public class FlatXmlProducerTest extends AbstractProducerTest
         // Setup producer
         String content =
                 "<?xml version=\"1.0\"?>" +
-                "<!DOCTYPE dataset SYSTEM \"urn:/dummy.dtd\">" +
+                "<!DOCTYPE dataset SYSTEM \"uri:/dummy.dtd\">" +
                 "<dataset>" +
                     "<EMPTY_TABLE/>" +
                 "</dataset>";
         InputSource source = new InputSource(new StringReader(content));
-        IDataSetProducer producer = new FlatXmlProducer(source, true);
+        IDataSetProducer producer = new FlatXmlProducer(source, false);
         producer.setConsumer(consumer);
 
         // Produce and verify consumer

@@ -54,8 +54,10 @@ public class StreamingIterator implements ITableIterator
         Channel channel = new BoundedBuffer(30);
         _channel = channel;
 
-        AsynchronousConsumer handler = new AsynchronousConsumer(source, channel);
-        new Thread(handler).start();
+        AsynchronousConsumer consumer = new AsynchronousConsumer(source, channel);
+        Thread thread = new Thread(consumer);
+        thread.setDaemon(true);
+        thread.start();
 
         // Take first element from asyncronous handler
         try

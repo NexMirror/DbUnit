@@ -57,8 +57,8 @@ public class FlatXmlProducer extends DefaultHandler
 
     private final InputSource _inputSource;
     private final EntityResolver _resolver;
-    private final boolean _ignoreDtd;
-    private XMLReader _xmlReader;
+    private final boolean _dtdMetadata;
+    private boolean _validating = false;
     private IDataSet _metaDataSet;
 
     private IDataSetConsumer _consumer = EMPTY_CONSUMER;
@@ -67,30 +67,34 @@ public class FlatXmlProducer extends DefaultHandler
     public FlatXmlProducer(InputSource xmlSource)
     {
         _inputSource = xmlSource;
-        _ignoreDtd = false;
         _resolver = this;
+        _dtdMetadata = true;
+        _validating = false;
     }
 
-    public FlatXmlProducer(InputSource xmlSource, boolean ignoreDtd)
+    public FlatXmlProducer(InputSource xmlSource, boolean dtdMetadata)
     {
         _inputSource = xmlSource;
-        _ignoreDtd = ignoreDtd;
         _resolver = this;
+        _dtdMetadata = dtdMetadata;
+        _validating = false;
     }
 
     public FlatXmlProducer(InputSource xmlSource, IDataSet metaDataSet)
     {
         _inputSource = xmlSource;
         _metaDataSet = metaDataSet;
-        _ignoreDtd = true;
         _resolver = this;
+        _dtdMetadata = false;
+        _validating = false;
     }
 
     public FlatXmlProducer(InputSource xmlSource, EntityResolver resolver)
     {
         _inputSource = xmlSource;
-        _ignoreDtd = false;
         _resolver = resolver;
+        _dtdMetadata = true;
+        _validating = false;
     }
 
 //    public FlatXmlProducer(InputSource inputSource, XMLReader xmlReader)
@@ -118,6 +122,11 @@ public class FlatXmlProducer extends DefaultHandler
         return new DefaultTableMetaData(tableName, columns);
     }
 
+    public void setValidating(boolean validating)
+    {
+        _validating = validating;
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     // IDataSetProducer interface
 
@@ -130,22 +139,20 @@ public class FlatXmlProducer extends DefaultHandler
     {
         try
         {
-            if (_xmlReader == null)
-            {
-                SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
-                _xmlReader = saxParser.getXMLReader();
-            }
+            SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+            saxParserFactory.setValidating(_validating);
+            XMLReader xmlReader = saxParserFactory.newSAXParser().getXMLReader();
 
-            if (!_ignoreDtd)
+            if (_dtdMetadata)
             {
                 FlatDtdHandler dtdHandler = new FlatDtdHandler();
-                FlatDtdHandler.setLexicalHandler(_xmlReader, dtdHandler);
-                FlatDtdHandler.setDeclHandler(_xmlReader, dtdHandler);
+                FlatDtdHandler.setLexicalHandler(xmlReader, dtdHandler);
+                FlatDtdHandler.setDeclHandler(xmlReader, dtdHandler);
             }
 
-            _xmlReader.setContentHandler(this);
-            _xmlReader.setEntityResolver(_resolver);
-            _xmlReader.parse(_inputSource);
+            xmlReader.setContentHandler(this);
+            xmlReader.setEntityResolver(_resolver);
+            xmlReader.parse(_inputSource);
         }
         catch (ParserConfigurationException e)
         {
@@ -168,7 +175,7 @@ public class FlatXmlProducer extends DefaultHandler
     public InputSource resolveEntity(String publicId, String systemId)
             throws SAXException
     {
-        if (_ignoreDtd)
+        if (!_dtdMetadata)
         {
             return new InputSource(new StringReader(""));
         }
