@@ -30,7 +30,7 @@ import org.dbunit.dataset.ITableMetaData;
  * @since Apr 17, 2003
  * @version $Revision$
  */
-public interface IDataSetListener
+public interface IDataSetConsumer
 {
     /**
      * Receive notification of the beginning of a dataset. This method is

@@ -20,7 +20,7 @@
  */
 package org.dbunit.dataset;
 
-import org.dbunit.dataset.xml.FlatXmlSource;
+import org.dbunit.dataset.xml.FlatXmlProvider;
 
 import org.xml.sax.InputSource;
 
@@ -44,8 +44,8 @@ public class StreamingTableTest extends ForwardOnlyTableTest
     {
         FileReader reader = new FileReader("src/xml/flatXmlDataSetTest.xml");
 
-//        IDataSetSource source = new DefaultDataSetSource(new FlatXmlDataSet(reader));
-        IDataSetSource source = new FlatXmlSource(new InputSource(reader));
+//        IDataSetProvider source = new DefaultDataSetProvider(new FlatXmlDataSet(reader));
+        IDataSetProvider source = new FlatXmlProvider(new InputSource(reader));
         ITableIterator iterator = new StreamingDataSet(source).iterator();
         while(iterator.next())
         {

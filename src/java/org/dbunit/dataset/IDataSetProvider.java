@@ -21,7 +21,7 @@
 package org.dbunit.dataset;
 
 import org.dbunit.dataset.DataSetException;
-import org.dbunit.dataset.IDataSetListener;
+import org.dbunit.dataset.IDataSetConsumer;
 
 /**
  * Interface for reading a dataset using callback.
@@ -30,10 +30,12 @@ import org.dbunit.dataset.IDataSetListener;
  * @since Apr 17, 2003
  * @version $Revision$
  */
-public interface IDataSetSource
+public interface IDataSetProvider
 {
+    public void setConsumer(IDataSetConsumer consumer) throws DataSetException;
+
     /**
-     * Process this dataset source. During the processing, the IDataSetSource
+     * Process this dataset source. During the processing, the IDataSetProvider
      * will provide information about the dataset through the specified event
      * listener.
      * <p>
@@ -41,5 +43,5 @@ public interface IDataSetSource
      * If a client application wants to terminate parsing early, it should
      * throw an exception from the listener.
      */
-    public void process(IDataSetListener listener) throws DataSetException;
+    public void process() throws DataSetException;
 }

@@ -33,38 +33,44 @@ import org.dbunit.dataset.IDataSet;
  * @since Apr 17, 2003
  * @version $Revision$
  */
-public class DefaultDataSetSource implements IDataSetSource
+public class DefaultDataSetProvider implements IDataSetProvider
 {
     private final ITableIterator _iterator;
+    private IDataSetConsumer _consumer;
 
-    public DefaultDataSetSource(ITableIterator iterator)
+    public DefaultDataSetProvider(ITableIterator iterator)
     {
         _iterator = iterator;
     }
 
-    public DefaultDataSetSource(IDataSet dataSet) throws DataSetException
+    public DefaultDataSetProvider(IDataSet dataSet) throws DataSetException
     {
         _iterator = dataSet.iterator();
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    // IDataSetSource interface
+    // IDataSetProvider interface
 
-    public void process(IDataSetListener _handler) throws DataSetException
+    public void setConsumer(IDataSetConsumer consumer) throws DataSetException
     {
-        _handler.startDataSet();
+        _consumer = consumer;
+    }
+
+    public void process() throws DataSetException
+    {
+        _consumer.startDataSet();
         while(_iterator.next())
         {
             ITable table = _iterator.getTable();
             ITableMetaData metaData = table.getTableMetaData();
 
-            _handler.startTable(metaData);
+            _consumer.startTable(metaData);
             try
             {
                 Column[] columns = metaData.getColumns();
                 if (columns.length == 0)
                 {
-                    _handler.endTable();
+                    _consumer.endTable();
                     continue;
                 }
 
@@ -76,16 +82,16 @@ public class DefaultDataSetSource implements IDataSetSource
                         Column column = columns[j];
                         values[j] = table.getValue(i, column.getColumnName());
                     }
-                    _handler.row(values);
+                    _consumer.row(values);
                 }
             }
             catch (RowOutOfBoundsException e)
             {
                 // end of table
-                _handler.endTable();
+                _consumer.endTable();
             }
         }
-        _handler.endDataSet();
+        _consumer.endDataSet();
     }
 }
 

@@ -25,12 +25,13 @@ import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.DefaultTableMetaData;
 import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.dataset.datatype.DataType;
-import org.dbunit.dataset.IDataSetListener;
-import org.dbunit.dataset.IDataSetSource;
+import org.dbunit.dataset.IDataSetConsumer;
+import org.dbunit.dataset.IDataSetProvider;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -43,35 +44,44 @@ import java.io.IOException;
  * @since Apr 18, 2003
  * @version $Revision$
  */
-public class FlatXmlSource implements IDataSetSource
+public class FlatXmlProvider implements IDataSetProvider
 {
     private final InputSource _inputSource;
-    private SAXParser _parser;
+    private XMLReader _xmlReader;
+    private IDataSetConsumer _consumer;
 
-    public FlatXmlSource(InputSource inputSource)
+    public FlatXmlProvider(InputSource inputSource)
     {
         _inputSource = inputSource;
     }
 
-    public FlatXmlSource(InputSource inputSource, SAXParser parser)
-    {
-        _inputSource = inputSource;
-        _parser = parser;
-    }
+//    public FlatXmlProvider(InputSource inputSource, SAXParser parser)
+//    {
+//        _inputSource = inputSource;
+//        _xmlReader = parser;
+//    }
 
     ////////////////////////////////////////////////////////////////////////////
-    // IDataSetSource interface
+    // IDataSetProvider interface
 
-    public void process(IDataSetListener listener) throws DataSetException
+    public void setConsumer(IDataSetConsumer consumer) throws DataSetException
+    {
+        _consumer = consumer;
+    }
+
+    public void process() throws DataSetException
     {
         try
         {
-            if (_parser == null)
+            if (_xmlReader == null)
             {
-                _parser = SAXParserFactory.newInstance().newSAXParser();
+                SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
+                _xmlReader = saxParser.getXMLReader();
             }
 
-            _parser.parse(_inputSource, new FlatXmlHandler(listener));
+            FlatXmlHandler handler = new FlatXmlHandler(_consumer);
+            _xmlReader.setContentHandler(handler);
+            _xmlReader.parse(_inputSource);
         }
         catch (ParserConfigurationException e)
         {
@@ -91,10 +101,10 @@ public class FlatXmlSource implements IDataSetSource
     {
         private static final String DATASET = "dataset";
 
-        private final IDataSetListener _listener;
+        private final IDataSetConsumer _listener;
         private ITableMetaData _activeMetaData;
 
-        public FlatXmlHandler(IDataSetListener listener)
+        public FlatXmlHandler(IDataSetConsumer listener)
         {
             _listener = listener;
         }

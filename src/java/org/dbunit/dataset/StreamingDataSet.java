@@ -25,7 +25,7 @@ import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.ITableIterator;
 import org.dbunit.dataset.ITableMetaData;
-import org.dbunit.dataset.IDataSetSource;
+import org.dbunit.dataset.IDataSetProvider;
 
 /**
  * @author Manuel Laflamme
@@ -34,10 +34,10 @@ import org.dbunit.dataset.IDataSetSource;
  */
 public class StreamingDataSet extends AbstractDataSet
 {
-    private IDataSetSource _source;
+    private IDataSetProvider _source;
     private int _iteratorCount;
 
-    public StreamingDataSet(IDataSetSource source)
+    public StreamingDataSet(IDataSetProvider source)
     {
         _source = source;
     }

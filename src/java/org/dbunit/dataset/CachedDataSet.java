@@ -28,24 +28,29 @@ import java.util.List;
  * @since Apr 18, 2003
  * @version $Revision$
  */
-public class CachedDataSet extends AbstractDataSet
+public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer
 {
     private ITable[] _tables;
+
+    private List _tableList = new ArrayList();
+    private ITableMetaData _activeMetaData;
+    private List _activeRowList;
 
     public CachedDataSet(IDataSet dataSet) throws DataSetException
     {
         List tableList = new ArrayList();
         ITableIterator iterator = dataSet.iterator();
-        while(iterator.next())
+        while (iterator.next())
         {
             tableList.add(new CachedTable(iterator.getTable()));
         }
         _tables = (ITable[])tableList.toArray(new ITable[0]);
     }
 
-    public CachedDataSet(IDataSetSource source) throws DataSetException
+    public CachedDataSet(IDataSetProvider provider) throws DataSetException
     {
-        source.process(new Listener());
+        provider.setConsumer(this);
+        provider.process();
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -57,42 +62,36 @@ public class CachedDataSet extends AbstractDataSet
         return new DefaultTableIterator(_tables, reversed);
     }
 
-    private class Listener implements IDataSetListener
+    ////////////////////////////////////////////////////////////////////////
+    // IDataSetConsumer interface
+
+    public void startDataSet() throws DataSetException
     {
-        List _tableList = new ArrayList();
-        ITableMetaData _activeMetaData;
-        List _activeRowList;
+    }
 
-        ////////////////////////////////////////////////////////////////////////
-        // IDataSetListener interface
+    public void endDataSet() throws DataSetException
+    {
+        _tables = (ITable[])_tableList.toArray(new ITable[0]);
+        _tableList = null;
+    }
 
-        public void startDataSet() throws DataSetException
-        {
-        }
-
-        public void endDataSet() throws DataSetException
-        {
-            _tables = (ITable[])_tableList.toArray(new ITable[0]);
-        }
-
-        public void startTable(ITableMetaData metaData) throws DataSetException
-        {
-            _activeMetaData = metaData;
-            _activeRowList = new ArrayList();
+    public void startTable(ITableMetaData metaData) throws DataSetException
+    {
+        _activeMetaData = metaData;
+        _activeRowList = new ArrayList();
 //            System.out.println("START " + _activeMetaData.getTableName());
-        }
+    }
 
-        public void endTable() throws DataSetException
-        {
+    public void endTable() throws DataSetException
+    {
 //            System.out.println("END " + _activeMetaData.getTableName());
-            _tableList.add(new DefaultTable(_activeMetaData, _activeRowList));
-            _activeRowList = null;
-            _activeMetaData = null;
-        }
+        _tableList.add(new DefaultTable(_activeMetaData, _activeRowList));
+        _activeRowList = null;
+        _activeMetaData = null;
+    }
 
-        public void row(Object[] values) throws DataSetException
-        {
-            _activeRowList.add(values);
-        }
+    public void row(Object[] values) throws DataSetException
+    {
+        _activeRowList.add(values);
     }
 }

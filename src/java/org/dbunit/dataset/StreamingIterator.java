@@ -27,8 +27,8 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.ITableIterator;
 import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.dataset.RowOutOfBoundsException;
-import org.dbunit.dataset.IDataSetListener;
-import org.dbunit.dataset.IDataSetSource;
+import org.dbunit.dataset.IDataSetConsumer;
+import org.dbunit.dataset.IDataSetProvider;
 
 import org.dbunit.util.concurrent.BoundedBuffer;
 import org.dbunit.util.concurrent.Channel;
@@ -49,12 +49,12 @@ public class StreamingIterator implements ITableIterator
     private Object _taken = null;
     private boolean _eod = false;
 
-    public StreamingIterator(IDataSetSource source) throws DataSetException
+    public StreamingIterator(IDataSetProvider source) throws DataSetException
     {
         Channel channel = new BoundedBuffer(30);
         _channel = channel;
 
-        AsynchronousHandler handler = new AsynchronousHandler(source, channel);
+        AsynchronousConsumer handler = new AsynchronousConsumer(source, channel);
         new Thread(handler).start();
 
         // Take first element from asyncronous handler
@@ -193,16 +193,16 @@ public class StreamingIterator implements ITableIterator
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    // AsynchronousHandler class
+    // AsynchronousConsumer class
 
-    private static class AsynchronousHandler implements Runnable, IDataSetListener
+    private static class AsynchronousConsumer implements Runnable, IDataSetConsumer
     {
-        private final IDataSetSource _source;
+        private final IDataSetProvider _producer;
         private final Puttable _channel;
 
-        public AsynchronousHandler(IDataSetSource source, Puttable channel)
+        public AsynchronousConsumer(IDataSetProvider source, Puttable channel)
         {
-            _source = source;
+            _producer = source;
             _channel = channel;
         }
 
@@ -213,7 +213,8 @@ public class StreamingIterator implements ITableIterator
         {
             try
             {
-                _source.process(this);
+                _producer.setConsumer(this);
+                _producer.process();
 //                System.out.println("End of thread! - " + System.currentTimeMillis());
             }
             catch (DataSetException e)
@@ -223,7 +224,7 @@ public class StreamingIterator implements ITableIterator
         }
 
         ////////////////////////////////////////////////////////////////////////
-        // IDataSetListener interface
+        // IDataSetConsumer interface
 
         public void startDataSet() throws DataSetException
         {
