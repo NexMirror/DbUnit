@@ -24,55 +24,19 @@ package org.dbunit.dataset;
 
 import org.dbunit.database.AmbiguousTableNameException;
 
-import java.util.*;
-
-import junit.framework.TestCase;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Manuel Laflamme
  * @version $Revision$
  */
-public abstract class AbstractDataSetTest extends TestCase
+public abstract class AbstractDataSetTest extends AbstractTest
 {
-    private static final String[] TABLE_NAMES = {
-        "TEST_TABLE",
-        "SECOND_TABLE",
-        "EMPTY_TABLE",
-        "PK_TABLE",
-        "ONLY_PK_TABLE",
-        "EMPTY_MULTITYPE_TABLE",
-    };
-
-    private static final String[] DUPLICATE_TABLE_NAMES = {
-        "DUPLICATE_TABLE",
-        "EMPTY_TABLE",
-        "DUPLICATE_TABLE",
-    };
-
     public AbstractDataSetTest(String s)
     {
         super(s);
-    }
-
-    protected String[] getExpectedNames() throws Exception
-    {
-        return (String[])TABLE_NAMES.clone();
-    }
-
-    protected String[] getExpectedLowerNames() throws Exception
-    {
-        String[] names = (String[])TABLE_NAMES.clone();
-        for (int i = 0; i < names.length; i++)
-        {
-            names[i] = names[i].toLowerCase();
-        }
-
-        return names;
-    }
-
-    protected String[] getExpectedDuplicateNames()
-    {
-        return (String[])DUPLICATE_TABLE_NAMES.clone();
     }
 
     protected int[] getExpectedDuplicateRows()
@@ -80,16 +44,11 @@ public abstract class AbstractDataSetTest extends TestCase
         return new int[] {1, 0, 2};
     }
 
-    protected String getDuplicateTableName()
-    {
-        return "DUPLICATE_TABLE";
-    }
-
     /**
      * This method exclude BLOB_TABLE and CLOB_TABLE from the specified dataset
      * because BLOB and CLOB are not supported by all database vendor.  It also excludes
      * tables with Identity columns (MSSQL) becasuse they are specific to MSSQL.
-     * @todo Should be refactored into thee various DatabaseEnvironments!
+     * TODO : should be refactored into thee various DatabaseEnvironments!
      */
     public static IDataSet removeExtraTestTables(IDataSet dataSet) throws Exception
     {
