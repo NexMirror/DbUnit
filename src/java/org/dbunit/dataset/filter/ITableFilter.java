@@ -48,9 +48,10 @@ public interface ITableFilter
     public String[] getTableNames(IDataSet dataSet) throws DataSetException;
 
     /**
-     * Returns the tables allowed by this filter from the specified dataset.
+     * Returns iterator of tables allowed by this filter from the specified dataset.
      *
      * @param dataSet the filtered dataset
      */
-    public ITable[] getTables(IDataSet dataSet) throws DataSetException;
+    public ITableIterator iterator(IDataSet dataSet, boolean reversed)
+            throws DataSetException;
 }

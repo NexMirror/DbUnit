@@ -18,25 +18,26 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.dbunit.database;
+package org.dbunit.dataset.filter;
 
 import org.dbunit.dataset.ITableIterator;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.dataset.ITable;
+import org.dbunit.dataset.IDataSet;
 
 /**
  * @author Manuel Laflamme
  * @since Apr 6, 2003
  * @version $Revision$
  */
-class DatabaseTableIterator implements ITableIterator
+public class SequenceTableIterator implements ITableIterator
 {
     private final String[] _tableNames;
-    private final DatabaseDataSet _dataSet;
+    private final IDataSet _dataSet;
     private int _index = -1;
 
-    public DatabaseTableIterator(String[] tableNames, DatabaseDataSet dataSet)
+    public SequenceTableIterator(String[] tableNames, IDataSet dataSet)
     {
         _tableNames = tableNames;
         _dataSet = dataSet;

@@ -73,7 +73,7 @@ public class FilteredDataSet extends AbstractDataSet
     protected ITableIterator createIterator(boolean reversed)
             throws DataSetException
     {
-        return new DefaultTableIterator(_filter.getTables(_dataSet), reversed);
+        return _filter.iterator(_dataSet, reversed);
     }
 
     ////////////////////////////////////////////////////////////////////////////

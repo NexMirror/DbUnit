@@ -85,14 +85,13 @@ public abstract class AbstractTableFilterTest
 
     public abstract void testGetTableNamesAndTableNotInDecoratedDataSet() throws Exception;
 
-    public abstract void testGetTables() throws Exception;
+    public abstract void testIterator() throws Exception;
 
-    public abstract void testGetDuplicateTables() throws Exception;
+    public abstract void testIteratorWithDuplicateTables() throws Exception;
 
-    public abstract void testGetCaseInsensitiveTables() throws Exception;
+    public abstract void testCaseInsensitiveIterator() throws Exception;
 
-    public abstract void testGetReverseTables() throws Exception;
+    public abstract void testReverseIterator() throws Exception;
 
-    public abstract void testGetTablesAndTableNotInDecoratedDataSet() throws Exception;
-
+    public abstract void testIteratorAndTableNotInDecoratedDataSet() throws Exception;
 }

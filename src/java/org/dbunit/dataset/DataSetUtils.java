@@ -235,8 +235,15 @@ public class DataSetUtils
      */
     public static ITable[] getTables(IDataSet dataSet) throws DataSetException
     {
+        return getTables(dataSet.iterator());
+    }
+
+    /**
+     * Returns the tables from the specified iterator.
+     */
+    public static ITable[] getTables(ITableIterator iterator) throws DataSetException
+    {
         List tableList = new ArrayList();
-        ITableIterator iterator = dataSet.iterator();
         while(iterator.next())
         {
             tableList.add(iterator.getTable());
