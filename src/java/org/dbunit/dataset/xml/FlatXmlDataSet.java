@@ -77,25 +77,43 @@ public class FlatXmlDataSet extends AbstractXmlDataSet
     public FlatXmlDataSet(File xmlFile, boolean dtdMetadata)
             throws IOException, DataSetException
     {
+        this(xmlFile.toURL(), dtdMetadata);
+    }
+
+    /**
+     * Creates an FlatXmlDataSet object with the specifed xml URL.
+     * Relative DOCTYPE uri are resolved from the xml file path.
+     *
+     * @param xmlURL the xml URL
+     */
+    public FlatXmlDataSet(URL xmlURL) throws IOException, DataSetException
+    {
+        this(xmlURL, true);
+    }
+
+    /**
+     * Creates an FlatXmlDataSet object with the specifed xml URL.
+     * Relative DOCTYPE uri are resolved from the xml file path.
+     *
+     * @param xmlURL the xml URL
+     * @param dtdMetadata if <code>false</code> do not use DTD as metadata
+     */
+    public FlatXmlDataSet(URL xmlURL, boolean dtdMetadata)
+            throws IOException, DataSetException
+    {
         try
         {
-            Reader reader = getReader(new FileInputStream(xmlFile));
-            Document document = new Document(new FastBufferedReader(reader));
-
+            Document document = new Document(new BufferedReader(new InputStreamReader(xmlURL.openStream())));
             IDataSet metaDataSet = null;
 
             // Create metadata from dtd if defined
             String dtdUri = getDocTypeUri(document);
             if (dtdMetadata && dtdUri != null)
             {
-                File dtdFile = new File(dtdUri);
-                if (!dtdFile.isAbsolute())
-                {
-                    dtdFile = new File(xmlFile.getParent(), dtdUri);
-                }
-                metaDataSet = new FlatDtdDataSet(new FileReader(dtdFile));
+                URL dtdFileURL = new URL(xmlURL, dtdUri);
+//                System.out.println("The DTD URL is : " + dtdFileURL);
+                metaDataSet = new FlatDtdDataSet(new InputStreamReader(dtdFileURL.openStream()));
             }
-
             _tables = getTables(document, metaDataSet);
         }
         catch (ParseException e)
