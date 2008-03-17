@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document><properties><title>Configurable Features and Properties</title></properties><body><section>
+      <h3>Configurable features and properties</h3>
+      <p>DbUnit does not use System properties anymore since version 2.0. DbUnit 
+        use a configuration object, <code>DatabaseConfig</code>, to query 
+        and set feature flags and property values for a <code>IDatabaseConnection</code>. 
+        It is possible to change DbUnit behaviors, such as using batched statements 
+        or not, using the <code>getFeature</code>, <code>setFeature</code>, 
+        <code>getProperty</code>, and <code>setProperty</code> methods 
+        of <code>DatabaseConfig</code>. </p>
+      <p>While feature flags are always boolean, property values are arbitrary objects. </p>
+        <p>The following sample displays the <code>batched statement</code> feature status:
+      <source><![CDATA[  String id = "http://www.dbunit.org/features/batchedStatements"; 
+  DatabaseConfig config = connection.getConfig(); 
+  if (config.getFeature(id)) 
+  { 
+    System.out.println("Batched statements is enabled."); 
+  } 
+  else 
+  { 
+    System.out.println("Batched statements is disabled."); 
+  } 
+]]></source></p>
+      <h3>Feature Flags</h3>
+      <a name="batchstatement"></a>
+      <h4>Batched statements</h4>
+      <table border="1">
+        <tr> 
+          <td>Feature ID</td>
+          <td>http://www.dbunit.org/features/batchedStatements</td>
+        </tr>
+        <tr> 
+          <td>Default</td>
+          <td>false</td>
+        </tr>
+        <tr> 
+          <td>Description</td>
+          <td>Enable or disable usage of JDBC batched statement by DbUnit. </td>
+        </tr>
+      </table>
+      <a name="qualifiedtablenames"></a>
+      <h4>Qualified table names</h4>
+      <table border="1">
+        <tr> 
+          <td>Feature ID</td>
+          <td>http://www.dbunit.org/features/qualifiedTableNames</td>
+        </tr>
+        <tr> 
+          <td>Default</td>
+          <td>false</td>
+        </tr>
+        <tr> 
+          <td>Description</td>
+          <td>Enable or disable multiple schemas support. If enabled, Dbunit access 
+            tables with names fully qualified by schema using this format: SCHEMA.TABLE.</td>
+        </tr>
+        <tr> 
+          <td>Note</td>
+          <td>This feature is not compatible with the <a href="#escapepattern">escape pattern</a> property.</td>
+        </tr>
+      </table>
+
+      <a name="typewarning"></a>
+      <h4>DataType warning</h4>
+      <table border="1">
+        <tr> 
+          <td>Feature ID</td>
+          <td>http://www.dbunit.org/features/datatypeWarning</td>
+        </tr>
+        <tr> 
+          <td>Default</td>
+          <td>true</td>
+        </tr>
+        <tr> 
+          <td>Description</td>
+          <td>Enable or disable the warning message displayed when DbUnit encounter an unsupported data type.</td>
+        </tr>
+     </table>
+      
+      <a name="skiporaclereyclebintables"></a>
+      <h4>Skip Oracle 10g Recyclebin tables</h4>
+      <table border="1">
+        <tr> 
+          <td>Feature ID</td>
+          <td>http://www.dbunit.org/features/skipOracleRecycleBinTables</td>
+        </tr>
+        <tr> 
+          <td>Default</td>
+          <td>false</td>
+        </tr>
+        <tr> 
+          <td>Description</td>
+          <td>Enable or disable the processing of oracle recycle bin tables (tables starting with BIN$).
+          Oracle 10g recyle bin tables may break DbUnit's assumption of tables name uniqueness within a schema
+          since these table are case sensitive. Enable this feature for Oracle 10g databases until the
+          bug in the oracle driver is fixed, which incorrectly reports this system tables to DbUnit.</td>
+        </tr>
+      </table> 
+
+      <h3>Properties</h3>
+      <h4><a name="escapepattern">Escape pattern</a></h4>
+      <table border="1">
+        <tr> 
+          <td>Property ID</td>
+          <td>http://www.dbunit.org/properties/escapePattern</td>
+        </tr>
+        <tr> 
+          <td>Default</td>
+          <td><i>none</i></td>
+        </tr>
+        <tr> 
+          <td>Description</td>
+          <td>Allows schema, table and column names escaping. The property value 
+            is an escape pattern where the ? is replaced by the name. For example, 
+            the pattern "[?]" is expanded as "[MY_TABLE]" for a table named "MY_TABLE". 
+          </td>
+        </tr>
+        <tr> 
+          <td>Note</td>
+          <td>This property is not compatible with the <a href="#qualifiedtablenames">qualified 
+            table names</a> feature.</td>
+        </tr>
+      </table>
+      
+      <h4><a name="tabletype">Table Type</a></h4>
+      <table border="1">
+        <tr> 
+          <td>Property ID</td>
+          <td>http://www.dbunit.org/properties/tableType</td>
+        </tr>
+        <tr> 
+          <td>Type</td>
+          <td>String[]</td>
+        </tr>
+        <tr> 
+          <td>Description</td>
+          <td>Used to configure the list of table types recognized by DbUnit. 
+            See <a href="http://java.sun.com/j2se/1.3/docs/api/java/sql/DatabaseMetaData.html#getTables(java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String%5B%5D)">java.sql.DatabaseMetaData.getTables</a> 
+            for possible values.</td>
+        </tr>
+        <tr> 
+          <td>Default</td>
+          <td>String[]{"TABLE"}</td>
+        </tr>
+      </table>
+      
+      
+      <a name="typefactory"></a>
+      <h4>DataType factory</h4>
+      <table border="1">
+        <tr> 
+          <td>Property ID</td>
+          <td>http://www.dbunit.org/properties/datatypeFactory</td>
+        </tr>
+        <tr> 
+          <td>Default</td>
+          <td>org.dbunit.dataset.datatype.DefaultDataTypeFactory</td>
+        </tr>
+        <tr> 
+          <td>Description</td>
+          <td>Used to configure the DataType factory. You can replace the default 
+            factory to add support for non-standard database vendor data types. 
+            The Object must implement <a href="api/org/dbunit/dataset/datatype/IDataTypeFactory.html">org.dbunit.dataset.datatype.IDataTypeFactory</a>.</td>
+        </tr>
+      </table>
+      <a name="statementfactory"></a>
+      <h4>Statement factory</h4>
+      <table border="1">
+        <tr> 
+          <td>Property ID</td>
+          <td>http://www.dbunit.org/properties/statementFactory</td>
+        </tr>
+        <tr> 
+          <td>Default</td>
+          <td>org.dbunit.database.statement.PreparedStatementFactory</td>
+        </tr>
+        <tr> 
+          <td>Description</td>
+          <td>Used to configure the statement factory. The Object must implement 
+            org.dbunit.database.statement.IStatementFactory.</td>
+        </tr>
+      </table>
+      <a name="resultsettablefactory"></a>
+      <h4>ResultSetTable factory</h4>
+      <table border="1">
+        <tr> 
+          <td>Property ID</td>
+          <td>http://www.dbunit.org/properties/resultSetTableFactory</td>
+        </tr>
+        <tr> 
+          <td>Default</td>
+          <td>org.dbunit.database.CachedResultSetTableFactory</td>
+        </tr>
+        <tr> 
+          <td>Description</td>
+          <td>Used to configure the ResultSet table factory. The Object must implement 
+            org.dbunit.database.IResultSetTableFactory.</td>
+        </tr>
+      </table>
+
+      <a name="primarykeysfilter"></a>
+      <h4>Primary keys filter</h4>
+      <table border="1">
+        <tr> 
+          <td>Property ID</td>
+          <td>http://www.dbunit.org/properties/primaryKeyFilter</td>
+        </tr>
+        <tr> 
+          <td>Default</td>
+          <td><i>none</i></td>
+        </tr>
+        <tr> 
+          <td>Description</td>
+          <td>Use to override primary keys detection. The Object must implement 
+            org.dbunit.dataset.filter.IColumnFilter.</td>
+        </tr>
+      </table>
+
+      <a name="identitycolumnfilter"></a>
+      <h4>MS SQL Server IDENTITY column filter</h4>
+      <table border="1">
+        <tr> 
+          <td>Property ID</td>
+          <td>http://www.dbunit.org/properties/mssql/identityColumnFilter</td>
+        </tr>
+        <tr> 
+          <td>Default</td>
+          <td><i>none</i></td>
+        </tr>
+        <tr> 
+          <td>Description</td>
+          <td>Use to override IDENTITY column detection. The Object must implement 
+            org.dbunit.dataset.filter.IColumnFilter.</td>
+        </tr>
+      </table>
+</section></body></document>
