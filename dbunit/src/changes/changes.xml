@@ -11,7 +11,8 @@
   </properties>
 
   <body>
-    <release version="in scm" date="next" description="DefaultPrepAndExpectedTestCase config, TimestampDataType.typeCast(), escape pattern for table name, fix, DefaultPrepAndExpectedTestCase.verifyData() connection">
+    <release version="in scm" date="next" description="DefaultPrepAndExpectedTestCase config, TimestampDataType.typeCast(), escape pattern for table name, DefaultPrepAndExpectedTestCase.verifyData() connection, XlsTable timezone">
+      <action dev="jeffjensen" type="fix" issue="280" due-to="mnt40">Don't add timezone offset for XlsTable.</action>
       <action dev="jeffjensen" type="fix">DefaultPrepAndExpectedTestCase.verifyData() uses databaseTester.getConnection() and should use DatabaseTestCase.getConnection().</action>
       <action dev="jeffjensen" type="fix">AbstractDatabaseConnection.createTable(String) ignores escape pattern for table name.</action>
       <action dev="jeffjensen" type="fix" issue="380" due-to="fs5">TimestampDataType.typeCast() fails on non-local timezones.</action>

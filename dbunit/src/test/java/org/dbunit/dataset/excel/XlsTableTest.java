@@ -108,7 +108,12 @@ public class XlsTableTest extends AbstractTableTest
         int row = 0;
         ITable table = createDataSet().getTable("TABLE_DIFFERENT_DATATYPES");
         
-//        long tzOffset = TimeZone.getDefault().getOffset(0);
+        // When cell type is numeric and cell value is datetime,
+        // Apache-POI returns datetime with system default timezone offset.
+        // And java.util.Date#getTime() returns time without timezone offset (= UTC).
+        // So actual time values in this case will be UTC time in the system default timezone.
+        // Expected time values also should be UTC time in the system default timezone.
+        long tzOffset = TimeZone.getDefault().getRawOffset();
         Object[] expected = {
 //                new Date(0-tzOffset), 
 //                new Date(0-tzOffset + (10*ONE_HOUR_IN_MILLIS + 45*ONE_MINUTE_IN_MILLIS)),
@@ -116,13 +121,13 @@ public class XlsTableTest extends AbstractTableTest
 //                new Long(25569),// Dates stored as Long numbers
 //                new Long(25569447916666668L),
 //                new Long(563136574074074L),
-                new Long(0),// Dates stored as Long numbers
-                new Long(38700000),
-                new Long(-2209026545000L),
+                new Long(0-tzOffset),// Dates stored as Long numbers
+                new Long(38700000-tzOffset),
+                new Long(-2209026545000L-tzOffset),
                 new BigDecimal("10000.00"), 
                 new BigDecimal("-200"), 
                 new BigDecimal("12345.123456789000"),
-                new Long(1233398764000L),
+                new Long(1233398764000L-tzOffset),
                 new Long(1233332866000L) // The last column is a dbunit-date-formatted column in the excel sheet
                 };
 

@@ -204,9 +204,6 @@ class XlsTable extends AbstractTable
         
         double numericValue = cell.getNumericCellValue();
         Date date = DateUtil.getJavaDate(numericValue);
-        // Add the timezone offset again because it was subtracted automatically by Apache-POI (we need UTC)
-        long tzOffset = TimeZone.getDefault().getOffset(date.getTime());
-        date = new Date(date.getTime() + tzOffset);
         return new Long(date.getTime());
         
         //TODO use a calendar for XLS Date objects when it is supported better by POI
