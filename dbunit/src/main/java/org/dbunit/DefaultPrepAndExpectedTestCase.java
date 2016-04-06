@@ -181,7 +181,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAndExpectedTestCase
 {
-    private final Logger LOG = LoggerFactory.getLogger(DefaultPrepAndExpectedTestCase.class);
+    private final Logger log = LoggerFactory.getLogger(DefaultPrepAndExpectedTestCase.class);
 
     private IDatabaseTester databaseTester;
     private DataFileLoader dataFileLoader;
@@ -246,7 +246,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
     public void configureTest(VerifyTableDefinition[] tables, String[] prepDataFiles, String[] expectedDataFiles)
             throws Exception
     {
-        LOG.debug("configureTest: saving instance variables");
+        log.debug("configureTest: saving instance variables");
         this.prepDs = makeCompositeDataSet(prepDataFiles);
         this.expectedDs = makeCompositeDataSet(expectedDataFiles);
         this.tableDefs = tables;
@@ -309,7 +309,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
             IDataSet dataset = new CompositeDataSet(prepDs, expectedDs);
             String tableNames[] = dataset.getTableNames();
             int count = tableNames.length;
-            LOG.info("cleanupData: about to clean up {} tables={}", new Integer(count), tableNames);
+            log.info("cleanupData: about to clean up {} tables={}", new Integer(count), tableNames);
 
             if (databaseTester == null)
             {
@@ -318,10 +318,10 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
 
             databaseTester.setDataSet(dataset);
             databaseTester.onTearDown();
-            LOG.debug("cleanupData: Clean up done");
+            log.debug("cleanupData: Clean up done");
         } catch (Exception e)
         {
-            LOG.error("cleanupData: Exception:", e);
+            log.error("cleanupData: Exception:", e);
             throw e;
         }
     }
@@ -334,7 +334,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
      */
     public void setupData() throws Exception
     {
-        LOG.debug("setupData: setting prep dataset and inserting rows");
+        log.debug("setupData: setting prep dataset and inserting rows");
         if (databaseTester == null)
         {
             throw new IllegalStateException("databaseTester is null; must configure or set it first");
@@ -346,7 +346,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
             databaseTester.onSetup();
         } catch (Exception e)
         {
-            LOG.error("setupData: Exception with setting up data:", e);
+            log.error("setupData: Exception with setting up data:", e);
             throw e;
         }
     }
@@ -366,10 +366,10 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
         try
         {
             int count = tableDefs.length;
-            LOG.info("verifyData: about to verify {} tables={}", new Integer(count), tableDefs);
+            log.info("verifyData: about to verify {} tables={}", new Integer(count), tableDefs);
             if (count == 0)
             {
-                LOG.warn("verifyData: No tables to verify;" + " no VerifyTableDefinitions specified");
+                log.warn("verifyData: No tables to verify;" + " no VerifyTableDefinitions specified");
             }
 
             for (int i = 0; i < count; i++)
@@ -379,9 +379,9 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
                 String[] includeColumns = td.getColumnInclusionFilters();
                 String tableName = td.getTableName();
 
-                LOG.info("verifyData: Verifying table '{}'", tableName);
+                log.info("verifyData: Verifying table '{}'", tableName);
 
-                LOG.debug("verifyData: Loading its rows from expected dataset");
+                log.debug("verifyData: Loading its rows from expected dataset");
                 ITable expectedTable = null;
                 try
                 {
@@ -389,11 +389,11 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
                 } catch (Exception e)
                 {
                     final String msg = "verifyData: Problem obtaining table '" + tableName + "' from expected dataset";
-                    LOG.error(msg, e);
+                    log.error(msg, e);
                     throw new DataSetException(msg, e);
                 }
 
-                LOG.debug("verifyData: Loading its rows from actual table");
+                log.debug("verifyData: Loading its rows from actual table");
                 ITable actualTable = null;
                 try
                 {
@@ -401,7 +401,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
                 } catch (Exception e)
                 {
                     final String msg = "verifyData: Problem obtaining table '" + tableName + "' from actual dataset";
-                    LOG.error(msg, e);
+                    log.error(msg, e);
                     throw new DataSetException(msg, e);
                 }
 
@@ -409,11 +409,11 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
             }
         } catch (Exception e)
         {
-            LOG.error("verifyData: Exception:", e);
+            log.error("verifyData: Exception:", e);
             throw e;
         } finally
         {
-            LOG.debug("verifyData: Verification done, closing connection");
+            log.debug("verifyData: Verification done, closing connection");
             connection.close();
         }
     }
@@ -441,20 +441,20 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
     {
         final String method = "verifyData: ";
         // Filter out the columns from the expected and actual results
-        LOG.debug(method + "Applying filters to expected table");
+        log.debug(method + "Applying filters to expected table");
         ITable expectedFilteredTable = applyColumnFilters(expectedTable, excludeColumns, includeColumns);
-        LOG.debug(method + "Applying filters to actual table");
+        log.debug(method + "Applying filters to actual table");
         ITable actualFilteredTable = applyColumnFilters(actualTable, excludeColumns, includeColumns);
 
-        LOG.debug(method + "Sorting expected table");
+        log.debug(method + "Sorting expected table");
         SortedTable expectedSortedTable = new SortedTable(expectedFilteredTable);
-        LOG.debug(method + "Sorted expected table={}", expectedSortedTable);
+        log.debug(method + "Sorted expected table={}", expectedSortedTable);
 
-        LOG.debug(method + "Sorting actual table");
+        log.debug(method + "Sorting actual table");
         SortedTable actualSortedTable = new SortedTable(actualFilteredTable, expectedFilteredTable.getTableMetaData());
-        LOG.debug(method + "Sorted actual table={}", actualSortedTable);
+        log.debug(method + "Sorted actual table={}", actualSortedTable);
 
-        LOG.debug(method + "Comparing expected table to actual table");
+        log.debug(method + "Comparing expected table to actual table");
         Column[] additionalColumnInfo = expectedTable.getTableMetaData().getColumns();
 
         Assertion.assertEquals(expectedSortedTable, actualSortedTable, additionalColumnInfo);
@@ -477,10 +477,10 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
         }
 
         int count = dataFiles.length;
-        LOG.debug("makeCompositeDataSet: dataFiles count=" + count);
+        log.debug("makeCompositeDataSet: dataFiles count=" + count);
         if (count == 0)
         {
-            LOG.info("makeCompositeDataSet: Specified zero data files");
+            log.info("makeCompositeDataSet: Specified zero data files");
         }
 
         List list = new ArrayList();
@@ -523,19 +523,19 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
         // not wanting to compare anything!
         if (includeColumns == null)
         {
-            LOG.debug("applyColumnFilters: including columns=(all)");
+            log.debug("applyColumnFilters: including columns=(all)");
         } else
         {
-            LOG.debug("applyColumnFilters: including columns='{}'", new Object[] {includeColumns});
+            log.debug("applyColumnFilters: including columns='{}'", new Object[] {includeColumns});
             filteredTable = DefaultColumnFilter.includedColumnsTable(filteredTable, includeColumns);
         }
 
         if (excludeColumns == null || excludeColumns.length == 0)
         {
-            LOG.debug("applyColumnFilters: excluding columns=(none)");
+            log.debug("applyColumnFilters: excluding columns=(none)");
         } else
         {
-            LOG.debug("applyColumnFilters: excluding columns='{}'", new Object[] {excludeColumns});
+            log.debug("applyColumnFilters: excluding columns='{}'", new Object[] {excludeColumns});
             filteredTable = DefaultColumnFilter.excludedColumnsTable(filteredTable, excludeColumns);
         }
 
