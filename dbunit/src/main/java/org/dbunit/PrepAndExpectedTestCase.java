@@ -24,16 +24,17 @@ import org.dbunit.dataset.IDataSet;
 
 /**
  * Test case supporting prep data and expected data.
- * 
+ *
  * @author Jeff Jensen jeffjensen AT users.sourceforge.net
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
  * @since 2.4.8
  */
-public interface PrepAndExpectedTestCase {
+public interface PrepAndExpectedTestCase
+{
     /**
      * Configure the test. Call this method before performing the test steps.
-     * 
+     *
      * @param tables
      *            Table definitions to verify after test execution.
      * @param prepDataFiles
@@ -42,20 +43,20 @@ public interface PrepAndExpectedTestCase {
      *            The expected data files to load as expected data.
      * @throws Exception
      */
-    void configureTest(VerifyTableDefinition[] tables, String[] prepDataFiles,
-            String[] expectedDataFiles) throws Exception;
+    void configureTest(VerifyTableDefinition[] tables, String[] prepDataFiles, String[] expectedDataFiles)
+            throws Exception;
 
     /**
      * Execute pre-test steps. Call this method before performing the test
      * steps.
-     * 
+     *
      * @throws Exception
      */
     void preTest() throws Exception;
 
     /**
      * Convenience method to call configureTest() and preTest().
-     * 
+     *
      * @param tables
      *            Table definitions to verify after test execution.
      * @param prepDataFiles
@@ -64,13 +65,12 @@ public interface PrepAndExpectedTestCase {
      *            The expected data files to load as expected data.
      * @throws Exception
      */
-    void preTest(VerifyTableDefinition[] tables, String[] prepDataFiles,
-            String[] expectedDataFiles) throws Exception;
+    void preTest(VerifyTableDefinition[] tables, String[] prepDataFiles, String[] expectedDataFiles) throws Exception;
 
     /**
      * Execute all post-test steps. Call this method after performing the test
      * steps.
-     * 
+     *
      * @throws Exception
      */
     void postTest() throws Exception;
@@ -78,7 +78,7 @@ public interface PrepAndExpectedTestCase {
     /**
      * Execute post-test steps. Call this method after performing the test
      * steps.
-     * 
+     *
      * @param verifyData
      *            Specify true to perform verify data steps, false to not.
      *            Useful to specify false when test has failure in progress
@@ -91,7 +91,7 @@ public interface PrepAndExpectedTestCase {
     /**
      * For the provided VerifyTableDefinitions, verify each table's actual
      * results are as expected.
-     * 
+     *
      * @throws Exception
      */
     void verifyData() throws Exception;
@@ -100,21 +100,21 @@ public interface PrepAndExpectedTestCase {
      * Cleanup tables specified in prep and expected datasets, using the
      * provided databaseTester. See
      * {@link org.dbunit.IDatabaseTester#onTearDown()}.
-     * 
+     *
      * @throws Exception
      */
     void cleanupData() throws Exception;
 
     /**
      * Get the prep dataset, created from the prepDataFiles.
-     * 
+     *
      * @return The prep dataset.
      */
     IDataSet getPrepDataset();
 
     /**
      * Get the expected dataset, created from the expectedDataFiles.
-     * 
+     *
      * @return The expected dataset.
      */
     IDataSet getExpectedDataset();

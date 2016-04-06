@@ -1,7 +1,5 @@
 package org.dbunit;
 
-import junit.framework.TestCase;
-
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.DefaultTable;
 import org.dbunit.dataset.IDataSet;
@@ -9,7 +7,10 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.util.fileloader.DataFileLoader;
 import org.dbunit.util.fileloader.FlatXmlDataFileLoader;
 
-public class DefaultPrepAndExpectedTestCaseTest extends TestCase {
+import junit.framework.TestCase;
+
+public class DefaultPrepAndExpectedTestCaseTest extends TestCase
+{
     private static final String PREP_DATA_FILE_NAME = "/xml/flatXmlDataSetTest.xml";
     private static final String EXP_DATA_FILE_NAME = "/xml/flatXmlDataSetTest.xml";
 
@@ -17,24 +18,25 @@ public class DefaultPrepAndExpectedTestCaseTest extends TestCase {
     // private final IDatabaseTester databaseTester = new
     // JdbcDatabaseTester(driverClass, connectionUrl);
 
-    private final DefaultPrepAndExpectedTestCase tc =
-        new DefaultPrepAndExpectedTestCase();
+    private final DefaultPrepAndExpectedTestCase tc = new DefaultPrepAndExpectedTestCase();
 
-    protected void setUp() throws Exception {
+    @Override
+    protected void setUp() throws Exception
+    {
         super.setUp();
         // tc.setDatabaseTester(databaseTester);
         tc.setDataFileLoader(dataFileLoader);
     }
 
-    public void testConfigureTest() throws Exception {
+    public void testConfigureTest() throws Exception
+    {
         String[] prepDataFiles = {PREP_DATA_FILE_NAME};
         String[] expectedDataFiles = {EXP_DATA_FILE_NAME};
         VerifyTableDefinition[] tables = {};
 
         tc.configureTest(tables, prepDataFiles, expectedDataFiles);
 
-        assertEquals("Configured tables do not match expected.", tables, tc
-                .getTableDefs());
+        assertEquals("Configured tables do not match expected.", tables, tc.getTableDefs());
 
         IDataSet expPrepDs = dataFileLoader.load(PREP_DATA_FILE_NAME);
         Assertion.assertEquals(expPrepDs, tc.getPrepDataset());
@@ -43,40 +45,49 @@ public class DefaultPrepAndExpectedTestCaseTest extends TestCase {
         Assertion.assertEquals(expExpDs, tc.getExpectedDataset());
     }
 
-    public void testPreTest() throws Exception {
+    public void testPreTest() throws Exception
+    {
         // TODO implement test
     }
 
-    public void testPostTest() {
+    public void testPostTest()
+    {
         // TODO implement test
     }
 
-    public void testPostTest_false() {
+    public void testPostTest_false()
+    {
         // TODO implement test
     }
 
-    public void testSetupData() {
+    public void testSetupData()
+    {
         // TODO implement test
     }
 
-    public void testVerifyData() {
+    public void testVerifyData()
+    {
         // TODO implement test
     }
 
-    public void testVerifyDataITableITableStringArrayStringArray() {
+    public void testVerifyDataITableITableStringArrayStringArray()
+    {
         // TODO implement test
     }
 
-    public void testCleanupData() {
+    public void testCleanupData()
+    {
         // TODO implement test
     }
 
-    public void testMakeCompositeDataSet() {
+    public void testMakeCompositeDataSet()
+    {
         // TODO implement test
     }
 
     // TODO implement test - doesn't test anything yet
-    public void testApplyColumnFiltersBothNull() throws DataSetException {
+    public void testApplyColumnFiltersBothNull() throws DataSetException
+    {
         final ITable table = new DefaultTable("test_table");
         final String[] excludeColumns = null;
         final String[] includeColumns = null;
@@ -84,7 +95,8 @@ public class DefaultPrepAndExpectedTestCaseTest extends TestCase {
     }
 
     // TODO implement test - doesn't test anything yet
-    public void testApplyColumnFiltersBothNotNull() throws DataSetException {
+    public void testApplyColumnFiltersBothNotNull() throws DataSetException
+    {
         final ITable table = new DefaultTable("test_table");
         final String[] excludeColumns = {"COL1"};
         final String[] includeColumns = {"COL2"};
