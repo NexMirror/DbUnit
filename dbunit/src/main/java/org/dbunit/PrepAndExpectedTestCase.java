@@ -68,6 +68,24 @@ public interface PrepAndExpectedTestCase
     void preTest(VerifyTableDefinition[] tables, String[] prepDataFiles, String[] expectedDataFiles) throws Exception;
 
     /**
+     * Run the DbUnit test.
+     *
+     * @param tables
+     *            Table definitions to verify after test execution.
+     * @param prepDataFiles
+     *            The prep data files to load as seed data.
+     * @param expectedDataFiles
+     *            The expected data files to load as expected data.
+     * @param testSteps
+     *            The test steps to run.
+     * @return User defined object from running the test steps.
+     * @throws Exception
+     * @since 2.5.2
+     */
+    Object runTest(VerifyTableDefinition[] verifyTables, String[] prepDataFiles, String[] expectedDataFiles,
+            PrepAndExpectedTestCaseSteps testSteps) throws Exception;
+
+    /**
      * Execute all post-test steps. Call this method after performing the test
      * steps.
      *

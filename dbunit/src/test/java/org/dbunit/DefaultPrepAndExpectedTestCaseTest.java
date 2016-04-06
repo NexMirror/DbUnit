@@ -1,11 +1,17 @@
 package org.dbunit;
 
+import org.dbunit.database.MockDatabaseConnection;
+import org.dbunit.database.statement.IBatchStatement;
+import org.dbunit.database.statement.MockBatchStatement;
+import org.dbunit.database.statement.MockStatementFactory;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.DefaultTable;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.util.fileloader.DataFileLoader;
 import org.dbunit.util.fileloader.FlatXmlDataFileLoader;
+
+import com.mockobjects.sql.MockConnection;
 
 import junit.framework.TestCase;
 
@@ -48,6 +54,29 @@ public class DefaultPrepAndExpectedTestCaseTest extends TestCase
     public void testPreTest() throws Exception
     {
         // TODO implement test
+    }
+
+    public void testRunTest() throws Exception
+    {
+        VerifyTableDefinition[] tables = {};
+        String[] prepDataFiles = {};
+        String[] expectedDataFiles = {};
+        PrepAndExpectedTestCaseSteps testSteps = new PrepAndExpectedTestCaseSteps()
+        {
+            public Object run() throws Exception
+            {
+                System.out.println("This message represents the test steps.");
+                return Boolean.TRUE;
+            }
+        };
+
+        MockDatabaseConnection mockDbConnection = makeMockDatabaseConnection();
+        IDatabaseTester databaseTester = new DefaultDatabaseTester(mockDbConnection);
+
+        tc.setDatabaseTester(databaseTester);
+        Boolean actual = (Boolean) tc.runTest(tables, prepDataFiles, expectedDataFiles, testSteps);
+
+        assertTrue("Did not receive expected value from runTest().", actual);
     }
 
     public void testPostTest()
@@ -101,5 +130,19 @@ public class DefaultPrepAndExpectedTestCaseTest extends TestCase
         final String[] excludeColumns = {"COL1"};
         final String[] includeColumns = {"COL2"};
         tc.applyColumnFilters(table, excludeColumns, includeColumns);
+    }
+
+    private MockDatabaseConnection makeMockDatabaseConnection()
+    {
+        MockConnection mockConnection = new MockConnection();
+
+        MockStatementFactory mockStatementFactory = new MockStatementFactory();
+        IBatchStatement mockBatchStatement = new MockBatchStatement();
+        mockStatementFactory.setupStatement(mockBatchStatement);
+
+        MockDatabaseConnection mockDbConnection = new MockDatabaseConnection();
+        mockDbConnection.setupConnection(mockConnection);
+        mockDbConnection.setupStatementFactory(mockStatementFactory);
+        return mockDbConnection;
     }
 }

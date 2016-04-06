@@ -100,7 +100,7 @@ import org.slf4j.LoggerFactory;
  *
  *         tc.preTest(tables, prepDataFiles, expectedDataFiles);
  *
- *         // execute test
+ *         // execute test steps
  *     } catch (Exception e)
  *     {
  *         log.error(&quot;Test error&quot;, e);
@@ -146,7 +146,7 @@ import org.slf4j.LoggerFactory;
  * &#064;Test
  * public void testExample() throws Exception
  * {
- *     // execute test
+ *     // execute test steps
  * }
  * </pre>
  *
@@ -158,6 +158,36 @@ import org.slf4j.LoggerFactory;
  *
  * Put common data in one or more files and pass the needed ones in the correct
  * data file array.
+ *
+ * <h4>Java 8 and Anonymous Interfaces</h4>
+ * <p>
+ * Release 2.5.2 introduced interface {@link PrepAndExpectedTestCaseSteps} and
+ * the
+ * {@link #runTest(VerifyTableDefinition[], String[], String[], PrepAndExpectedTestCaseSteps)}
+ * method. This allows for encapsulating test steps into an anonymous inner
+ * class or a Java 8+ lambda and avoiding the try/catch/finally template in
+ * tests.
+ * </p>
+ *
+ * <pre>
+ * &#064;Autowired
+ * private PrepAndExpectedTestCase tc;
+ *
+ * &#064;Test
+ * public void testExample() throws Exception
+ * {
+ *     final String[] prepDataFiles = {}; // define prep files
+ *     final String[] expectedDataFiles = {}; // define expected files
+ *     final VerifyTableDefinition[] tables = {}; // define tables to verify
+ *     final PrepAndExpectedTestCaseSteps testSteps = () -> {
+ *         // execute test steps
+ *
+ *         return null; // or an object for use outside the Steps
+ *     };
+ *
+ *     tester.runTest(tables, prepDataFiles, expectedDataFiles, testSteps);
+ * }
+ * </pre>
  *
  * <h4>Notes</h4>
  * <ol>
@@ -182,6 +212,8 @@ import org.slf4j.LoggerFactory;
 public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAndExpectedTestCase
 {
     private final Logger log = LoggerFactory.getLogger(DefaultPrepAndExpectedTestCase.class);
+
+    public static final String TEST_ERROR_MSG = "DbUnit test error.";
 
     private IDatabaseTester databaseTester;
     private DataFileLoader dataFileLoader;
@@ -268,6 +300,30 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
     {
         configureTest(tables, prepDataFiles, expectedDataFiles);
         preTest();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object runTest(VerifyTableDefinition[] verifyTables, String[] prepDataFiles, String[] expectedDataFiles,
+            PrepAndExpectedTestCaseSteps testSteps) throws Exception
+    {
+        final Object result;
+
+        try
+        {
+            preTest(verifyTables, prepDataFiles, expectedDataFiles);
+            result = testSteps.run();
+        } catch (final Exception e)
+        {
+            log.error(TEST_ERROR_MSG, e);
+            throw e;
+        } finally
+        {
+            postTest();
+        }
+
+        return result;
     }
 
     /**
