@@ -38,37 +38,37 @@
     <mavenVersion>3.0.4</mavenVersion>
 
     <!-- Maven plugin versions -->
-    <assemblyPluginVersion>2.5.3</assemblyPluginVersion>
+    <assemblyPluginVersion>2.6</assemblyPluginVersion>
     <changelogPluginVersion>2.3</changelogPluginVersion>
-    <changesPluginVersion>2.11</changesPluginVersion>
-    <checkstylePluginVersion>2.15</checkstylePluginVersion>
-    <cleanPluginVersion>2.6.1</cleanPluginVersion>
+    <changesPluginVersion>2.12</changesPluginVersion>
+    <checkstylePluginVersion>2.17</checkstylePluginVersion>
+    <cleanPluginVersion>3.0.0</cleanPluginVersion>
     <coberturaPluginVersion>2.7</coberturaPluginVersion>
-    <compilerPluginVersion>3.3</compilerPluginVersion>
+    <compilerPluginVersion>3.5.1</compilerPluginVersion>
     <deployPluginVersion>2.8.2</deployPluginVersion>
-    <enforcerPluginVersion>1.4</enforcerPluginVersion>
-    <failsafePluginVersion>2.18.1</failsafePluginVersion>
+    <enforcerPluginVersion>1.4.1</enforcerPluginVersion>
+    <failsafePluginVersion>2.19.1</failsafePluginVersion>
     <gpgPluginVersion>1.6</gpgPluginVersion>
     <installPluginVersion>2.5.2</installPluginVersion>
     <jarPluginVersion>2.6</jarPluginVersion>
     <javadocPluginVersion>2.10.3</javadocPluginVersion>
     <jdependPluginVersion>2.0</jdependPluginVersion>
     <jxrPluginVersion>2.5</jxrPluginVersion>
-    <pmdPluginVersion>3.4</pmdPluginVersion>
-    <projectInfoReportsPluginVersion>2.8</projectInfoReportsPluginVersion>
-    <releasePluginVersion>2.5.1</releasePluginVersion>
+    <pmdPluginVersion>3.6</pmdPluginVersion>
+    <projectInfoReportsPluginVersion>2.9</projectInfoReportsPluginVersion>
+    <releasePluginVersion>2.5.3</releasePluginVersion>
     <resourcesPluginVersion>2.7</resourcesPluginVersion>
-    <sitePluginVersion>3.4</sitePluginVersion>
+    <sitePluginVersion>3.5</sitePluginVersion>
     <sqlPluginVersion>1.5</sqlPluginVersion>
-    <surefirePluginVersion>2.18.1</surefirePluginVersion>
+    <surefirePluginVersion>2.19.1</surefirePluginVersion>
 
     <!-- Framework versions --> 
     <junitVersion>4.12</junitVersion>
-    <logbackVersion>1.1.3</logbackVersion>
-    <slf4jVersion>1.7.12</slf4jVersion>
-    
+    <logbackVersion>1.1.7</logbackVersion>
+    <slf4jVersion>1.7.21</slf4jVersion>
+
     <!-- Other versions --> 
-    <wagonSshVersion>2.8</wagonSshVersion>
+    <wagonSshVersion>2.10</wagonSshVersion>
   </properties>
 
   <prerequisites>
