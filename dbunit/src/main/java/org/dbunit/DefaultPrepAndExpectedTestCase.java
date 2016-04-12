@@ -185,7 +185,7 @@ import org.slf4j.LoggerFactory;
  *         return null; // or an object for use outside the Steps
  *     };
  *
- *     tester.runTest(tables, prepDataFiles, expectedDataFiles, testSteps);
+ *     tc.runTest(tables, prepDataFiles, expectedDataFiles, testSteps);
  * }
  * </pre>
  *
