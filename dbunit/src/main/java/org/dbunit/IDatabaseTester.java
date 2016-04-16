@@ -36,57 +36,65 @@ import org.dbunit.operation.DatabaseOperation;
  */
 public interface IDatabaseTester
 {
-   /**
-    * Close the specified connection.
-    * @deprecated since 2.4.4 define a user defined {@link #setOperationListener(IOperationListener)} in advance
-    */
-   void closeConnection( IDatabaseConnection connection ) throws Exception;
+    /**
+     * Close the specified connection.
+     *
+     * @deprecated since 2.4.4 define a user defined
+     *             {@link #setOperationListener(IOperationListener)} in advance
+     */
+    @Deprecated
+    void closeConnection(IDatabaseConnection connection) throws Exception;
 
-   /**
-    * Returns the test database connection.
-    */
-   IDatabaseConnection getConnection() throws Exception;
+    /**
+     * Returns the test database connection.
+     */
+    IDatabaseConnection getConnection() throws Exception;
 
-   /**
-    * Returns the test dataset.
-    */
-   IDataSet getDataSet();
+    /**
+     * Returns the test dataset.
+     */
+    IDataSet getDataSet();
 
-   /**
-    * Sets the test dataset to use.
-    */
-   void setDataSet( IDataSet dataSet );
+    /**
+     * Sets the test dataset to use.
+     */
+    void setDataSet(IDataSet dataSet);
 
-   /**
-    * Sets the schema value.
-    * @deprecated since 2.4.3 Should not be used anymore. Every concrete {@link IDatabaseTester} implementation that needs a schema has the possibility to set it somehow in the constructor
-    */
-   void setSchema( String schema );
+    /**
+     * Sets the schema value.
+     *
+     * @deprecated since 2.4.3 Should not be used anymore. Every concrete
+     *             {@link IDatabaseTester} implementation that needs a schema
+     *             has the possibility to set it somehow in the constructor
+     */
+    @Deprecated
+    void setSchema(String schema);
 
-   /**
-    * Sets the DatabaseOperation to call when starting the test.
-    */
-   void setSetUpOperation( DatabaseOperation setUpOperation );
+    /**
+     * Sets the DatabaseOperation to call when starting the test.
+     */
+    void setSetUpOperation(DatabaseOperation setUpOperation);
 
-   /**
-    * Sets the DatabaseOperation to call when ending the test.
-    */
-   void setTearDownOperation( DatabaseOperation tearDownOperation );
+    /**
+     * Sets the DatabaseOperation to call when ending the test.
+     */
+    void setTearDownOperation(DatabaseOperation tearDownOperation);
 
-   /**
-    * TestCases must call this method inside setUp()
-    */
-   void onSetup() throws Exception;
+    /**
+     * TestCases must call this method inside setUp()
+     */
+    void onSetup() throws Exception;
 
-   /**
-    * TestCases must call this method inside tearDown()
-    */
-   void onTearDown() throws Exception;
+    /**
+     * TestCases must call this method inside tearDown()
+     */
+    void onTearDown() throws Exception;
 
-   /**
-    * @param operationListener The operation listener that is invoked on
-    * specific events in the {@link IDatabaseTester}.
-    * @since 2.4.4
-    */
-   void setOperationListener(IOperationListener operationListener);
+    /**
+     * @param operationListener
+     *            The operation listener that is invoked on specific events in
+     *            the {@link IDatabaseTester}.
+     * @since 2.4.4
+     */
+    void setOperationListener(IOperationListener operationListener);
 }

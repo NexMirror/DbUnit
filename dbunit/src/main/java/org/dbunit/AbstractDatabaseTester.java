@@ -21,8 +21,8 @@
 
 package org.dbunit;
 
-import org.dbunit.assertion.SimpleAssert;
 import org.dbunit.assertion.DefaultFailureHandler;
+import org.dbunit.assertion.SimpleAssert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.operation.DatabaseOperation;
@@ -40,188 +40,198 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractDatabaseTester extends SimpleAssert implements IDatabaseTester
 {
+    /**
+     * Logger for this class
+     */
+    private static final Logger logger = LoggerFactory.getLogger(AbstractDatabaseTester.class);
 
-	/**
-	 * Logger for this class
-	 */
-	private static final Logger logger = LoggerFactory.getLogger(AbstractDatabaseTester.class);
+    /**
+     * Enumeration of the valid {@link OperationType}s
+     */
+    private static final class OperationType
+    {
+        public static final OperationType SET_UP = new OperationType("setUp");
+        public static final OperationType TEAR_DOWN = new OperationType("tearDown");
 
-	/**
-	 * Enumeration of the valid {@link OperationType}s
-	 */
-	private static final class OperationType {
-	    public static final OperationType SET_UP = new OperationType("setUp"); 
-	    public static final OperationType TEAR_DOWN = new OperationType("tearDown");
-	    
-	    private String key;
-	    private OperationType(String key){
-	        this.key=key;
-	    }
-	    public String toString(){
-	        return "OperationType: " + key;
-	    }
-	}
-	
-	private IDataSet dataSet;
-	private String schema;
-	private DatabaseOperation setUpOperation = DatabaseOperation.CLEAN_INSERT;
-	private DatabaseOperation tearDownOperation = DatabaseOperation.NONE;
-	private IOperationListener operationListener;
+        private final String key;
 
-	public AbstractDatabaseTester()
-	{
-		this(null);
-	}
+        private OperationType(String key)
+        {
+            this.key = key;
+        }
 
-	/**
-	 * @param schema The schema to be tested. Can be <code>null</code>
-	 * @since 2.4.3
-	 */
-	public AbstractDatabaseTester(String schema)
-	{
-	    super(new DefaultFailureHandler());
-	    this.schema = schema;
-	}
+        @Override
+        public String toString()
+        {
+            return "OperationType: " + key;
+        }
+    }
 
-	public void closeConnection( IDatabaseConnection connection ) throws Exception
-	{
-		logger.debug("closeConnection(connection={}) - start",connection);
+    private IDataSet dataSet;
+    private String schema;
+    private DatabaseOperation setUpOperation = DatabaseOperation.CLEAN_INSERT;
+    private DatabaseOperation tearDownOperation = DatabaseOperation.NONE;
+    private IOperationListener operationListener;
 
-		connection.close();
-	}
+    public AbstractDatabaseTester()
+    {
+        this(null);
+    }
 
-	public IDataSet getDataSet()
-	{
-		logger.debug("getDataSet() - start");
+    /**
+     * @param schema
+     *            The schema to be tested. Can be <code>null</code>
+     * @since 2.4.3
+     */
+    public AbstractDatabaseTester(String schema)
+    {
+        super(new DefaultFailureHandler());
+        this.schema = schema;
+    }
 
-		return dataSet;
-	}
+    public void closeConnection(IDatabaseConnection connection) throws Exception
+    {
+        logger.debug("closeConnection(connection={}) - start", connection);
 
-	public void onSetup() throws Exception
-	{
-		logger.debug("onSetup() - start");
-		executeOperation( getSetUpOperation(), OperationType.SET_UP );
-	}
+        connection.close();
+    }
 
-	public void onTearDown() throws Exception
-	{
-		logger.debug("onTearDown() - start");
-		executeOperation( getTearDownOperation(), OperationType.TEAR_DOWN );
-	}
+    public IDataSet getDataSet()
+    {
+        logger.debug("getDataSet() - start");
 
-	public void setDataSet( IDataSet dataSet )
-	{
-		logger.debug("setDataSet(dataSet={}) - start", dataSet);
+        return dataSet;
+    }
 
-		this.dataSet = dataSet;
-	}
+    public void onSetup() throws Exception
+    {
+        logger.debug("onSetup() - start");
+        executeOperation(getSetUpOperation(), OperationType.SET_UP);
+    }
 
-	public void setSchema( String schema )
-	{
-		logger.debug("setSchema(schema={}) - start", schema);
+    public void onTearDown() throws Exception
+    {
+        logger.debug("onTearDown() - start");
+        executeOperation(getTearDownOperation(), OperationType.TEAR_DOWN);
+    }
 
-		logger.warn("setSchema() should not be used anymore");
-		this.schema = schema;
-	}
+    public void setDataSet(IDataSet dataSet)
+    {
+        logger.debug("setDataSet(dataSet={}) - start", dataSet);
 
-	public void setSetUpOperation( DatabaseOperation setUpOperation )
-	{
-		logger.debug("setSetUpOperation(setUpOperation={}) - start", setUpOperation);
+        this.dataSet = dataSet;
+    }
 
-		this.setUpOperation = setUpOperation;
-	}
+    public void setSchema(String schema)
+    {
+        logger.debug("setSchema(schema={}) - start", schema);
 
-	public void setTearDownOperation( DatabaseOperation tearDownOperation )
-	{
-		logger.debug("setTearDownOperation(tearDownOperation={}) - start", tearDownOperation);
+        logger.warn("setSchema() should not be used anymore");
+        this.schema = schema;
+    }
 
-		this.tearDownOperation = tearDownOperation;
-	}
+    public void setSetUpOperation(DatabaseOperation setUpOperation)
+    {
+        logger.debug("setSetUpOperation(setUpOperation={}) - start", setUpOperation);
 
-	/**
-	 * Returns the schema value.
-	 */
-	protected String getSchema()
-	{
-		logger.trace("getSchema() - start");
+        this.setUpOperation = setUpOperation;
+    }
 
-		return schema;
-	}
+    public void setTearDownOperation(DatabaseOperation tearDownOperation)
+    {
+        logger.debug("setTearDownOperation(tearDownOperation={}) - start", tearDownOperation);
 
-	/**
-	 * Returns the DatabaseOperation to call when starting the test.
-	 */
-	protected DatabaseOperation getSetUpOperation()
-	{
-		logger.trace("getSetUpOperation() - start");
+        this.tearDownOperation = tearDownOperation;
+    }
 
-		return setUpOperation;
-	}
+    /**
+     * Returns the schema value.
+     */
+    protected String getSchema()
+    {
+        logger.trace("getSchema() - start");
 
-	/**
-	 * Returns the DatabaseOperation to call when ending the test.
-	 */
-	protected DatabaseOperation getTearDownOperation()
-	{
-		logger.trace("getTearDownOperation() - start");
+        return schema;
+    }
 
-		return tearDownOperation;
-	}
+    /**
+     * Returns the DatabaseOperation to call when starting the test.
+     */
+    protected DatabaseOperation getSetUpOperation()
+    {
+        logger.trace("getSetUpOperation() - start");
 
-	/**
-	 * Executes a DatabaseOperation with a IDatabaseConnection supplied by
-	 * {@link getConnection()} and the test dataset.
-	 */
-	private void executeOperation( DatabaseOperation operation, OperationType type ) throws Exception
-	{
-		logger.debug("executeOperation(operation={}) - start", operation);
+        return setUpOperation;
+    }
 
-		if( operation != DatabaseOperation.NONE ){
-		    // Ensure that the operationListener is set
-		    if(operationListener == null){
-		        logger.debug("OperationListener is null and will be defaulted.");
-		        operationListener = new DefaultOperationListener();
-		    }
-		    
-			IDatabaseConnection connection = getConnection();
-		    operationListener.connectionRetrieved(connection);
+    /**
+     * Returns the DatabaseOperation to call when ending the test.
+     */
+    protected DatabaseOperation getTearDownOperation()
+    {
+        logger.trace("getTearDownOperation() - start");
 
-			try{
-				operation.execute( connection, getDataSet() );
-			}
-			finally{
-			    // Since 2.4.4 the OperationListener is responsible for closing the connection at the right time
-			    if(type == OperationType.SET_UP){
-			        operationListener.operationSetUpFinished(connection);
-			    }
-			    else if(type == OperationType.TEAR_DOWN){
-			        operationListener.operationTearDownFinished(connection);
-			    }
-			    else{
-			        throw new DatabaseUnitRuntimeException("Cannot happen - unknown OperationType specified: " + type);
-			    }
-			}
-		}
-	}
+        return tearDownOperation;
+    }
 
-    public void setOperationListener(IOperationListener operationListener) 
+    /**
+     * Executes a DatabaseOperation with a IDatabaseConnection supplied by
+     * {@link getConnection()} and the test dataset.
+     */
+    private void executeOperation(DatabaseOperation operation, OperationType type) throws Exception
+    {
+        logger.debug("executeOperation(operation={}) - start", operation);
+
+        if (operation != DatabaseOperation.NONE)
+        {
+            // Ensure that the operationListener is set
+            if (operationListener == null)
+            {
+                logger.debug("OperationListener is null and will be defaulted.");
+                operationListener = new DefaultOperationListener();
+            }
+
+            IDatabaseConnection connection = getConnection();
+            operationListener.connectionRetrieved(connection);
+
+            try
+            {
+                operation.execute(connection, getDataSet());
+            } finally
+            {
+                // Since 2.4.4 the OperationListener is responsible for closing
+                // the connection at the right time
+                if (type == OperationType.SET_UP)
+                {
+                    operationListener.operationSetUpFinished(connection);
+                } else if (type == OperationType.TEAR_DOWN)
+                {
+                    operationListener.operationTearDownFinished(connection);
+                } else
+                {
+                    throw new DatabaseUnitRuntimeException("Cannot happen - unknown OperationType specified: " + type);
+                }
+            }
+        }
+    }
+
+    public void setOperationListener(IOperationListener operationListener)
     {
         logger.debug("setOperationListener(operationListener={}) - start", operationListener);
         this.operationListener = operationListener;
     }
 
+    @Override
     public String toString()
     {
-    	StringBuffer sb = new StringBuffer();
-    	sb.append(getClass().getName()).append("[");
-    	sb.append("schema=").append(schema);
-    	sb.append(", dataSet=").append(dataSet);
-    	sb.append(", setUpOperation=").append(setUpOperation);
-    	sb.append(", tearDownOperation=").append(tearDownOperation);
-    	sb.append(", operationListener=").append(operationListener);
-    	sb.append("]");
-    	return sb.toString();
+        StringBuffer sb = new StringBuffer();
+        sb.append(getClass().getName()).append("[");
+        sb.append("schema=").append(schema);
+        sb.append(", dataSet=").append(dataSet);
+        sb.append(", setUpOperation=").append(setUpOperation);
+        sb.append(", tearDownOperation=").append(tearDownOperation);
+        sb.append(", operationListener=").append(operationListener);
+        sb.append("]");
+        return sb.toString();
     }
-
 }
-
