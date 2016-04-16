@@ -373,7 +373,9 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
                 throw new IllegalStateException("databaseTester is null; must configure or set it first");
             }
 
+            databaseTester.setTearDownOperation(getTearDownOperation());
             databaseTester.setDataSet(dataset);
+            databaseTester.setOperationListener(getOperationListener());
             databaseTester.onTearDown();
             log.debug("cleanupData: Clean up done");
         } catch (Exception e)
@@ -381,6 +383,14 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
             log.error("cleanupData: Exception:", e);
             throw e;
         }
+    }
+
+    @Override
+    protected void tearDown() throws Exception
+    {
+        // parent tearDown() only cleans up prep data
+        cleanupData();
+        super.tearDown();
     }
 
     /**
@@ -399,13 +409,26 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
 
         try
         {
-            databaseTester.setDataSet(prepDs);
-            databaseTester.onSetup();
+            super.setUp();
         } catch (Exception e)
         {
             log.error("setupData: Exception with setting up data:", e);
             throw e;
         }
+    }
+
+    @Override
+    protected DatabaseOperation getSetUpOperation() throws Exception
+    {
+        assertNotNull("databaseTester is null; must configure or set it first", databaseTester);
+        return databaseTester.getSetUpOperation();
+    }
+
+    @Override
+    protected DatabaseOperation getTearDownOperation() throws Exception
+    {
+        assertNotNull("databaseTester is null; must configure or set it first", databaseTester);
+        return databaseTester.getTearDownOperation();
     }
 
     /**
