@@ -56,6 +56,16 @@ public interface IDatabaseTester
     IDataSet getDataSet();
 
     /**
+     * Gets the DatabaseOperation to call when starting the test.
+     */
+    DatabaseOperation getSetUpOperation();
+
+    /**
+     * Gets the DatabaseOperation to call when ending the test.
+     */
+    DatabaseOperation getTearDownOperation();
+
+    /**
      * Sets the test dataset to use.
      */
     void setDataSet(IDataSet dataSet);
