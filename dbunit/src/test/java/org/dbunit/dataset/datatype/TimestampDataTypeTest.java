@@ -21,9 +21,6 @@
 
 package org.dbunit.dataset.datatype;
 
-import org.dbunit.database.ExtendedMockSingleRowResultSet;
-import org.dbunit.dataset.ITable;
-
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -31,6 +28,9 @@ import java.sql.Types;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
+
+import org.dbunit.database.ExtendedMockSingleRowResultSet;
+import org.dbunit.dataset.ITable;
 
 /**
  * @author Manuel Laflamme
@@ -49,6 +49,7 @@ public class TimestampDataTypeTest extends AbstractDataTypeTest
     /**
      *
      */
+    @Override
     public void testToString() throws Exception
     {
         assertEquals("name", "TIMESTAMP", THIS_TYPE.toString());
@@ -57,22 +58,26 @@ public class TimestampDataTypeTest extends AbstractDataTypeTest
     /**
      *
      */
+    @Override
     public void testGetTypeClass() throws Exception
     {
         assertEquals("class", Timestamp.class, THIS_TYPE.getTypeClass());
     }
 
+    @Override
     public void testIsNumber() throws Exception
     {
         assertEquals("is number", false, THIS_TYPE.isNumber());
     }
 
+    @Override
     public void testIsDateTime() throws Exception
     {
         assertEquals("is date/time", true, THIS_TYPE.isDateTime());
     }
 
-    private static Timestamp makeTimestamp(int year, int month, int day, int hour, int minute, int second, int millis, TimeZone timeZone)
+    private static Timestamp makeTimestamp(int year, int month, int day,
+            int hour, int minute, int second, int millis, TimeZone timeZone)
     {
         Calendar cal = new GregorianCalendar(timeZone);
         cal.clear();
@@ -81,26 +86,35 @@ public class TimestampDataTypeTest extends AbstractDataTypeTest
         return new Timestamp(cal.getTime().getTime());
     }
 
-    private static Timestamp makeTimestamp(int year, int month, int day, int hour, int minute, int second, int millis, String timeZone)
+    private static Timestamp makeTimestamp(int year, int month, int day,
+            int hour, int minute, int second, int millis, String timeZone)
     {
-       return makeTimestamp(year, month, day, hour, minute, second, millis, TimeZone.getTimeZone(timeZone));
+        return makeTimestamp(year, month, day, hour, minute, second, millis,
+                TimeZone.getTimeZone(timeZone));
     }
 
-    private static Timestamp makeTimestamp(int year, int month, int day, int hour, int minute, int second, int millis)
+    private static Timestamp makeTimestamp(int year, int month, int day,
+            int hour, int minute, int second, int millis)
     {
-        return makeTimestamp(year, month, day, hour, minute, second, millis, TimeZone.getDefault());
+        return makeTimestamp(year, month, day, hour, minute, second, millis,
+                TimeZone.getDefault());
     }
 
-    private static Timestamp makeTimestamp(int year, int month, int day, int hour, int minute, int second, String timeZone)
+    private static Timestamp makeTimestamp(int year, int month, int day,
+            int hour, int minute, int second, String timeZone)
     {
-        return makeTimestamp(year, month, day, hour, minute, second, 0, TimeZone.getTimeZone(timeZone));
+        return makeTimestamp(year, month, day, hour, minute, second, 0,
+                TimeZone.getTimeZone(timeZone));
     }
 
-    private static Timestamp makeTimestamp(int year, int month, int day, int hour, int minute, int second)
+    private static Timestamp makeTimestamp(int year, int month, int day,
+            int hour, int minute, int second)
     {
-        return makeTimestamp(year, month, day, hour, minute, second, 0, TimeZone.getDefault());
+        return makeTimestamp(year, month, day, hour, minute, second, 0,
+                TimeZone.getDefault());
     }
 
+    @Override
     public void testTypeCast() throws Exception
     {
         // Useful when manually testing this for other timezones
@@ -112,6 +126,7 @@ public class TimestampDataTypeTest extends AbstractDataTypeTest
         int rawOffset = currentTimeZone.getRawOffset();
         int hourOffset = rawOffset / 1000 / 60 / 60;
 
+        // @formatter:off
         Object[] values = {
             null,
             new Timestamp(1234),
@@ -145,8 +160,10 @@ public class TimestampDataTypeTest extends AbstractDataTypeTest
             makeTimestamp(1995, 0, 7, 1, 22, 41),
             makeTimestamp(2008, 10, 27, 14 - hourOffset, 52, 38, "Europe/Berlin")
         };
+        // @formatter:on
 
-        assertEquals("actual vs expected count", values.length, expected.length);
+        assertEquals("actual vs expected count", values.length,
+                expected.length);
 
         for (int i = 0; i < values.length; i++)
         {
@@ -155,19 +172,23 @@ public class TimestampDataTypeTest extends AbstractDataTypeTest
         }
     }
 
+    @Override
     public void testTypeCastNone() throws Exception
     {
         assertEquals("typecast", null, THIS_TYPE.typeCast(ITable.NO_VALUE));
     }
 
+    @Override
     public void testTypeCastInvalid() throws Exception
     {
+        // @formatter:off
         Object[] values = {
             new Integer(1234),
             new Object(),
             "bla",
             "2000.05.05",
         };
+        // @formatter:on
 
         for (int i = 0; i < values.length; i++)
         {
@@ -175,15 +196,16 @@ public class TimestampDataTypeTest extends AbstractDataTypeTest
             {
                 THIS_TYPE.typeCast(values[i]);
                 fail("Should throw TypeCastException - " + i);
-            }
-            catch (TypeCastException e)
+            } catch (TypeCastException e)
             {
             }
         }
     }
 
+    @Override
     public void testCompareEquals() throws Exception
     {
+        // @formatter:off
         Object[] values1 = {
             null,
             new Timestamp(1234),
@@ -205,16 +227,20 @@ public class TimestampDataTypeTest extends AbstractDataTypeTest
         };
 
         assertEquals("values count", values1.length, values2.length);
-
+        // @formatter:on
         for (int i = 0; i < values1.length; i++)
         {
-            assertEquals("compare1 " + i, 0, THIS_TYPE.compare(values1[i], values2[i]));
-            assertEquals("compare2 " + i, 0, THIS_TYPE.compare(values2[i], values1[i]));
+            assertEquals("compare1 " + i, 0,
+                    THIS_TYPE.compare(values1[i], values2[i]));
+            assertEquals("compare2 " + i, 0,
+                    THIS_TYPE.compare(values2[i], values1[i]));
         }
     }
 
+    @Override
     public void testCompareInvalid() throws Exception
     {
+        // @formatter:off
         Object[] values1 = {
             new Integer(1234),
             new Object(),
@@ -227,6 +253,7 @@ public class TimestampDataTypeTest extends AbstractDataTypeTest
             null,
             null,
         };
+        // @formatter:on
 
         assertEquals("values count", values1.length, values2.length);
 
@@ -236,8 +263,7 @@ public class TimestampDataTypeTest extends AbstractDataTypeTest
             {
                 THIS_TYPE.compare(values1[i], values2[i]);
                 fail("Should throw TypeCastException - " + i);
-            }
-            catch (TypeCastException e)
+            } catch (TypeCastException e)
             {
             }
 
@@ -245,15 +271,16 @@ public class TimestampDataTypeTest extends AbstractDataTypeTest
             {
                 THIS_TYPE.compare(values1[i], values2[i]);
                 fail("Should throw TypeCastException - " + i);
-            }
-            catch (TypeCastException e)
+            } catch (TypeCastException e)
             {
             }
         }
     }
 
+    @Override
     public void testCompareDifferent() throws Exception
     {
+        // @formatter:off
         Object[] less = {
             null,
             new java.sql.Date(0),
@@ -265,55 +292,70 @@ public class TimestampDataTypeTest extends AbstractDataTypeTest
             new java.sql.Date(System.currentTimeMillis()),
             Timestamp.valueOf("2003-01-30 11:42:00.0"),
         };
+        // @formatter:on
 
         assertEquals("values count", less.length, greater.length);
 
         for (int i = 0; i < less.length; i++)
         {
             assertTrue("less " + i, THIS_TYPE.compare(less[i], greater[i]) < 0);
-            assertTrue("greater " + i, THIS_TYPE.compare(greater[i], less[i]) > 0);
+            assertTrue("greater " + i,
+                    THIS_TYPE.compare(greater[i], less[i]) > 0);
         }
     }
 
+    @Override
     public void testSqlType() throws Exception
     {
         assertEquals(THIS_TYPE, DataType.forSqlType(Types.TIMESTAMP));
-        assertEquals("forSqlTypeName", THIS_TYPE, DataType.forSqlTypeName(THIS_TYPE.toString()));
+        assertEquals("forSqlTypeName", THIS_TYPE,
+                DataType.forSqlTypeName(THIS_TYPE.toString()));
         assertEquals(Types.TIMESTAMP, THIS_TYPE.getSqlType());
     }
 
+    @Override
     public void testForObject() throws Exception
     {
         assertEquals(THIS_TYPE, DataType.forObject(new Timestamp(1234)));
     }
 
+    @Override
     public void testAsString() throws Exception
     {
+        // @formatter:off
         java.sql.Timestamp[] values = {
             new java.sql.Timestamp(1234),
         };
+        // @formatter:on
 
+        // @formatter:off
         String[] expected = {
             new java.sql.Timestamp(1234).toString(),
         };
+        // @formatter:on
 
-
-        assertEquals("actual vs expected count", values.length, expected.length);
+        assertEquals("actual vs expected count", values.length,
+                expected.length);
 
         for (int i = 0; i < values.length; i++)
         {
-            assertEquals("asString " + i, expected[i], DataType.asString(values[i]));
+            assertEquals("asString " + i, expected[i],
+                    DataType.asString(values[i]));
         }
     }
 
+    @Override
     public void testGetSqlValue() throws Exception
     {
+        // @formatter:off
         Timestamp[] expected = {
             null,
             new Timestamp(1234),
         };
+        // @formatter:on
 
-        ExtendedMockSingleRowResultSet resultSet = new ExtendedMockSingleRowResultSet();
+        ExtendedMockSingleRowResultSet resultSet =
+                new ExtendedMockSingleRowResultSet();
         resultSet.addExpectedIndexedValues(expected);
 
         for (int i = 0; i < expected.length; i++)
@@ -323,10 +365,4 @@ public class TimestampDataTypeTest extends AbstractDataTypeTest
             assertEquals("value", expectedValue, actualValue);
         }
     }
-
 }
-
-
-
-
-
