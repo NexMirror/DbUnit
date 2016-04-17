@@ -31,10 +31,13 @@ import java.io.Reader;
 
 import org.dbunit.Assertion;
 import org.dbunit.dataset.AbstractDataSetTest;
+import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.DataSetUtils;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
+import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.testutil.TestUtils;
+import org.junit.Test;
 
 /**
  * @author Manuel Laflamme
@@ -163,4 +166,24 @@ public class XmlDataSetTest extends AbstractDataSetTest
         assertEquals(0, tables[1].getRowCount());
     }
 
+    @Test
+    public void testCreate_$InTableName_Success() throws DataSetException
+    {
+        final String fileName = "/xml/dataSet$Test.xml";
+        final String tableName = "TEST_TA$BLE";
+
+        InputStream inputStream = getClass().getResourceAsStream(fileName);
+        XmlDataSet dataSet = new XmlDataSet(inputStream);
+
+        ITable table = dataSet.getTable(tableName);
+
+        // getTable() throws NoSuchTableException if not found
+        // so these checks currently unnecessary but future proof
+        assertNotNull("DataSet table is null.", table);
+
+        ITableMetaData tableMetaData = table.getTableMetaData();
+        String actualTableName = tableMetaData.getTableName();
+        assertEquals("Expected table name not found.", tableName,
+                actualTableName);
+    }
 }
