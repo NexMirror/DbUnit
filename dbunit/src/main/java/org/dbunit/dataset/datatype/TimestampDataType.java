@@ -27,6 +27,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -123,8 +124,10 @@ public class TimestampDataType extends AbstractDataType
             // Apply zone if any
             if (zoneValue != null)
             {
-                BigInteger time = BigInteger.valueOf(ts.getTime() / 1000 * 1000).multiply(ONE_BILLION)
-                        .add(BigInteger.valueOf(ts.getNanos()));
+                TimeZone localTZ = java.util.TimeZone.getDefault();
+                BigInteger localTZOffset = BigInteger.valueOf(localTZ.getRawOffset());
+                BigInteger time = BigInteger.valueOf(ts.getTime() / 1000 * 1000).add(localTZOffset)
+                        .multiply(ONE_BILLION).add(BigInteger.valueOf(ts.getNanos()));
                 int hours = Integer.parseInt(zoneValue.substring(1, 3));
                 int minutes = Integer.parseInt(zoneValue.substring(3, 5));
                 BigInteger offsetAsSeconds = BigInteger.valueOf((hours * 3600) + (minutes * 60));

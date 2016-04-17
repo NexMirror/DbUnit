@@ -114,6 +114,20 @@ public class TimestampDataTypeTest extends AbstractDataTypeTest
                 TimeZone.getDefault());
     }
 
+    public void testWithTimezone_LocalTZ() throws Exception
+    {
+        Timestamp ts1 = makeTimestamp(2013, 0, 27, 1, 22, 41, 900, "GMT+1");
+        String ts2 = "2013-01-27 01:22:41.900 +0100";
+        assertEquals(ts1, THIS_TYPE.typeCast(ts2));
+    }
+
+    public void testWithTimezone_GMT6() throws Exception
+    {
+        Timestamp ts1 = makeTimestamp(2013, 0, 27, 1, 22, 41, 900, "GMT+6");
+        String ts2 = "2013-01-27 01:22:41.900 +0600";
+        assertEquals(ts1, THIS_TYPE.typeCast(ts2));
+    }
+
     @Override
     public void testTypeCast() throws Exception
     {
@@ -122,9 +136,6 @@ public class TimestampDataTypeTest extends AbstractDataTypeTest
         // TimeZone testTimeZone = TimeZone.getTimeZone("America/New_York");
         // TimeZone testTimeZone = TimeZone.getTimeZone("Europe/Berlin");
         // TimeZone.setDefault(testTimeZone);
-        TimeZone currentTimeZone = TimeZone.getDefault();
-        int rawOffset = currentTimeZone.getRawOffset();
-        int hourOffset = rawOffset / 1000 / 60 / 60;
 
         // @formatter:off
         Object[] values = {
@@ -152,13 +163,13 @@ public class TimestampDataTypeTest extends AbstractDataTypeTest
             new Timestamp(1234),
             new Timestamp(Date.valueOf((new Date(1234).toString())).getTime()),
             new Timestamp(1234),
-            makeTimestamp(1995, 0, 7, 1 - hourOffset, 22, 41, 900, "America/New_York"),
-            makeTimestamp(1995, 0, 7, 1 - hourOffset, 22, 41, 923, "America/New_York"),
+            makeTimestamp(1995, 0, 7, 1, 22, 41, 900, "America/New_York"),
+            makeTimestamp(1995, 0, 7, 1, 22, 41, 923, "America/New_York"),
             makeTimestamp(1995, 0, 7, 1, 22, 41, 900),
             makeTimestamp(1995, 0, 7, 1, 22, 41, 923),
-            makeTimestamp(1995, 0, 7, 1 - hourOffset, 22, 41, "America/New_York"),
+            makeTimestamp(1995, 0, 7, 1, 22, 41, "America/New_York"),
             makeTimestamp(1995, 0, 7, 1, 22, 41),
-            makeTimestamp(2008, 10, 27, 14 - hourOffset, 52, 38, "Europe/Berlin")
+            makeTimestamp(2008, 10, 27, 14, 52, 38, "Europe/Berlin")
         };
         // @formatter:on
 
