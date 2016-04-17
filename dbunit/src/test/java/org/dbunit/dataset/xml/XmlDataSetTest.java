@@ -49,13 +49,14 @@ public class XmlDataSetTest extends AbstractDataSetTest
         super(s);
     }
 
+    @Override
     protected IDataSet createDataSet() throws Exception
     {
-        Reader in = new FileReader(
-                TestUtils.getFile("xml/dataSetTest.xml"));
+        Reader in = new FileReader(TestUtils.getFile("xml/dataSetTest.xml"));
         return new XmlDataSet(in);
     }
 
+    @Override
     protected IDataSet createDuplicateDataSet() throws Exception
     {
         InputStream in = new FileInputStream(
@@ -63,16 +64,17 @@ public class XmlDataSetTest extends AbstractDataSetTest
         return new XmlDataSet(in);
     }
 
-    protected IDataSet createMultipleCaseDuplicateDataSet() throws Exception 
+    @Override
+    protected IDataSet createMultipleCaseDuplicateDataSet() throws Exception
     {
-        InputStream in = new FileInputStream(
-                TestUtils.getFile("xml/xmlDataSetDuplicateMultipleCaseTest.xml"));
+        InputStream in = new FileInputStream(TestUtils
+                .getFile("xml/xmlDataSetDuplicateMultipleCaseTest.xml"));
         return new XmlDataSet(in);
     }
 
     public void testWrite() throws Exception
     {
-        IDataSet expectedDataSet = (XmlDataSet)createDataSet();
+        IDataSet expectedDataSet = createDataSet();
         File tempFile = File.createTempFile("dataSetTest", ".xml");
         try
         {
@@ -84,10 +86,12 @@ public class XmlDataSetTest extends AbstractDataSetTest
                 XmlDataSet.write(expectedDataSet, out);
 
                 // load new dataset from temp file
-                IDataSet actualDataSet = new XmlDataSet(new FileReader(tempFile));
+                IDataSet actualDataSet =
+                        new XmlDataSet(new FileReader(tempFile));
 
                 // verify table count
-                assertEquals("table count", expectedDataSet.getTableNames().length,
+                assertEquals("table count",
+                        expectedDataSet.getTableNames().length,
                         actualDataSet.getTableNames().length);
 
                 // verify each table
@@ -96,62 +100,67 @@ public class XmlDataSetTest extends AbstractDataSetTest
                 assertEquals("table count", expected.length, actual.length);
                 for (int i = 0; i < expected.length; i++)
                 {
-                    String expectedName = expected[i].getTableMetaData().getTableName();
-                    String actualName = actual[i].getTableMetaData().getTableName();
+                    String expectedName =
+                            expected[i].getTableMetaData().getTableName();
+                    String actualName =
+                            actual[i].getTableMetaData().getTableName();
                     assertEquals("table name", expectedName, actualName);
 
                     assertTrue("not same instance", expected[i] != actual[i]);
                     Assertion.assertEquals(expected[i], actual[i]);
                 }
-            }
-            finally
+            } finally
             {
                 out.close();
             }
-        }
-        finally
+        } finally
         {
             tempFile.delete();
         }
     }
 
-    
     /**
-     * Overridden from parent because XmlDataSet has different behaviour than other datasets.
-     * It allows the occurrence of the same table multiple times in arbitrary locations.
+     * Overridden from parent because XmlDataSet has different behaviour than
+     * other datasets. It allows the occurrence of the same table multiple times
+     * in arbitrary locations.
+     *
      * @see org.dbunit.dataset.AbstractDataSetTest#testCreateDuplicateDataSet()
      */
-    //@Override
+    // @Override
+    @Override
     public void testCreateDuplicateDataSet() throws Exception
     {
-            IDataSet dataSet = createDuplicateDataSet();
-            ITable[] tables = dataSet.getTables();
-            assertEquals(2, tables.length);
-            assertEquals("DUPLICATE_TABLE", tables[0].getTableMetaData().getTableName());
-            assertEquals(3, tables[0].getRowCount());
-            assertEquals("EMPTY_TABLE", tables[1].getTableMetaData().getTableName());
-            assertEquals(0, tables[1].getRowCount());
+        IDataSet dataSet = createDuplicateDataSet();
+        ITable[] tables = dataSet.getTables();
+        assertEquals(2, tables.length);
+        assertEquals("DUPLICATE_TABLE",
+                tables[0].getTableMetaData().getTableName());
+        assertEquals(3, tables[0].getRowCount());
+        assertEquals("EMPTY_TABLE",
+                tables[1].getTableMetaData().getTableName());
+        assertEquals(0, tables[1].getRowCount());
     }
 
     /**
-     * Overridden from parent because XmlDataSet has different behaviour than other datasets.
-     * It allows the occurrence of the same table multiple times in arbitrary locations.
+     * Overridden from parent because XmlDataSet has different behaviour than
+     * other datasets. It allows the occurrence of the same table multiple times
+     * in arbitrary locations.
+     *
      * @see org.dbunit.dataset.AbstractDataSetTest#testCreateMultipleCaseDuplicateDataSet()
      */
-    //@Override
+    // @Override
+    @Override
     public void testCreateMultipleCaseDuplicateDataSet() throws Exception
     {
         IDataSet dataSet = createMultipleCaseDuplicateDataSet();
         ITable[] tables = dataSet.getTables();
         assertEquals(2, tables.length);
-        assertEquals("DUPLICATE_TABLE", tables[0].getTableMetaData().getTableName());
+        assertEquals("DUPLICATE_TABLE",
+                tables[0].getTableMetaData().getTableName());
         assertEquals(3, tables[0].getRowCount());
-        assertEquals("EMPTY_TABLE", tables[1].getTableMetaData().getTableName());
+        assertEquals("EMPTY_TABLE",
+                tables[1].getTableMetaData().getTableName());
         assertEquals(0, tables[1].getRowCount());
     }
 
 }
-
-
-
-
