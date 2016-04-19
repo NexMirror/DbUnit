@@ -252,7 +252,9 @@ public abstract class AbstractBatchOperation extends AbstractOperation
     {
         final String tableColumnName = tableName + "." + columnName;
         final String msg = "table.column=" + tableColumnName
-                + " value is empty but must contain a value;";
+                + " value is empty but must contain a value"
+                + " (to disable this feature check,"
+                + " set DatabaseConfig.FEATURE_ALLOW_EMPTY_FIELDS to true)";
         logger.error("execute: {}", msg);
 
         throw new IllegalArgumentException(msg);
