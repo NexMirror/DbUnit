@@ -21,8 +21,9 @@
 
 package org.dbunit.operation;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.sql.SQLException;
+import java.util.BitSet;
+
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.IDatabaseConnection;
@@ -37,9 +38,8 @@ import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.dataset.RowOutOfBoundsException;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.TypeCastException;
-
-import java.sql.SQLException;
-import java.util.BitSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Base implementation for database operation that are executed in batch.
@@ -50,11 +50,11 @@ import java.util.BitSet;
  */
 public abstract class AbstractBatchOperation extends AbstractOperation
 {
-
     /**
      * Logger for this class
      */
-    private static final Logger logger = LoggerFactory.getLogger(AbstractBatchOperation.class);
+    private static final Logger logger =
+            LoggerFactory.getLogger(AbstractBatchOperation.class);
 
     private static final BitSet EMPTY_BITSET = new BitSet();
     protected boolean _reverseRowOrder = false;
@@ -76,8 +76,7 @@ public abstract class AbstractBatchOperation extends AbstractOperation
         {
             table.getValue(0, columns[0].getColumnName());
             return false;
-        }
-        catch (RowOutOfBoundsException e)
+        } catch (RowOutOfBoundsException e)
         {
             // Not able to access first row thus empty
             return true;
@@ -85,17 +84,18 @@ public abstract class AbstractBatchOperation extends AbstractOperation
     }
 
     /**
-     * Returns list of tables this operation is applied to. This method
-     * allow subclass to do filtering.
+     * Returns list of tables this operation is applied to. This method allow
+     * subclass to do filtering.
      */
-    protected ITableIterator iterator(IDataSet dataSet) throws DatabaseUnitException
+    protected ITableIterator iterator(IDataSet dataSet)
+            throws DatabaseUnitException
     {
         return dataSet.iterator();
     }
 
     /**
-     * Returns mapping of columns to ignore by this operation. Each bit set represent
-     * a column to ignore.
+     * Returns mapping of columns to ignore by this operation. Each bit set
+     * represent a column to ignore.
      */
     BitSet getIgnoreMapping(ITable table, int row) throws DataSetException
     {
@@ -106,25 +106,31 @@ public abstract class AbstractBatchOperation extends AbstractOperation
      * Returns false if the specified table row have a different ignore mapping
      * than the specified mapping.
      */
-    boolean equalsIgnoreMapping(BitSet ignoreMapping, ITable table, int row) throws DataSetException
+    boolean equalsIgnoreMapping(BitSet ignoreMapping, ITable table, int row)
+            throws DataSetException
     {
         return true;
     }
 
     abstract OperationData getOperationData(ITableMetaData metaData,
-            BitSet ignoreMapping, IDatabaseConnection connection) throws DataSetException;
+            BitSet ignoreMapping, IDatabaseConnection connection)
+            throws DataSetException;
 
     ////////////////////////////////////////////////////////////////////////////
     // DatabaseOperation class
 
+    @Override
     public void execute(IDatabaseConnection connection, IDataSet dataSet)
             throws DatabaseUnitException, SQLException
-            {
-        logger.debug("execute(connection={}, dataSet={}) - start", connection, dataSet);
+    {
+        logger.debug("execute(connection={}, dataSet={}) - start", connection,
+                dataSet);
 
         DatabaseConfig databaseConfig = connection.getConfig();
-        IStatementFactory factory = (IStatementFactory)databaseConfig.getProperty(DatabaseConfig.PROPERTY_STATEMENT_FACTORY);
-        boolean allowEmptyFields = connection.getConfig().getFeature(DatabaseConfig.FEATURE_ALLOW_EMPTY_FIELDS);
+        IStatementFactory factory = (IStatementFactory) databaseConfig
+                .getProperty(DatabaseConfig.PROPERTY_STATEMENT_FACTORY);
+        boolean allowEmptyFields = connection.getConfig()
+                .getFeature(DatabaseConfig.FEATURE_ALLOW_EMPTY_FIELDS);
 
         // for each table
         ITableIterator iterator = iterator(dataSet);
@@ -132,7 +138,7 @@ public abstract class AbstractBatchOperation extends AbstractOperation
         {
             ITable table = iterator.getTable();
 
-            String tableName=table.getTableMetaData().getTableName();
+            String tableName = table.getTableMetaData().getTableName();
             logger.trace("execute: processing table='{}'", tableName);
 
             // Do not process empty table
@@ -141,7 +147,8 @@ public abstract class AbstractBatchOperation extends AbstractOperation
                 continue;
             }
 
-            ITableMetaData metaData = getOperationMetaData(connection, table.getTableMetaData());
+            ITableMetaData metaData =
+                    getOperationMetaData(connection, table.getTableMetaData());
             BitSet ignoreMapping = null;
             OperationData operationData = null;
             IPreparedBatchStatement statement = null;
@@ -154,13 +161,16 @@ public abstract class AbstractBatchOperation extends AbstractOperation
 
                 try
                 {
-                    for (int i = start; ; i = i + increment)
+                    for (int i = start;; i = i + increment)
                     {
                         int row = i;
 
-                        // If current row have a different ignore value mapping than
+                        // If current row have a different ignore value mapping
+                        // than
                         // previous one, we generate a new statement
-                        if (ignoreMapping == null || !equalsIgnoreMapping(ignoreMapping, table, row))
+                        if (ignoreMapping == null
+                                || !equalsIgnoreMapping(ignoreMapping, table,
+                                        row))
                         {
                             // Execute and close previous statement
                             if (statement != null)
@@ -171,11 +181,11 @@ public abstract class AbstractBatchOperation extends AbstractOperation
                             }
 
                             ignoreMapping = getIgnoreMapping(table, row);
-                            operationData = getOperationData(metaData, ignoreMapping, connection);
+                            operationData = getOperationData(metaData,
+                                    ignoreMapping, connection);
                             statement = factory.createPreparedBatchStatement(
                                     operationData.getSql(), connection);
                         }
-
 
                         // for each column
                         Column[] columns = operationData.getColumns();
@@ -189,7 +199,8 @@ public abstract class AbstractBatchOperation extends AbstractOperation
                                 try
                                 {
                                     DataType dataType = column.getDataType();
-                                    Object value = table.getValue(row, columnName);
+                                    Object value =
+                                            table.getValue(row, columnName);
 
                                     if ("".equals(value) && !allowEmptyFields)
                                     {
@@ -198,8 +209,7 @@ public abstract class AbstractBatchOperation extends AbstractOperation
                                     }
 
                                     statement.addValue(value, dataType);
-                                }
-                                catch (TypeCastException e)
+                                } catch (TypeCastException e)
                                 {
                                     final String msg =
                                             "Error casting value for table '"
@@ -213,25 +223,22 @@ public abstract class AbstractBatchOperation extends AbstractOperation
                         }
                         statement.addBatch();
                     }
-                }
-                catch (RowOutOfBoundsException e)
+                } catch (RowOutOfBoundsException e)
                 {
                     // This exception occurs when records are exhausted
-                    // and we reach the end of the table.  Ignore this error
+                    // and we reach the end of the table. Ignore this error
 
                     // end of table
                 }
 
                 statement.executeBatch();
                 statement.clearBatch();
-            }
-            catch (SQLException e)
+            } catch (SQLException e)
             {
                 final String msg =
                         "Exception processing table name='" + tableName + "'";
                 throw new DatabaseUnitException(msg, e);
-            }
-            finally
+            } finally
             {
                 if (statement != null)
                 {
@@ -239,19 +246,19 @@ public abstract class AbstractBatchOperation extends AbstractOperation
                 }
             }
         }
-            }
+    }
 
     protected void handleColumnHasNoValue(String tableName, String columnName)
     {
         final String tableColumnName = tableName + "." + columnName;
-        final String msg =
-                "table.column=" + tableColumnName
-                        + " value is empty but must contain a value";
+        final String msg = "table.column=" + tableColumnName
+                + " value is empty but must contain a value;";
         logger.error("execute: {}", msg);
 
         throw new IllegalArgumentException(msg);
     }
 
+    @Override
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
@@ -261,5 +268,4 @@ public abstract class AbstractBatchOperation extends AbstractOperation
         sb.append("]");
         return sb.toString();
     }
-
 }
