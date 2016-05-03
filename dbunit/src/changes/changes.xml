@@ -11,7 +11,8 @@
   </properties>
 
   <body>
-    <release version="in scm" date="next" description="Fix DefaultPrepAndExpectedTestCase config, TimestampDataType.typeCast(), escape pattern for table name">
+    <release version="in scm" date="next" description="DefaultPrepAndExpectedTestCase config, TimestampDataType.typeCast(), escape pattern for table name, fix, DefaultPrepAndExpectedTestCase.verifyData() connection">
+      <action dev="jeffjensen" type="fix">DefaultPrepAndExpectedTestCase.verifyData() uses databaseTester.getConnection() and should use DatabaseTestCase.getConnection().</action>
       <action dev="jeffjensen" type="fix">AbstractDatabaseConnection.createTable(String) ignores escape pattern for table name.</action>
       <action dev="jeffjensen" type="fix" issue="380" due-to="fs5">TimestampDataType.typeCast() fails on non-local timezones.</action>
       <action dev="jeffjensen" type="fix" issue="383">DefaultPrepAndExpectedTestCase doesn't handle all DatabaseConfig access approaches, missing dbUnit lifecycle steps.</action>

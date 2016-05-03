@@ -451,7 +451,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
                     "databaseTester is null; must configure or set it first");
         }
 
-        IDatabaseConnection connection = databaseTester.getConnection();
+        IDatabaseConnection connection = getConnection();
 
         try
         {
