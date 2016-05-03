@@ -133,9 +133,12 @@ public abstract class AbstractDatabaseConnection implements IDatabaseConnection
                     "The parameter 'tableName' must not be null");
         }
 
+        String escapePattern = (String) getConfig()
+                .getProperty(DatabaseConfig.PROPERTY_ESCAPE_PATTERN);
+
         // qualify with schema if configured
-        QualifiedTableName qualifiedTableName =
-                new QualifiedTableName(tableName, this.getSchema());
+        QualifiedTableName qualifiedTableName = new QualifiedTableName(
+                tableName, this.getSchema(), escapePattern);
         String qualifiedName = qualifiedTableName.getQualifiedName();
         String sql = "select * from " + qualifiedName;
         return this.createQueryTable(tableName, sql);

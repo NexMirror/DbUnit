@@ -11,9 +11,10 @@
   </properties>
 
   <body>
-    <release version="in scm" date="next" description="Fix DefaultPrepAndExpectedTestCase config, TimestampDataType.typeCast()">
-      <action dev="jeffjensen" type="fix" issue="383">DefaultPrepAndExpectedTestCase doesn't handle all DatabaseConfig access approaches, missing dbUnit lifecycle steps.</action>
+    <release version="in scm" date="next" description="Fix DefaultPrepAndExpectedTestCase config, TimestampDataType.typeCast(), escape pattern for table name">
+      <action dev="jeffjensen" type="fix">AbstractDatabaseConnection.createTable(String) ignores escape pattern for table name.</action>
       <action dev="jeffjensen" type="fix" issue="380" due-to="fs5">TimestampDataType.typeCast() fails on non-local timezones.</action>
+      <action dev="jeffjensen" type="fix" issue="383">DefaultPrepAndExpectedTestCase doesn't handle all DatabaseConfig access approaches, missing dbUnit lifecycle steps.</action>
     </release>
     <release version="2.5.2" date="Apr 8, 2016" description="Lost dbunit.org, toString() tables, respect DEFAULTs, multi-schema, PrepAndExpectedTestCaseSteps">
       <action dev="jeffjensen" type="fix" issue="368" due-to="warwing">Multi schema support in FlatXmlDataSets.</action>
