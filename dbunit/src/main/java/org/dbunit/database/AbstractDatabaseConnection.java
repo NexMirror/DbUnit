@@ -48,7 +48,8 @@ public abstract class AbstractDatabaseConnection implements IDatabaseConnection
     /**
      * Logger for this class
      */
-    private static final Logger logger = LoggerFactory.getLogger(AbstractDatabaseConnection.class);
+    private static final Logger logger =
+            LoggerFactory.getLogger(AbstractDatabaseConnection.class);
 
     private IDataSet _dataSet = null;
     private final DatabaseConfig _databaseConfig;
@@ -74,7 +75,7 @@ public abstract class AbstractDatabaseConnection implements IDatabaseConnection
     }
 
     public IDataSet createDataSet(String[] tableNames)
-    throws DataSetException, SQLException
+            throws DataSetException, SQLException
     {
         logger.debug("createDataSet(tableNames={}) - start", tableNames);
 
@@ -82,12 +83,14 @@ public abstract class AbstractDatabaseConnection implements IDatabaseConnection
     }
 
     public ITable createQueryTable(String resultName, String sql)
-    throws DataSetException, SQLException
+            throws DataSetException, SQLException
     {
-        logger.debug("createQueryTable(resultName={}, sql={}) - start", resultName, sql);
+        logger.debug("createQueryTable(resultName={}, sql={}) - start",
+                resultName, sql);
 
         IResultSetTableFactory tableFactory = getResultSetTableFactory();
-        IResultSetTable rsTable = tableFactory.createTable(resultName, sql, this);
+        IResultSetTable rsTable =
+                tableFactory.createTable(resultName, sql, this);
         if (logger.isDebugEnabled())
         {
             String rowCount = null;
@@ -95,36 +98,39 @@ public abstract class AbstractDatabaseConnection implements IDatabaseConnection
             {
                 int rowCountInt = rsTable.getRowCount();
                 rowCount = String.valueOf(rowCountInt);
-            }
-            catch (Exception e)
+            } catch (Exception e)
             {
-                rowCount =
-                        "Unable to determine row count due to Exception: "
-                                + e.getLocalizedMessage();
+                rowCount = "Unable to determine row count due to Exception: "
+                        + e.getLocalizedMessage();
             }
             logger.debug("createQueryTable: rowCount={}", rowCount);
         }
         return rsTable;
     }
 
-    public ITable createTable(String resultName, PreparedStatement preparedStatement)
-    throws DataSetException, SQLException
+    public ITable createTable(String resultName,
+            PreparedStatement preparedStatement)
+            throws DataSetException, SQLException
     {
-        logger.debug("createQueryTable(resultName={}, preparedStatement={}) - start", resultName, preparedStatement);
+        logger.debug(
+                "createQueryTable(resultName={}, preparedStatement={}) - start",
+                resultName, preparedStatement);
 
         IResultSetTableFactory tableFactory = getResultSetTableFactory();
-        IResultSetTable rsTable = tableFactory.createTable(resultName, preparedStatement, this);
+        IResultSetTable rsTable =
+                tableFactory.createTable(resultName, preparedStatement, this);
         return rsTable;
     }
 
-
-    public ITable createTable(String tableName) throws DataSetException,
-    SQLException
+    public ITable createTable(String tableName)
+            throws DataSetException, SQLException
     {
         logger.debug("createTable(tableName={}) - start", tableName);
 
-        if (tableName == null) {
-            throw new NullPointerException("The parameter 'tableName' must not be null");
+        if (tableName == null)
+        {
+            throw new NullPointerException(
+                    "The parameter 'tableName' must not be null");
         }
 
         // qualify with schema if configured
@@ -142,15 +148,18 @@ public abstract class AbstractDatabaseConnection implements IDatabaseConnection
         return getRowCount(tableName, null);
     }
 
-    public int getRowCount(String tableName, String whereClause) throws SQLException
+    public int getRowCount(String tableName, String whereClause)
+            throws SQLException
     {
-        logger.debug("getRowCount(tableName={}, whereClause={}) - start", tableName, whereClause);
+        logger.debug("getRowCount(tableName={}, whereClause={}) - start",
+                tableName, whereClause);
 
         StringBuffer sqlBuffer = new StringBuffer(128);
         sqlBuffer.append("select count(*) from ");
 
-        //add table name and schema (schema only if available)
-        QualifiedTableName qualifiedTableName = new QualifiedTableName(tableName, this.getSchema());
+        // add table name and schema (schema only if available)
+        QualifiedTableName qualifiedTableName =
+                new QualifiedTableName(tableName, this.getSchema());
         String qualifiedName = qualifiedTableName.getQualifiedName();
         sqlBuffer.append(qualifiedName);
         if (whereClause != null)
@@ -164,14 +173,17 @@ public abstract class AbstractDatabaseConnection implements IDatabaseConnection
         try
         {
             resultSet = statement.executeQuery(sqlBuffer.toString());
-            if(resultSet.next()) {
+            if (resultSet.next())
+            {
                 return resultSet.getInt(1);
-            } else {
-                throw new DatabaseUnitRuntimeException("Select count did not return any results for table '" +
-                        tableName + "'. Statement: " + sqlBuffer.toString());
+            } else
+            {
+                throw new DatabaseUnitRuntimeException(
+                        "Select count did not return any results for table '"
+                                + tableName + "'. Statement: "
+                                + sqlBuffer.toString());
             }
-        }
-        finally
+        } finally
         {
             SQLHelper.close(resultSet, statement);
         }
@@ -185,17 +197,21 @@ public abstract class AbstractDatabaseConnection implements IDatabaseConnection
     /**
      * @deprecated Use {@link #getConfig}
      */
+    @Deprecated
     public IStatementFactory getStatementFactory()
     {
-        return (IStatementFactory)_databaseConfig.getProperty(DatabaseConfig.PROPERTY_STATEMENT_FACTORY);
+        return (IStatementFactory) _databaseConfig
+                .getProperty(DatabaseConfig.PROPERTY_STATEMENT_FACTORY);
     }
 
     private IResultSetTableFactory getResultSetTableFactory()
     {
-        return (IResultSetTableFactory)_databaseConfig.getProperty(DatabaseConfig.PROPERTY_RESULTSET_TABLE_FACTORY);
+        return (IResultSetTableFactory) _databaseConfig
+                .getProperty(DatabaseConfig.PROPERTY_RESULTSET_TABLE_FACTORY);
 
     }
 
+    @Override
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
