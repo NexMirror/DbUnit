@@ -27,6 +27,7 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.Column;
 import org.dbunit.dataset.CompositeDataSet;
 import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.DefaultDataSet;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.SortedTable;
@@ -221,9 +222,9 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     private IDatabaseTester databaseTester;
     private DataFileLoader dataFileLoader;
 
-    private IDataSet prepDs;
-    private IDataSet expectedDs;
-    private VerifyTableDefinition[] tableDefs;
+    private IDataSet prepDs = new DefaultDataSet();
+    private IDataSet expectedDs = new DefaultDataSet();
+    private VerifyTableDefinition[] tableDefs = {};
 
     /** Create new instance. */
     public DefaultPrepAndExpectedTestCase()
