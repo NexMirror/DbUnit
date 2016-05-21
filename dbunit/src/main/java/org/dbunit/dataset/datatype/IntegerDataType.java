@@ -37,10 +37,6 @@ import java.sql.SQLException;
  */
 public class IntegerDataType extends AbstractDataType
 {
-
-    /**
-     * Logger for this class
-     */
     private static final Logger logger = LoggerFactory.getLogger(IntegerDataType.class);
 
     IntegerDataType(String name, int sqlType)
@@ -63,6 +59,22 @@ public class IntegerDataType extends AbstractDataType
         if (value instanceof Number)
         {
             return new Integer(((Number)value).intValue());
+        }
+
+        // Treat "false" as 0, "true" as 1
+        if (value instanceof String)
+        {
+            String string = (String) value;
+
+            if ("false".equalsIgnoreCase(string))
+            {
+                return new Integer(0);
+            }
+
+            if ("true".equalsIgnoreCase(string))
+            {
+                return new Integer(1);
+            }
         }
 
         // Bugfix in release 2.4.6
@@ -106,8 +118,4 @@ public class IntegerDataType extends AbstractDataType
         statement.setInt(column, ((Integer)typeCast(value)).intValue());
     }
 }
-
-
-
-
 
