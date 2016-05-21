@@ -23,18 +23,19 @@ package org.dbunit.ext.oracle;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import oracle.jdbc.OraclePreparedStatement;
-import oracle.jdbc.OracleResultSet;
-import oracle.sql.OPAQUE;
-import oracle.sql.OpaqueDescriptor;
+import java.sql.SQLXML;
+import java.sql.Types;
 
 import org.dbunit.dataset.datatype.BlobDataType;
 import org.dbunit.dataset.datatype.TypeCastException;
 
+import oracle.jdbc.OraclePreparedStatement;
+import oracle.jdbc.OracleResultSet;
+
 /**
- * 
+ *
  * TODO UnitTests are completely missing
+ * 
  * @author Phil Barr
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -42,26 +43,44 @@ import org.dbunit.dataset.datatype.TypeCastException;
  */
 public class OracleXMLTypeDataType extends BlobDataType
 {
-
-    public Object getSqlValue(int column, ResultSet resultSet) throws SQLException, TypeCastException
+    OracleXMLTypeDataType()
     {
-        byte[] data = new byte[0];
+        super("SQLXML", Types.SQLXML);
+    }
+
+    @Override
+    public Object getSqlValue(int column, ResultSet resultSet)
+            throws SQLException, TypeCastException
+    {
+        byte[] data = null;
         OracleResultSet oracleResultSet = (OracleResultSet) resultSet;
-        OPAQUE opaque = oracleResultSet.getOPAQUE(column);
-        if (opaque != null) 
+        SQLXML sqlXml = oracleResultSet.getSQLXML(column);
+        if (sqlXml != null)
         {
-            data = opaque.getBytes();
+            data = sqlXml.getString().getBytes();
         }
 
         // return the byte data (using typeCast to cast it to Base64 notation)
         return typeCast(data);
     }
 
-    public void setSqlValue(Object value, int column, PreparedStatement statement) throws SQLException, TypeCastException
+    @Override
+    public void setSqlValue(Object value, int column,
+            PreparedStatement statement) throws SQLException, TypeCastException
     {
-        OraclePreparedStatement oraclePreparedStatement = (OraclePreparedStatement) statement;
-        OpaqueDescriptor opaqueDescriptor = OpaqueDescriptor.createDescriptor("SYS.XMLTYPE", statement.getConnection());
-        OPAQUE opaque = new OPAQUE(opaqueDescriptor, (byte[]) typeCast(value), statement.getConnection());
-        oraclePreparedStatement.setOPAQUE(column, opaque);
+        OraclePreparedStatement oraclePreparedStatement =
+                (OraclePreparedStatement) statement;
+        SQLXML sqlXmlValue =
+                oraclePreparedStatement.getConnection().createSQLXML();
+        // XML document in the parameter is Base64 encoded (it is entered in XML
+        // parameter
+        sqlXmlValue.setString(new String((byte[]) typeCast(value)));
+        oraclePreparedStatement.setSQLXML(column, sqlXmlValue);
+    }
+
+    @Override
+    public String getSqlTypeName()
+    {
+        return "SYS.XMLTYPE";
     }
 }

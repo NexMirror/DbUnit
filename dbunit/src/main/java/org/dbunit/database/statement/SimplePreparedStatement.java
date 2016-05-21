@@ -66,7 +66,7 @@ public class SimplePreparedStatement extends AbstractPreparedBatchStatement
         // Special NULL handling
         if (value == null || value == ITable.NO_VALUE)
         {
-            _statement.setNull(++_index, dataType.getSqlType());
+            _statement.setNull(++_index, dataType.getSqlType(), dataType.getSqlTypeName());
             return;
         }
 

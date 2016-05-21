@@ -37,7 +37,6 @@ import java.sql.Blob;
  */
 public class BlobDataType extends BytesDataType
 {
-
     /**
      * Logger for this class
      */
@@ -46,6 +45,11 @@ public class BlobDataType extends BytesDataType
     public BlobDataType()
     {
         super("BLOB", Types.BLOB);
+    }
+
+    public BlobDataType(String name, int sqlType)
+    {
+        super(name, sqlType);
     }
 
     public Object getSqlValue(int column, ResultSet resultSet) throws SQLException, TypeCastException

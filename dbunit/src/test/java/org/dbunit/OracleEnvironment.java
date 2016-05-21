@@ -51,7 +51,8 @@ public class OracleEnvironment extends DatabaseEnvironment
         ITable[] extraTables = {
             new DefaultTable("CLOB_TABLE"),
             new DefaultTable("BLOB_TABLE"),
-            new DefaultTable("SDO_GEOMETRY_TABLE")
+            new DefaultTable("SDO_GEOMETRY_TABLE"),
+            new DefaultTable("XML_TYPE_TABLE"),
         };
 
         return new CompositeDataSet(super.getInitDataSet(),

@@ -90,4 +90,12 @@ CREATE TABLE SDO_GEOMETRY_TABLE
    VAL SDO_GEOMETRY,
    PRIMARY KEY(PK));
 
+-----------------------------------------------------------------------------
+-- XML_TABLE
+-----------------------------------------------------------------------------
+
+DROP TABLE XML_TYPE_TABLE;
+CREATE TABLE XML_TYPE_TABLE
+(PK NUMERIC(38, 0) NOT NULL,
+ XMLTYPE XMLTYPE, PRIMARY KEY (PK));
 

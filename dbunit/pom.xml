@@ -886,7 +886,7 @@
         <dbunit.profile.schema>PUBLIC</dbunit.profile.schema>
         <dbunit.profile.user>sa</dbunit.profile.user>
         <dbunit.profile.password />
-        <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY</dbunit.profile.unsupportedFeatures>
+        <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
         <dbunit.profile.ddl>empty.sql</dbunit.profile.ddl> <!-- DDL in HypersonicEnvironment -->
       </properties>
       <dependencies>
@@ -977,7 +977,7 @@
         <dbunit.profile.schema>PUBLIC</dbunit.profile.schema>
         <dbunit.profile.user>sa</dbunit.profile.user>
         <dbunit.profile.password />
-        <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY</dbunit.profile.unsupportedFeatures>
+        <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
         <dbunit.profile.ddl>empty.sql</dbunit.profile.ddl> <!-- DDL in HypersonicEnvironment -->
       </properties>
     </profile>
@@ -1078,7 +1078,7 @@
         <dbunit.profile.schema>public</dbunit.profile.schema>
         <dbunit.profile.user>dbunit</dbunit.profile.user>
         <dbunit.profile.password>dbunit</dbunit.profile.password>
-        <dbunit.profile.unsupportedFeatures>INSERT_IDENTITY,CLOB,BLOB,SCROLLABLE_RESULTSET,SDO_GEOMETRY</dbunit.profile.unsupportedFeatures>
+        <dbunit.profile.unsupportedFeatures>INSERT_IDENTITY,CLOB,BLOB,SCROLLABLE_RESULTSET,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
         <dbunit.profile.ddl>postgresql.sql</dbunit.profile.ddl>
       </properties>
       <dependencies>
@@ -1098,7 +1098,7 @@
         <dbunit.profile.schema />
         <dbunit.profile.user>dbunit</dbunit.profile.user>
         <dbunit.profile.password>dbunit</dbunit.profile.password>
-        <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,SDO_GEOMETRY</dbunit.profile.unsupportedFeatures>
+        <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
         <dbunit.profile.ddl>mysql.sql</dbunit.profile.ddl>
       </properties>
       <dependencies>
@@ -1118,7 +1118,7 @@
         <dbunit.profile.schema>dbo</dbunit.profile.schema>
         <dbunit.profile.user>dbunit</dbunit.profile.user>
         <dbunit.profile.password>dbunit</dbunit.profile.password>
-        <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,SDO_GEOMETRY</dbunit.profile.unsupportedFeatures>
+        <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
         <dbunit.profile.ddl>mssql.sql</dbunit.profile.ddl>
       </properties>
       <!-- JH_TODO: mssql dependencies -->
@@ -1146,7 +1146,7 @@
         <dbunit.profile.schema>APP</dbunit.profile.schema>
         <dbunit.profile.user>APP</dbunit.profile.user>
         <dbunit.profile.password>APP</dbunit.profile.password>
-        <dbunit.profile.unsupportedFeatures>VARBINARY,BLOB,CLOB,TRANSACTION,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY</dbunit.profile.unsupportedFeatures>
+        <dbunit.profile.unsupportedFeatures>VARBINARY,BLOB,CLOB,TRANSACTION,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
         <dbunit.profile.ddl>empty.sql</dbunit.profile.ddl> <!-- DDL in DerbyEnvironment -->
       </properties>
       <dependencies>
@@ -1167,7 +1167,7 @@
         <dbunit.profile.schema>PUBLIC</dbunit.profile.schema>
         <dbunit.profile.user>sa</dbunit.profile.user>
         <dbunit.profile.password />
-        <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY</dbunit.profile.unsupportedFeatures>
+        <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
         <dbunit.profile.ddl>empty.sql</dbunit.profile.ddl> <!-- DDL in H2Environment -->
       </properties>
       <dependencies>

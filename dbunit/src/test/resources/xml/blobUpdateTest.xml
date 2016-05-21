@@ -2,5 +2,7 @@
 <dataset>
 	<BLOB_TABLE PK="0" BLOB="YWGHFJFHGDDSSDGKHGKJHGKJHGKJGKLJHGJKGKHGJHJjZA=="/>
 	<BLOB_TABLE PK="1" BLOB="YWJjZA=="/>
+    <BLOB_TABLE PK="2" /> <!-- NULL Value -->
+    <BLOB_TABLE PK="3" BLOB="YWJjZA=="/>
 </dataset>
 

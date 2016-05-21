@@ -146,6 +146,14 @@ public abstract class DataType
     public abstract Class getTypeClass();
 
     /**
+     * Returns the SQL type name for user types (null for basic SQL types)
+     */
+    public String getSqlTypeName()
+    {
+        return null;
+    }
+
+    /**
      * Returns <code>true</code> if this <code>DataType</code> represents a
      * number.
      */

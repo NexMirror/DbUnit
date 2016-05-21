@@ -90,6 +90,13 @@ public class UpdateOperationIT extends AbstractDatabaseIT
             );
         }
 
+        if (environment.support(TestFeature.XML_TYPE))
+        {
+            dataSet = new CompositeDataSet(
+                    new FlatXmlDataSetBuilder().build(TestUtils.getFile("xml/xmlTypeInsertTest.xml")),
+                    dataSet);
+        }
+
         return dataSet;
     }
 
@@ -393,7 +400,7 @@ public class UpdateOperationIT extends AbstractDatabaseIT
                         TestUtils.getFile("xml/blobInsertTest.xml"));
 
                 ITable tableBefore = _connection.createDataSet().getTable(tableName);
-                assertEquals("count before", 1, _connection.getRowCount(tableName));
+                assertEquals("count before", 3, _connection.getRowCount(tableName));
                 Assertion.assertEquals(beforeDataSet.getTable(tableName), tableBefore);
 
 //                System.out.println("****** BEFORE *******");
@@ -406,7 +413,7 @@ public class UpdateOperationIT extends AbstractDatabaseIT
 
             {
                 ITable tableAfter = _connection.createDataSet().getTable(tableName);
-                assertEquals("count after", 2, tableAfter.getRowCount());
+                assertEquals("count after", 4, tableAfter.getRowCount());
                 Assertion.assertEquals(afterDataSet.getTable(tableName), tableAfter);
 
 //                System.out.println("****** AFTER *******");
@@ -439,6 +446,35 @@ public class UpdateOperationIT extends AbstractDatabaseIT
             {
                 ITable tableAfter = _connection.createDataSet().getTable(tableName);
                 assertEquals("count after", 8, tableAfter.getRowCount());
+                Assertion.assertEquals(afterDataSet.getTable(tableName), tableAfter);
+            }
+        }
+    }
+
+    public void testUpdateXmlType() throws Exception
+    {
+        // execute this test only if the target database support XML_TYPE
+        DatabaseEnvironment environment = DatabaseEnvironment.getInstance();
+        if (environment.support(TestFeature.XML_TYPE))
+        {
+            String tableName = "XML_TYPE_TABLE";
+
+            {
+                IDataSet beforeDataSet = new FlatXmlDataSetBuilder().build(
+                        TestUtils.getFile("xml/xmlTypeInsertTest.xml"));
+
+                ITable tableBefore = _connection.createDataSet().getTable(tableName);
+                assertEquals("count before", 3, _connection.getRowCount(tableName));
+                Assertion.assertEquals(beforeDataSet.getTable(tableName), tableBefore);
+            }
+
+            IDataSet afterDataSet = new FlatXmlDataSetBuilder().build(
+                    TestUtils.getFile("xml/xmlTypeUpdateTest.xml"));
+            DatabaseOperation.REFRESH.execute(_connection, afterDataSet);
+
+            {
+                ITable tableAfter = _connection.createDataSet().getTable(tableName);
+                assertEquals("count after", 4, tableAfter.getRowCount());
                 Assertion.assertEquals(afterDataSet.getTable(tableName), tableAfter);
             }
         }

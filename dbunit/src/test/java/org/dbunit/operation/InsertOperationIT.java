@@ -499,7 +499,7 @@ public class InsertOperationIT extends AbstractDatabaseIT
             DatabaseOperation.INSERT.execute(_connection, xmlDataSet);
 
             ITable tableAfter = _connection.createDataSet().getTable(tableName);
-            assertEquals("count after", 1, tableAfter.getRowCount());
+            assertEquals("count after", 3, tableAfter.getRowCount());
             Assertion.assertEquals(xmlDataSet.getTable(tableName), tableAfter);
         }
     }
@@ -521,6 +521,27 @@ public class InsertOperationIT extends AbstractDatabaseIT
 
             ITable tableAfter = _connection.createDataSet().getTable(tableName);
             assertEquals("count after", 1, tableAfter.getRowCount());
+            Assertion.assertEquals(xmlDataSet.getTable(tableName), tableAfter);
+        }
+    }
+
+    public void testInsertXmlType() throws Exception
+    {
+        // execute this test only if the target database support CLOB
+        DatabaseEnvironment environment = DatabaseEnvironment.getInstance();
+        if (environment.support(TestFeature.XML_TYPE))
+        {
+            String tableName = "XML_TYPE_TABLE";
+
+            Reader in = new FileReader(TestUtils.getFile("xml/xmlTypeInsertTest.xml"));
+            IDataSet xmlDataSet = new FlatXmlDataSetBuilder().build(in);
+
+            assertEquals("count before", 0, _connection.getRowCount(tableName));
+
+            DatabaseOperation.INSERT.execute(_connection, xmlDataSet);
+
+            ITable tableAfter = _connection.createDataSet().getTable(tableName);
+            assertEquals("count after", 3, tableAfter.getRowCount());
             Assertion.assertEquals(xmlDataSet.getTable(tableName), tableAfter);
         }
     }
