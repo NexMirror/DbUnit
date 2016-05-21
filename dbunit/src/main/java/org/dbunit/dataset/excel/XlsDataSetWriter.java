@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -52,6 +54,8 @@ import org.slf4j.LoggerFactory;
  */
 public class XlsDataSetWriter 
 {
+    private static final Logger logger = LoggerFactory.getLogger(XlsDataSetWriter.class);
+
     public static final String ZEROS = "0000000000000000000000000000000000000000000000000000";
 
     /**
@@ -61,13 +65,17 @@ public class XlsDataSetWriter
      * pattern incidentally.
      */
     public static final String DATE_FORMAT_AS_NUMBER_DBUNIT = "####################";
+
     /**
-     * Logger for this class
+     * Instead of recreating a new style object for each numeric cell, which
+     * will cause the code to hit the POI limit of 4000 styles pretty quickly,
+     * only create one per format and reuse the same style for all cells with
+     * the same format.
      */
-    private static final Logger logger = LoggerFactory.getLogger(XlsDataSetWriter.class);
+    private static final Map<Workbook, Map> cellStyleMap = new HashMap<Workbook, Map>();
 
     private CellStyle dateCellStyle;
-    
+
     /**
      * Write the specified dataset to the specified Excel document.
      */
@@ -139,9 +147,42 @@ public class XlsDataSetWriter
     protected static CellStyle createDateCellStyle(Workbook workbook) {
         DataFormat format = workbook.createDataFormat();
         short dateFormatCode = format.getFormat(DATE_FORMAT_AS_NUMBER_DBUNIT);
-        CellStyle dateCellStyle = workbook.createCellStyle();
-        dateCellStyle.setDataFormat(dateFormatCode);
-        return dateCellStyle;
+        return getCellStyle(workbook, dateFormatCode);
+    }
+
+    protected static CellStyle getCellStyle(Workbook workbook, short formatCode)
+    {
+        Map<Short, CellStyle> map = findWorkbookCellStyleMap(workbook);
+        CellStyle cellStyle = findCellStyle(workbook, formatCode, map);
+
+        return cellStyle;
+    }
+
+    protected static Map<Short, CellStyle> findWorkbookCellStyleMap(
+            Workbook workbook)
+    {
+        Map<Short, CellStyle> map = cellStyleMap.get(workbook);
+        if (map == null)
+        {
+            map = new HashMap<Short, CellStyle>();
+            cellStyleMap.put(workbook, map);
+        }
+
+        return map;
+    }
+
+    protected static CellStyle findCellStyle(Workbook workbook,
+            Short formatCode, Map<Short, CellStyle> map)
+    {
+        CellStyle cellStyle = map.get(formatCode);
+        if (cellStyle == null)
+        {
+            cellStyle = workbook.createCellStyle();
+            cellStyle.setDataFormat(formatCode);
+            map.put(formatCode, cellStyle);
+        }
+
+        return cellStyle;
     }
 
     protected void setDateCell(Cell cell, Date value, Workbook workbook) 
@@ -226,13 +267,11 @@ public class XlsDataSetWriter
         }
         if(logger.isDebugEnabled())
             logger.debug("Using format '{}' for value '{}'.", String.valueOf(format), value);
-        
-        CellStyle cellStyleNumber = workbook.createCellStyle();
-        cellStyleNumber.setDataFormat(format);
+
+        CellStyle cellStyleNumber = getCellStyle(workbook, format);
         cell.setCellStyle(cellStyleNumber);
     }
 
-    
 //    public static Date get1900(Date date) {
 //        Calendar cal = Calendar.getInstance();
 //        cal.setTimeInMillis(date.getTime() % (24*60*60*1000));
@@ -259,7 +298,6 @@ public class XlsDataSetWriter
     }
     
     protected Workbook createWorkbook() {
-    	return new HSSFWorkbook();
+        return new HSSFWorkbook();
     }
-
 }
