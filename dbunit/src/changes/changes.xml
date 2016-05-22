@@ -11,7 +11,8 @@
   </properties>
 
   <body>
-    <release version="in scm" date="next" description="DefaultPrepAndExpectedTestCase config, TimestampDataType.typeCast(), escape pattern for table name, DefaultPrepAndExpectedTestCase.verifyData() connection, XlsTable timezone, OracleXMLType, 'true' 'false' for numeric fields, XlsDataSetWriter cellstyle caching">
+    <release version="in scm" date="next" description="DefaultPrepAndExpectedTestCase config, TimestampDataType.typeCast(), escape pattern for table name, DefaultPrepAndExpectedTestCase.verifyData() connection, XlsTable timezone, OracleXMLType, 'true' 'false' for numeric fields, XlsDataSetWriter cellstyle caching, ForeignKeyRelationshipEdge.compareTo">
+      <action dev="jeffjensen" type="fix" issue="320">Can not obtain relations from several columns.</action>
       <action dev="jeffjensen" type="fix" issue="377" due-to="markarnold">Running out of cell styles in XlsDataSetWriter.</action>
       <action dev="jeffjensen" type="add" issue="313" due-to="weifengli">Allow 'false' -> 0 and 'true' -> 1 for numeric fields.</action>
       <action dev="jeffjensen" type="fix" issue="374" due-to="sidikcz">Unable to insert row with Oracle XMLType.</action>

@@ -21,6 +21,8 @@
 package org.dbunit.database.search;
 
 import org.dbunit.util.search.Edge;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of an edge representing a foreign key (FK)  relationship between two
@@ -37,6 +39,7 @@ import org.dbunit.util.search.Edge;
  * @since 2.2 (Sep 9, 2005)
  */
 public class ForeignKeyRelationshipEdge extends Edge {
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private String fkColumn;
     private String pkColumn;
@@ -106,4 +109,21 @@ public class ForeignKeyRelationshipEdge extends Edge {
         return true;
     }
 
+    public int compareTo(Object o)
+    {
+        log.debug("compareTo(o={}) - start", o);
+
+        ForeignKeyRelationshipEdge that = (ForeignKeyRelationshipEdge) o;
+
+        int result = super.compareTo(that);
+        if (result == 0)
+        {
+            result = this.pkColumn.compareTo(that.pkColumn);
+        }
+        if (result == 0)
+        {
+            result = this.fkColumn.compareTo(that.fkColumn);
+        }
+        return result;
+    }
 }
