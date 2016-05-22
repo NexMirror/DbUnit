@@ -26,28 +26,32 @@
   <section name="News">
       <table border="1">
         <tr>
+          <td>2016-04-12</td>
+          <td>2.5.3-SNAPSHOT in progress. Please try the latest snapshot build and let us know how it works! Refer to the <a href="changes-report.html#in_scm">changes report</a> for the snapshot contents (and any subsequent updates).  Refer to <a href="repos.html">Maven Repositories</a> for obtaining snapshots.</td>
+        </tr>
+        <tr>
           <td>2016-04-08</td>
-          <td>DbUnit project team is proud to deliver the new 2.5.2 release: please have a look at the <a href="changes-report.html#a2.5.2">changes</a> report for the release contents.</td>
+          <td>Release 2.5.2 available. Refer to the <a href="changes-report.html#a2.5.2">changes report</a> for the release contents. Refer to <a href="repos.html">Maven Repositories</a> for obtaining it.</td>
         </tr>
         <tr>
           <td>2015-04-11</td>
-          <td>DbUnit project team is proud to deliver the new 2.5.1 release: please have a look at the <a href="changes-report.html#a2.5.1">changes</a> report for the release contents.</td>
+          <td>Release 2.5.1 available. Refer to the <a href="changes-report.html#a2.5.1">changes report</a> for the release contents. Refer to <a href="repos.html">Maven Repositories</a> for obtaining it.</td>
         </tr>
         <tr>
           <td>2014-04-24</td>
-          <td>DbUnit project team is proud to deliver the new 2.5.0 release: please have a look at the <a href="changes-report.html#a2.5.0">changes</a> report for the release contents.</td>
+          <td>Release 2.5.0 available. Refer to the <a href="changes-report.html#a2.5.0">changes report</a> for the release contents. Refer to <a href="repos.html">Maven Repositories</a> for obtaining it.</td>
         </tr>
         <tr>
           <td>2012-09-30</td>
-          <td>DbUnit project team is proud to deliver the new 2.4.9 release: please have a look at the <a href="changes-report.html#a2.4.9">changes</a> report for the release contents.</td>
+          <td>Release 2.4.9 available. Refer to the <a href="changes-report.html#a2.4.9">changes report</a> for the release contents. Refer to <a href="repos.html">Maven Repositories</a> for obtaining it.</td>
         </tr>
         <tr>
           <td>2010-08-31</td>
-          <td>DbUnit project team is proud to deliver the new 2.4.8 release: please have a look at the <a href="changes-report.html#a2.4.8">changes</a> report for the release contents.</td>
+          <td>Release 2.4.8 available. Refer to the <a href="changes-report.html#a2.4.8">changes report</a> for the release contents. Refer to <a href="repos.html">Maven Repositories</a> for obtaining it.</td>
         </tr>
         <tr>
           <td>2009-11-09</td>
-          <td>DbUnit project team is proud to deliver the new 2.4.7 release: please have a look at the <a href="changes-report.html#a2.4.7">changes</a> report for the release contents.</td>
+          <td>Release 2.4.7 available. Refer to the <a href="changes-report.html#a2.4.7">changes report</a> for the release contents. Refer to <a href="repos.html">Maven Repositories</a> for obtaining it.</td>
         </tr>
         <tr>
           <td>2009-10-09</td>
