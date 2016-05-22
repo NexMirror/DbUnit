@@ -158,6 +158,18 @@ public class IntegerDataTypeTest extends AbstractDataTypeTest
         }
     }
 
+    public void testTypeCastBool() throws Exception
+    {
+        for (int i = 0; i < TYPES.length; i++)
+        {
+            DataType type = TYPES[i];
+            assertEquals("typecast " + type, 0, type.typeCast("false"));
+            assertEquals("typecast " + type, 0, type.typeCast("FALSE"));
+            assertEquals("typecast " + type, 1, type.typeCast("true"));
+            assertEquals("typecast " + type, 1, type.typeCast("TRUE"));
+        }
+    }
+
     public void testTypeCastInvalid() throws Exception
     {
         Object[] values = {
