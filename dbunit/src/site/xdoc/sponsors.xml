@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+
+  <properties>
+    <title>Credits</title>
+    <author>rlogiacco</author>
+    <author>jjensen</author>
+  </properties>
+
+  <body>
+
+    <section name="Sponsors">
+	  <p>As with many open source projects, <b>DbUnit</b> has to thank not only the developer and the user communities but some supporting companies too, as they provide us licenses, bandwidth, space, and all sorts of things that usually you have to pay for.</p>
+      <p>The following organizations currently support dbUnit.</p>
+	      <ul>
+	      	<li>
+			  <a href="http://www.sourceforge.net">SourceForge</a> provides us the web space, source control, and all other tools in its great platform
+			</li>
+	      	<li>
+			  <a href="http://www.intertech.com">Intertech Consulting and Training</a> hosts our CI builds at <a href="http://dbunit.intertech.com/jenkins">http://dbunit.intertech.com/jenkins</a>
+			</li>
+	      </ul>
+		<p>To all of them our sincere thanks for their support!</p>
+    </section>
+
+  </body>
+
+</document>
