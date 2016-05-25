@@ -89,20 +89,8 @@
     <!-- features; how to have both? <url>http://sourceforge.net/p/dbunit/feature-requests/</url> -->
   </issueManagement>
   <ciManagement>
-    <system>parabuild</system>
-    <url><![CDATA[http://parabuild.viewtier.com:8080/parabuild/index.htm?view=detailed&buildid=30]]></url>
-    <notifiers>
-      <notifier>
-        <type>mail</type>
-        <sendOnError>true</sendOnError>
-        <sendOnFailure>false</sendOnFailure>
-        <sendOnSuccess>false</sendOnSuccess>
-        <sendOnWarning>false</sendOnWarning>
-        <configuration>
-          <address>gommma@users.sourceforge.net</address>
-        </configuration>
-      </notifier>
-    </notifiers>
+    <system>jenkins</system>
+    <url>http://dbunit.intertech.com/jenkins/</url>
   </ciManagement>
 
   <mailingLists>
@@ -119,7 +107,7 @@
       <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=dbunit-developer</archive>
     </mailingList>
     <mailingList>
-      <name>dbUnit SVN Commit List</name>
+      <name>dbUnit Commit List</name>
       <subscribe>http://lists.sourceforge.net/lists/listinfo/dbunit-commit</subscribe>
       <unsubscribe>http://lists.sourceforge.net/lists/listinfo/dbunit-commit</unsubscribe>
       <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=dbunit-commit</archive>
