@@ -849,28 +849,6 @@
 
   <profiles>
     <profile>
-      <id>official</id>
-      <!-- JH_TODO: it would be better to "chain" these from the default profile.  But it appears this isn't possible with Maven. -->
-      <properties>
-        <dbunit.profile>hsqldb</dbunit.profile>
-        <dbunit.profile.driverClass>org.hsqldb.jdbcDriver</dbunit.profile.driverClass>
-        <dbunit.profile.url>jdbc:hsqldb:mem:.</dbunit.profile.url>
-        <dbunit.profile.schema>PUBLIC</dbunit.profile.schema>
-        <dbunit.profile.user>sa</dbunit.profile.user>
-        <dbunit.profile.password />
-        <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
-        <dbunit.profile.ddl>empty.sql</dbunit.profile.ddl> <!-- DDL in HypersonicEnvironment -->
-      </properties>
-      <dependencies>
-        <dependency>
-          <groupId>com.oracle</groupId>
-          <artifactId>ojdbc14</artifactId>
-          <version>10.2.0.4.0</version>
-          <optional>true</optional>
-        </dependency>
-      </dependencies>
-    </profile>
-    <profile>
       <id>oracle-default</id>
       <activation>
         <activeByDefault>true</activeByDefault>
@@ -899,6 +877,14 @@
         <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
         <dbunit.profile.ddl>empty.sql</dbunit.profile.ddl> <!-- DDL in HypersonicEnvironment -->
       </properties>
+      <dependencies>
+        <dependency>
+          <groupId>com.oracle</groupId>
+          <artifactId>ojdbc14</artifactId>
+          <version>10.2.0.4.0</version>
+          <optional>true</optional>
+        </dependency>
+      </dependencies>
     </profile>
     <!-- "original" OracleDataTypeFactory (NOT 10g) with Oracle 10 JDBC driver for Java 1.4 -->
     <profile>

@@ -13,13 +13,13 @@ Overview
 
   * {{{http://maven.apache.org}Maven 3}}
 
+  * Git client
+
   * Oracle ojdbc14.jar (see below)
 
   []
 
   Once you have them all, you can build DbUnit by just typing <<mvn>>!  Anyway, the items below describe every step.
-
-  If you wish to work on the latest DbUnit source code, you also may want to install a {{{http://subversion.tigris.org} Subversion}} client.
 
 
 Installing the Oracle JDBC driver
@@ -59,7 +59,7 @@ Generating the JAR
 
 Creating the site
 
-  Run <<<mvn site:site>>> in the command line; the site will be available on <<<target/site/index.html>>>. Note that you might get an <OutOfMemoryExceptionError>; if that happens, you must increase the heap size through the <MAVEN_OPTS> variable (for instance, on Unix systems, you could run <<<MAVEN_OPTS=-mx512M mvn site:site>>>).
+  Run <<<mvn site>>> in the command line; the site will be available on <<<target/site/index.html>>>. Note that you might get an <OutOfMemoryExceptionError>; if that happens, you must increase the heap size through the <MAVEN_OPTS> variable (for instance, on Unix systems, you could run <<<MAVEN_OPTS=-mx512M mvn site>>>).
 
 
 Using an IDE
@@ -70,7 +70,7 @@ Using an IDE
   Further the {{{http://m2eclipse.codehaus.org}m2eclipse Plugin}} might be of interest to you
 
 
-Contributing patches
+Contributing
 
   [[1]] Base your work off of master head.
 
@@ -83,10 +83,11 @@ Contributing patches
   [[4]] For new features, your changes should include tests proving the feature
         works.  Your tests should prove future changes do not break your feature.
 
-  [[5]] Run Maven using the <<official>> profile, i.e., <<<mvn -Pofficial clean install>>>.
+  [[5]] Run Maven using the profile for database under test, e.g. <<<mvn -Pderby clean install>>>.
+        The default active profile is hsqldb.
 
-  [[6]] Once you finish your modifications, create a patch and attach to the bug
-        or feature request SourceForge tracker item.
+  [[6]] Once you finish your modifications, create a merge request or 
+        create a patch and attach to the bug or feature request SourceForge tracker item.
 
 Maintenance tasks
 
@@ -106,7 +107,7 @@ Updating the repository and site
   Once new code is committed, it is necessary to update the Maven repository with new snapshots, and also update the site. These 2 tasks can be done with a simple command:
 
 ---
-mvn -Pofficial clean source:jar javadoc:jar deploy site:site site:deploy
+mvn clean source:jar javadoc:jar deploy site site:deploy
 ---
 
 Releasing
@@ -128,13 +129,13 @@ Releasing
  Fortunately, the steps are automated by Maven. The first 3 steps can be achieved using {{{http://maven.apache.org/plugins/maven-release-plugin/}Maven Release Plugin}}, as follows:
 
 ---
-mvn -Pofficial release:prepare
+mvn release:prepare
 ---
 
   and then:
 
 ---
-mvn -Pofficial release:perform
+mvn release:perform
 ---
 
   That last command has created all necessary files for the fourth step.
