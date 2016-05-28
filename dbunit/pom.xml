@@ -849,16 +849,23 @@
 
   <profiles>
     <profile>
-      <id>oracle-default</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
+      <id>derby</id>
+      <properties>
+        <dbunit.profile>derby</dbunit.profile>
+        <dbunit.profile.driverClass>org.apache.derby.jdbc.EmbeddedDriver</dbunit.profile.driverClass>
+        <dbunit.profile.url>jdbc:derby:target/derby_db;create=true</dbunit.profile.url>
+        <dbunit.profile.schema>APP</dbunit.profile.schema>
+        <dbunit.profile.user>APP</dbunit.profile.user>
+        <dbunit.profile.password>APP</dbunit.profile.password>
+        <dbunit.profile.unsupportedFeatures>VARBINARY,BLOB,CLOB,TRANSACTION,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
+        <dbunit.profile.ddl>empty.sql</dbunit.profile.ddl> <!-- DDL in DerbyEnvironment -->
+      </properties>
       <dependencies>
         <dependency>
-          <groupId>com.oracle</groupId>
-          <artifactId>ojdbc14</artifactId>
-          <version>10.2.0.4.0</version>
-          <optional>true</optional>
+          <groupId>org.apache.derby</groupId>
+          <artifactId>derby</artifactId>
+          <version>10.4.1.3</version>
+          <scope>test</scope>
         </dependency>
       </dependencies>
     </profile>
@@ -886,8 +893,42 @@
         </dependency>
       </dependencies>
     </profile>
-    <!-- "original" OracleDataTypeFactory (NOT 10g) with Oracle 10 JDBC driver for Java 1.4 -->
     <profile>
+      <id>h2</id>
+      <properties>
+        <dbunit.profile>h2</dbunit.profile>
+        <dbunit.profile.driverClass>org.h2.Driver</dbunit.profile.driverClass>
+        <dbunit.profile.url>jdbc:h2:target/h2/test</dbunit.profile.url>
+        <dbunit.profile.schema>PUBLIC</dbunit.profile.schema>
+        <dbunit.profile.user>sa</dbunit.profile.user>
+        <dbunit.profile.password />
+        <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
+        <dbunit.profile.ddl>empty.sql</dbunit.profile.ddl> <!-- DDL in H2Environment -->
+      </properties>
+      <dependencies>
+        <dependency>
+           <groupId>com.h2database</groupId>
+           <artifactId>h2</artifactId>
+           <version>1.1.118</version>
+       </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>oracle-default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>com.oracle</groupId>
+          <artifactId>ojdbc14</artifactId>
+          <version>10.2.0.4.0</version>
+          <optional>true</optional>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <!-- "original" OracleDataTypeFactory (NOT 10g) with Oracle 10 JDBC driver for Java 1.4 -->
       <id>oracle-ojdbc14</id>
       <properties>
         <dbunit.profile>oracle</dbunit.profile>
@@ -908,8 +949,8 @@
         </dependency>
       </dependencies>
     </profile>
-    <!-- "original" OracleDataTypeFactory (NOT 10g) with Oracle 11 JDBC driver for Java 6 -->
     <profile>
+      <!-- "original" OracleDataTypeFactory (NOT 10g) with Oracle 11 JDBC driver for Java 6 -->
       <id>oracle-ojdbc6</id>
       <properties>
         <dbunit.profile>oracle</dbunit.profile>
@@ -930,8 +971,8 @@
         </dependency>
       </dependencies>
     </profile>
-    <!-- "newer" Oracle10DataTypeFactory with Oracle 10 JDBC driver for Java 1.4 -->
     <profile>
+      <!-- "newer" Oracle10DataTypeFactory with Oracle 10 JDBC driver for Java 1.4 -->
       <id>oracle10-ojdbc14</id>
       <properties>
         <dbunit.profile>oracle10</dbunit.profile>
@@ -952,8 +993,8 @@
         </dependency>
       </dependencies>
     </profile>
-    <!-- "newer" Oracle10DataTypeFactory with Oracle 11 JDBC driver for Java 6 -->
     <profile>
+      <!-- "newer" Oracle10DataTypeFactory with Oracle 11 JDBC driver for Java 6 -->
       <id>oracle10-ojdbc6</id>
       <properties>
         <dbunit.profile>oracle10</dbunit.profile>
@@ -1042,47 +1083,7 @@
       </properties>
       <!-- JH_TODO: db2 dependencies -->
     </profile>
-    <profile>
-      <id>derby</id>
-      <properties>
-        <dbunit.profile>derby</dbunit.profile>
-        <dbunit.profile.driverClass>org.apache.derby.jdbc.EmbeddedDriver</dbunit.profile.driverClass>
-        <dbunit.profile.url>jdbc:derby:target/derby_db;create=true</dbunit.profile.url>
-        <dbunit.profile.schema>APP</dbunit.profile.schema>
-        <dbunit.profile.user>APP</dbunit.profile.user>
-        <dbunit.profile.password>APP</dbunit.profile.password>
-        <dbunit.profile.unsupportedFeatures>VARBINARY,BLOB,CLOB,TRANSACTION,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
-        <dbunit.profile.ddl>empty.sql</dbunit.profile.ddl> <!-- DDL in DerbyEnvironment -->
-      </properties>
-      <dependencies>
-        <dependency>
-          <groupId>org.apache.derby</groupId>
-          <artifactId>derby</artifactId>
-          <version>10.4.1.3</version>
-          <scope>test</scope>
-        </dependency>
-      </dependencies>
-    </profile>
-    <profile>
-      <id>h2</id>
-      <properties>
-        <dbunit.profile>h2</dbunit.profile>
-        <dbunit.profile.driverClass>org.h2.Driver</dbunit.profile.driverClass>
-        <dbunit.profile.url>jdbc:h2:target/h2/test</dbunit.profile.url>
-        <dbunit.profile.schema>PUBLIC</dbunit.profile.schema>
-        <dbunit.profile.user>sa</dbunit.profile.user>
-        <dbunit.profile.password />
-        <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
-        <dbunit.profile.ddl>empty.sql</dbunit.profile.ddl> <!-- DDL in H2Environment -->
-      </properties>
-      <dependencies>
-        <dependency>
-           <groupId>com.h2database</groupId>
-           <artifactId>h2</artifactId>
-           <version>1.1.118</version>
-       </dependency>
-      </dependencies>
-    </profile>
+    
   </profiles>
 
 </project>
