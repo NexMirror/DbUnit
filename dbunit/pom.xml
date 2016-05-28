@@ -409,6 +409,11 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
           <version>${assemblyPluginVersion}</version>
+          <configuration>
+            <descriptors>
+              <descriptor>assembly.xml</descriptor>
+            </descriptors>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -434,11 +439,25 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>cobertura-maven-plugin</artifactId>
           <version>${coberturaPluginVersion}</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>clean</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${compilerPluginVersion}</version>
+          <configuration>
+            <source>${compileSource}</source>
+            <target>${compileSource}</target>
+            <compilerVersion>${compileSource}</compilerVersion>
+            <debug>true</debug>
+            <fork>true</fork>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -449,11 +468,78 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
           <version>${enforcerPluginVersion}</version>
+          <executions>
+            <execution>
+              <id>enforce-versions</id>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <rules>
+              <!--
+              Links to rules:
+                1) http://maven.apache.org/enforcer/enforcer-rules/index.html
+                2) http://mojo.codehaus.org/extra-enforcer-rules/
+              -->
+              <requireMavenVersion>
+                <version>${mavenVersion}</version>
+              </requireMavenVersion>
+              <requireJavaVersion>
+                <version>${compileSource}</version>
+              </requireJavaVersion>
+              <requirePluginVersions>
+                <phases>compile</phases>
+              </requirePluginVersions>
+            </rules>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-failsafe-plugin</artifactId>
           <version>${failsafePluginVersion}</version>
+          <configuration>
+            <encoding>UTF-8</encoding>
+            <systemProperties>
+              <property>
+                <name>dbunit.profile</name>
+                <value>${dbunit.profile}</value>
+              </property>
+              <property>
+                <name>dbunit.profile.driverClass</name>
+                <value>${dbunit.profile.driverClass}</value>
+              </property>
+              <property>
+                <name>dbunit.profile.url</name>
+                <value>${dbunit.profile.url}</value>
+              </property>
+              <property>
+                <name>dbunit.profile.schema</name>
+                <value>${dbunit.profile.schema}</value>
+              </property>
+              <property>
+                <name>dbunit.profile.user</name>
+                <value>${dbunit.profile.user}</value>
+              </property>
+              <property>
+                <name>dbunit.profile.password</name>
+                <value>${dbunit.profile.password}</value>
+              </property>
+              <property>
+                <name>dbunit.profile.unsupportedFeatures</name>
+                <value>${dbunit.profile.unsupportedFeatures}</value>
+              </property>
+            </systemProperties>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>integration-test</goal>
+                <goal>verify</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -469,6 +555,12 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
           <version>${jarPluginVersion}</version>
+          <configuration>
+            <includes>
+              <include>/LICENSE.txt</include>
+              <include>**</include>
+            </includes>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -509,6 +601,59 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>sql-maven-plugin</artifactId>
           <version>${sqlPluginVersion}</version>
+          <configuration>
+            <driver>${dbunit.profile.driverClass}</driver>
+            <url>${dbunit.profile.url}</url>
+            <username>${dbunit.profile.user}</username>
+            <password>${dbunit.profile.password}</password>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>hsqldb</groupId>
+              <artifactId>hsqldb</artifactId>
+              <version>1.8.0.1</version>
+            </dependency>
+            <dependency>
+              <groupId>com.oracle</groupId>
+              <artifactId>ojdbc14</artifactId>
+              <version>10.2.0.4.0</version>
+            </dependency>
+            <dependency>
+              <groupId>postgresql</groupId>
+              <artifactId>postgresql</artifactId>
+              <version>8.4-701.jdbc3</version>
+            </dependency>
+            <dependency>
+              <groupId>mysql</groupId>
+              <artifactId>mysql-connector-java</artifactId>
+              <version>5.1.6</version>
+            </dependency>
+            <dependency>
+              <groupId>org.apache.derby</groupId>
+              <artifactId>derby</artifactId>
+              <version>10.4.1.3</version>
+            </dependency>
+            <dependency>
+              <groupId>com.h2database</groupId>
+              <artifactId>h2</artifactId>
+              <version>1.1.118</version>
+            </dependency>
+          </dependencies>
+          <executions>
+            <execution>
+              <id>sql-ddl</id>
+              <phase>pre-integration-test</phase>
+              <goals>
+                <goal>execute</goal>
+              </goals>
+              <configuration>
+                <srcFiles>
+                  <srcFile>src/test/resources/sql/${dbunit.profile.ddl}</srcFile>
+                </srcFiles>
+                <onError>continue</onError>
+              </configuration>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -526,224 +671,56 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${surefirePluginVersion}</version>
+          <configuration>
+            <excludes>
+              <exclude>**/Abstract*.java</exclude>
+            </excludes>
+            <includes>
+              <include>**/*Test.java</include>
+            </includes>
+            <systemProperties>
+              <property>
+                <name>dbunit.profile</name>
+                <value>${dbunit.profile}</value>
+              </property>
+              <property>
+                <name>dbunit.profile.driverClass</name>
+                <value>${dbunit.profile.driverClass}</value>
+              </property>
+              <property>
+                <name>dbunit.profile.url</name>
+                <value>${dbunit.profile.url}</value>
+              </property>
+              <property>
+                <name>dbunit.profile.schema</name>
+                <value>${dbunit.profile.schema}</value>
+              </property>
+              <property>
+                <name>dbunit.profile.user</name>
+                <value>${dbunit.profile.user}</value>
+              </property>
+              <property>
+                <name>dbunit.profile.password</name>
+                <value>${dbunit.profile.password}</value>
+              </property>
+              <property>
+                <name>dbunit.profile.unsupportedFeatures</name>
+                <value>${dbunit.profile.unsupportedFeatures}</value>
+              </property>
+            </systemProperties>
+          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
+
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <excludes>
-            <exclude>**/Abstract*.java</exclude>
-          </excludes>
-          <includes>
-            <include>**/*Test.java</include>
-          </includes>
-          <systemProperties>
-            <property>
-              <name>dbunit.profile</name>
-              <value>${dbunit.profile}</value>
-            </property>
-            <property>
-              <name>dbunit.profile.driverClass</name>
-              <value>${dbunit.profile.driverClass}</value>
-            </property>
-            <property>
-              <name>dbunit.profile.url</name>
-              <value>${dbunit.profile.url}</value>
-            </property>
-            <property>
-              <name>dbunit.profile.schema</name>
-              <value>${dbunit.profile.schema}</value>
-            </property>
-            <property>
-              <name>dbunit.profile.user</name>
-              <value>${dbunit.profile.user}</value>
-            </property>
-            <property>
-              <name>dbunit.profile.password</name>
-              <value>${dbunit.profile.password}</value>
-            </property>
-            <property>
-              <name>dbunit.profile.unsupportedFeatures</name>
-              <value>${dbunit.profile.unsupportedFeatures}</value>
-            </property>
-          </systemProperties>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
-        <configuration>
-          <encoding>UTF-8</encoding>
-          <systemProperties>
-            <property>
-              <name>dbunit.profile</name>
-              <value>${dbunit.profile}</value>
-            </property>
-            <property>
-              <name>dbunit.profile.driverClass</name>
-              <value>${dbunit.profile.driverClass}</value>
-            </property>
-            <property>
-              <name>dbunit.profile.url</name>
-              <value>${dbunit.profile.url}</value>
-            </property>
-            <property>
-              <name>dbunit.profile.schema</name>
-              <value>${dbunit.profile.schema}</value>
-            </property>
-            <property>
-              <name>dbunit.profile.user</name>
-              <value>${dbunit.profile.user}</value>
-            </property>
-            <property>
-              <name>dbunit.profile.password</name>
-              <value>${dbunit.profile.password}</value>
-            </property>
-            <property>
-              <name>dbunit.profile.unsupportedFeatures</name>
-              <value>${dbunit.profile.unsupportedFeatures}</value>
-            </property>
-          </systemProperties>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>integration-test</goal>
-              <goal>verify</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>${compileSource}</source>
-          <target>${compileSource}</target>
-          <compilerVersion>${compileSource}</compilerVersion>
-          <debug>true</debug>
-          <fork>true</fork>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <includes>
-            <include>/LICENSE.txt</include>
-            <include>**</include>
-          </includes>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <configuration>
-          <descriptors>
-            <descriptor>assembly.xml</descriptor>
-          </descriptors>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>sql-maven-plugin</artifactId>
-        <configuration>
-          <driver>${dbunit.profile.driverClass}</driver>
-          <url>${dbunit.profile.url}</url>
-          <username>${dbunit.profile.user}</username>
-          <password>${dbunit.profile.password}</password>
-        </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>1.8.0.1</version>
-          </dependency>
-          <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc14</artifactId>
-            <version>10.2.0.4.0</version>
-          </dependency>
-          <dependency>
-            <groupId>postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>8.4-701.jdbc3</version>
-          </dependency>
-          <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.6</version>
-          </dependency>
-          <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derby</artifactId>
-            <version>10.4.1.3</version>
-          </dependency>
-          <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.1.118</version>
-          </dependency>
-        </dependencies>
-        <executions>
-          <execution>
-            <id>sql-ddl</id>
-            <phase>pre-integration-test</phase>
-            <goals>
-              <goal>execute</goal>
-            </goals>
-            <configuration>
-              <srcFiles>
-                <srcFile>src/test/resources/sql/${dbunit.profile.ddl}</srcFile>
-              </srcFiles>
-              <onError>continue</onError>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>cobertura-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>clean</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>enforce-versions</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <rules>
-            <!--
-            Links to rules:
-              1) http://maven.apache.org/enforcer/enforcer-rules/index.html
-              2) http://mojo.codehaus.org/extra-enforcer-rules/
-            -->
-            <requireMavenVersion>
-              <version>${mavenVersion}</version>
-            </requireMavenVersion>
-            <requireJavaVersion>
-              <version>${compileSource}</version>
-            </requireJavaVersion>
-            <requirePluginVersions>
-              <phases>compile</phases>
-            </requirePluginVersions>
-          </rules>
-        </configuration>
       </plugin>
     </plugins>
   </build>
@@ -892,23 +869,6 @@
           <optional>true</optional>
         </dependency>
       </dependencies>
-      <build>
-        <pluginManagement>
-          <plugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-compiler-plugin</artifactId>
-              <configuration>
-                <source>${compileSource}</source>
-                <target>${compileSource}</target>
-                <compilerVersion>${compileSource}</compilerVersion>
-                <debug>true</debug>
-                <fork>true</fork>
-              </configuration>
-            </plugin>
-          </plugins>
-        </pluginManagement>
-      </build>
 
       <reporting>
         <plugins>
