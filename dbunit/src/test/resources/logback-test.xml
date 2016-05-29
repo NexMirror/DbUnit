@@ -8,20 +8,26 @@
     <!-- NOTE: user must append slash in property -->
     <file>${logback.file.path:-target/}dbunit-TEST.log</file>
     <append>false</append>
-    <layout class="ch.qos.logback.classic.PatternLayout">
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
       <pattern>%date %contextName [%thread] %-5level %-55logger{55} %mdc: %marker: %msg%n</pattern>
-    </layout>
+    </encoder>
+  </appender>
+
+  <appender name="FILE-ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+    <queueSize>500</queueSize>
+    <discardingThreshold>5</discardingThreshold>
+    <appender-ref ref="FILE" />
   </appender>
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <layout class="ch.qos.logback.classic.PatternLayout">
-      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36}: %msg%n</pattern>
-    </layout>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %-55logger{55} %mdc: %marker: %msg%n</pattern>
+    </encoder>
   </appender>
 
   <root level="INFO">
     <appender-ref ref="STDOUT" />
-    <appender-ref ref="FILE" />
+    <appender-ref ref="FILE-ASYNC" />
   </root>
 
   <jmxConfigurator contextName="dbunit"/>
