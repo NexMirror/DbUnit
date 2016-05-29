@@ -876,6 +876,12 @@
           <version>${derbyDriverVersion}</version>
           <scope>test</scope>
         </dependency>
+        <dependency>
+          <groupId>com.oracle</groupId>
+          <artifactId>ojdbc14</artifactId>
+          <version>${oracle10DriverVersion}</version>
+          <optional>true</optional>
+        </dependency>
       </dependencies>
     </profile>
     <profile>
@@ -920,9 +926,16 @@
            <artifactId>h2</artifactId>
            <version>${h2DriverVersion}</version>
        </dependency>
+        <dependency>
+          <groupId>com.oracle</groupId>
+          <artifactId>ojdbc14</artifactId>
+          <version>${oracle10DriverVersion}</version>
+          <optional>true</optional>
+        </dependency>
       </dependencies>
     </profile>
     <profile>
+      <!-- FIXME needs driver and other properties set -->
       <id>oracle-default</id>
       <activation>
         <activeByDefault>true</activeByDefault>
@@ -1042,6 +1055,12 @@
           <artifactId>postgresql</artifactId>
           <version>${postgresqlDriverVersion}</version>
         </dependency>
+        <dependency>
+          <groupId>com.oracle</groupId>
+          <artifactId>ojdbc14</artifactId>
+          <version>${oracle10DriverVersion}</version>
+          <optional>true</optional>
+        </dependency>
       </dependencies>
     </profile>
     <profile>
@@ -1062,6 +1081,12 @@
           <artifactId>mysql-connector-java</artifactId>
           <version>${mysqlDriverVersion}</version>
         </dependency>
+        <dependency>
+          <groupId>com.oracle</groupId>
+          <artifactId>ojdbc14</artifactId>
+          <version>${oracle10DriverVersion}</version>
+          <optional>true</optional>
+        </dependency>
       </dependencies>
     </profile>
     <profile>
@@ -1077,6 +1102,14 @@
         <dbunit.profile.ddl>mssql.sql</dbunit.profile.ddl>
       </properties>
       <!-- JH_TODO: mssql dependencies -->
+      <dependencies>
+        <dependency>
+          <groupId>com.oracle</groupId>
+          <artifactId>ojdbc14</artifactId>
+          <version>${oracle10DriverVersion}</version>
+          <optional>true</optional>
+        </dependency>
+      </dependencies>
     </profile>
     <profile>
       <id>db2</id>
@@ -1091,6 +1124,14 @@
         <dbunit.profile.ddl>db2xml.sql</dbunit.profile.ddl>
       </properties>
       <!-- JH_TODO: db2 dependencies -->
+      <dependencies>
+        <dependency>
+          <groupId>com.oracle</groupId>
+          <artifactId>ojdbc14</artifactId>
+          <version>${oracle10DriverVersion}</version>
+          <optional>true</optional>
+        </dependency>
+      </dependencies>
     </profile>
     
   </profiles>
