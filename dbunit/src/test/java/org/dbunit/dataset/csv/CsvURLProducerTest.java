@@ -40,11 +40,13 @@ import org.dbunit.ant.AbstractStep;
 import org.dbunit.ant.Export;
 import org.dbunit.ant.Operation;
 import org.dbunit.ant.Query;
+import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.CachedDataSet;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.ITable;
+import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.dbunit.testutil.TestUtils;
 import org.dbunit.util.FileHelper;
@@ -163,7 +165,11 @@ public class CsvURLProducerTest extends TestCase {
     }
 
     private IDatabaseConnection getConnection() throws SQLException, DatabaseUnitException {
-        return new DatabaseConnection(DriverManager.getConnection(url, user, password));
+        DatabaseConnection connection = new DatabaseConnection(DriverManager.getConnection(url, user, password));
+        DatabaseConfig config = connection.getConfig();
+        config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
+                new HsqldbDataTypeFactory());
+        return connection;
     }
 
     protected void setUp() throws Exception {

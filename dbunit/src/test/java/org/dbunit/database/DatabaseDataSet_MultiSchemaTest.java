@@ -12,6 +12,7 @@ import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.NoSuchTableException;
+import org.dbunit.ext.h2.H2DataTypeFactory;
 import org.dbunit.testutil.TestUtils;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -331,8 +332,10 @@ public class DatabaseDataSet_MultiSchemaTest
                 H2Environment.createJdbcConnection(databaseName, username,
                         password);
         connectionTest = new DatabaseConnection(jdbcConnection, schema);
-        connectionTest.getConfig().setProperty(
-                DatabaseConfig.FEATURE_QUALIFIED_TABLE_NAMES,
+        final DatabaseConfig config = connectionTest.getConfig();
+        config.setProperty(DatabaseConfig.FEATURE_QUALIFIED_TABLE_NAMES,
                 useQualifiedTableNames);
+        config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
+                new H2DataTypeFactory());
     }
 }
