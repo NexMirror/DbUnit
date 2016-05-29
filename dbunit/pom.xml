@@ -834,8 +834,10 @@
             <toAddress implementation="java.lang.String">dbunit-developer@lists.sourceforge.net</toAddress>
             <toAddress implementation="java.lang.String">dbunit-user@lists.sourceforge.net</toAddress>
           </toAddresses>
-          <urlDownload>http://sourceforge.net/project/showfiles.php?group_id=47439</urlDownload>
-          <issueLinkTemplate><![CDATA[http://sourceforge.net/support/tracker.php?aid=%ISSUE%]]></issueLinkTemplate>
+          <urlDownload>http://dbunit.sourceforge.net/repos.html</urlDownload>
+          <issueLinkTemplatePerSystem>
+            <sourceforge><![CDATA[https://sourceforge.net/p/dbunit/bugs/%ISSUE%]]></sourceforge>
+          </issueLinkTemplatePerSystem>
         </configuration>
         <reportSets>
           <reportSet>
