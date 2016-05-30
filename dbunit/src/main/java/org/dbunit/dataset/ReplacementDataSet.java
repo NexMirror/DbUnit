@@ -57,9 +57,7 @@ public class ReplacementDataSet extends AbstractDataSet
      */
     public ReplacementDataSet(IDataSet dataSet)
     {
-        _dataSet = dataSet;
-        _objectMap = new HashMap();
-        _substringMap = new HashMap();
+        this(dataSet, new HashMap(), new HashMap());
     }
 
     /**
@@ -71,6 +69,7 @@ public class ReplacementDataSet extends AbstractDataSet
      */
     public ReplacementDataSet(IDataSet dataSet, Map objectMap, Map substringMap)
     {
+        super(dataSet.isCaseSensitiveTableNames());
         _dataSet = dataSet;
         _objectMap = objectMap == null ? new HashMap() : objectMap;
         _substringMap = substringMap == null ? new HashMap() : substringMap;

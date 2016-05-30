@@ -1,0 +1,4 @@
+<dataset>
+	<TEST_TABLE COLUMN0="row 0 col 0" />
+    <test_table COLUMN0="row 1 col 0"  />
+</dataset>
