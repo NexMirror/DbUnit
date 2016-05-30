@@ -37,4 +37,12 @@ Snapshots
 ---
 
  Note: it is a better practice to add the repo to your artifact manager,
- such as Nexus, rather than add the repo to a POM.
+ such as Nexus, or define in settings.xml, rather than add the repo to a POM.
+
+* settings.xml How-To
+
+ Official Maven documentation on repositories in settings.xml:
+ {{https://maven.apache.org/settings.html#Repositories}}
+
+ Stack Overflow answer showing the Sonatype OSS Snapshot repo definition in settings.xml:
+ {{http://stackoverflow.com/questions/7715321/how-to-download-snapshot-version-from-maven-snapshot-repository#7717234}}
