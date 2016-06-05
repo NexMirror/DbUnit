@@ -385,7 +385,7 @@ public class DbUnitAssertIT extends TestCase
         String[] names = DataSetUtils.getReverseTableNames(dataSet1);
         IDataSet dataSet2 = new FilteredDataSet(names, dataSet1);
 
-        assertTrue("assert not same", dataSet1 != dataSet2);
+        assertTrue("Datasets are the same instances.", dataSet1 != dataSet2);
         assertion.assertEquals(dataSet1, dataSet2);
     }
 
@@ -401,7 +401,7 @@ public class DbUnitAssertIT extends TestCase
         }
         IDataSet dataSet2 = new FilteredDataSet(names, dataSet1);
 
-        assertTrue("assert not same", dataSet1 != dataSet2);
+        assertTrue("Datasets are the same instances.", dataSet1 != dataSet2);
         assertion.assertEquals(dataSet1, dataSet2);
     }
     
@@ -414,8 +414,12 @@ public class DbUnitAssertIT extends TestCase
             assertion.assertEquals(dataSet1, dataSet2);
             fail("Should throw an AssertionFailedError");
         } catch (ComparisonFailure expected) {
-            assertEquals("[TEST_TABLE_WITH_CASE_SENSITIVE_NAME]", expected.getExpected());
-            assertEquals("[test_table_with_case_sensitive_name]", expected.getActual());
+            assertEquals("Expected table name did not match.",
+                    "[TEST_TABLE_WITH_CASE_SENSITIVE_NAME]",
+                    expected.getExpected());
+            assertEquals("Actual table name did not match.",
+                    "[test_table_with_case_sensitive_name]",
+                    expected.getActual());
         }
     }
     
@@ -423,7 +427,7 @@ public class DbUnitAssertIT extends TestCase
     {
         IDataSet dataSet1 = new FlatXmlDataSetBuilder().setCaseSensitiveTableNames(true).build(TestUtils.getFileReader("xml/assertion_table_name_case_sensitive_with_lower_case.xml"));
         IDataSet dataSet2 = new FlatXmlDataSetBuilder().setCaseSensitiveTableNames(true).build(TestUtils.getFileReader("xml/assertion_table_name_case_sensitive_with_lower_case.xml"));
-        assertTrue("assert not same", dataSet1 != dataSet2);
+        assertTrue("Datasets are the same instances.", dataSet1 != dataSet2);
         assertion.assertEquals(dataSet1, dataSet2);
     }
 
@@ -435,7 +439,7 @@ public class DbUnitAssertIT extends TestCase
         String[] names = new String[]{dataSet1.getTableNames()[0]};
         IDataSet dataSet2 = new FilteredDataSet(names, dataSet1);
 
-        assertTrue("assert not same", dataSet1 != dataSet2);
+        assertTrue("Datasets are the same instances.", dataSet1 != dataSet2);
 
         try
         {
@@ -466,7 +470,7 @@ public class DbUnitAssertIT extends TestCase
         }
         IDataSet dataSet2 = new DefaultDataSet(tables);
 
-        assertTrue("assert not same", dataSet1 != dataSet2);
+        assertTrue("Datasets are the same instances.", dataSet1 != dataSet2);
         assertEquals("table count", dataSet1.getTableNames().length,
                 dataSet2.getTableNames().length);
 
@@ -487,7 +491,7 @@ public class DbUnitAssertIT extends TestCase
         // different row counts (double)
         IDataSet dataSet2 = new CompositeDataSet(dataSet1, dataSet1);
 
-        assertTrue("assert not same", dataSet1 != dataSet2);
+        assertTrue("Datasets are the same instances.", dataSet1 != dataSet2);
         assertEquals("table count", dataSet1.getTableNames().length,
                 dataSet2.getTableNames().length);
 
