@@ -790,10 +790,21 @@
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <version>${projectInfoReportsPluginVersion}</version>
       </plugin>
+<!--
+TODO convert to JaCoCo
+Cobertura site gen report fails on integration test
+
+DbUnitTaskIT.setUp:85->BuildFileTest.configureProject:235->BuildFileTest.configureProject:248  NoSuchMethod
+
+java.lang.NoSuchMethodError: 
+org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/FileUtils;
+        at org.dbunit.ant.DbUnitTaskIT.setUp(DbUnitTaskIT.java:85)
+
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>cobertura-maven-plugin</artifactId>
       </plugin>
+-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
