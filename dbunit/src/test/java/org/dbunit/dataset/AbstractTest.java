@@ -30,7 +30,7 @@ import java.util.List;
  * @since Apr 6, 2003
  * @version $Revision$
  */
-public class AbstractTest extends TestCase
+public abstract class AbstractTest extends TestCase
 {
     private static final String[] TABLE_NAMES = {
         "TEST_TABLE",
