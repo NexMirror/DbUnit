@@ -13,7 +13,8 @@
   </properties>
 
   <body>
-    <release version="in scm" date="next" description="DefaultPrepAndExpectedTestCase config, TimestampDataType.typeCast(), escape pattern for table name, DefaultPrepAndExpectedTestCase.verifyData() connection, XlsTable timezone, OracleXMLType, 'true' 'false' for numeric fields, XlsDataSetWriter cellstyle caching, ForeignKeyRelationshipEdge.compareTo, new CI, POM cleanup, ReplacementDataSet caseSensitiveTableNames">
+    <release version="in scm" date="next" description="DefaultPrepAndExpectedTestCase config, TimestampDataType.typeCast(), escape pattern for table name, DefaultPrepAndExpectedTestCase.verifyData() connection, XlsTable timezone, OracleXMLType, 'true' 'false' for numeric fields, XlsDataSetWriter cellstyle caching, ForeignKeyRelationshipEdge.compareTo, new CI, POM cleanup, ReplacementDataSet and DbUnitAssert case sensitive table names">
+      <action dev="jeffjensen" type="fix" issue="386" due-to="rafaelvs">DbUnitAssert table name case sensitive problems.</action>
       <action dev="jeffjensen" type="fix" issue="388" due-to="rafaelvs">ReplacementDataSet "ignores" its decorated DataSet's caseSensitiveTableNames setting.</action>
       <action dev="jeffjensen" type="update" issue="387">Broken links to issues referenced in changes-report.html.</action>
       <action dev="jeffjensen" type="update">POM cleanup: remove "official" profile, consolidate config.</action>

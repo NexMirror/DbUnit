@@ -229,8 +229,8 @@ public class DbUnitAssert
             failureHandler = getDefaultFailureHandler();
         }
 
-        String[] expectedNames = getSortedUpperTableNames(expectedDataSet);
-        String[] actualNames = getSortedUpperTableNames(actualDataSet);
+        String[] expectedNames = getSortedTableNames(expectedDataSet);
+        String[] actualNames = getSortedTableNames(actualDataSet);
 
         // tables count
         if (expectedNames.length != actualNames.length) {
@@ -570,14 +570,16 @@ public class DbUnitAssert
         return result;
     }
 
-    protected String[] getSortedUpperTableNames(IDataSet dataSet)
+    protected String[] getSortedTableNames(IDataSet dataSet)
     throws DataSetException 
     {
-        logger.debug("getSortedUpperTableNames(dataSet={}) - start", dataSet);
+        logger.debug("getSortedTableNames(dataSet={}) - start", dataSet);
 
         String[] names = dataSet.getTableNames();
-        for (int i = 0; i < names.length; i++) {
-            names[i] = names[i].toUpperCase();
+        if( !dataSet.isCaseSensitiveTableNames() ) {
+	        for (int i = 0; i < names.length; i++) {
+	            names[i] = names[i].toUpperCase();
+	        }
         }
         Arrays.sort(names);
         return names;

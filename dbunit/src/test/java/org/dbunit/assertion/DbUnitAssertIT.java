@@ -21,7 +21,6 @@
 
 package org.dbunit.assertion;
 
-import java.io.FileReader;
 import java.io.StringReader;
 import java.math.BigDecimal;
 
@@ -402,6 +401,28 @@ public class DbUnitAssertIT extends TestCase
         }
         IDataSet dataSet2 = new FilteredDataSet(names, dataSet1);
 
+        assertTrue("assert not same", dataSet1 != dataSet2);
+        assertion.assertEquals(dataSet1, dataSet2);
+    }
+    
+    public void testAssertDataSetsTableNamesCaseSensitiveNotEquals() throws Exception
+    {
+        IDataSet dataSet1 = new FlatXmlDataSetBuilder().setCaseSensitiveTableNames(true).build(TestUtils.getFileReader("xml/assertion_table_name_case_sensitive_1.xml"));
+        IDataSet dataSet2 = new FlatXmlDataSetBuilder().setCaseSensitiveTableNames(true).build(TestUtils.getFileReader("xml/assertion_table_name_case_sensitive_2.xml"));
+        
+        try {
+            assertion.assertEquals(dataSet1, dataSet2);
+            fail("Should throw an AssertionFailedError");
+        } catch (ComparisonFailure expected) {
+            assertEquals("[TEST_TABLE_WITH_CASE_SENSITIVE_NAME]", expected.getExpected());
+            assertEquals("[test_table_with_case_sensitive_name]", expected.getActual());
+        }
+    }
+    
+    public void testAssertDataSetsTableNamesCaseSensitiveWithLowerCaseEquals() throws Exception
+    {
+        IDataSet dataSet1 = new FlatXmlDataSetBuilder().setCaseSensitiveTableNames(true).build(TestUtils.getFileReader("xml/assertion_table_name_case_sensitive_with_lower_case.xml"));
+        IDataSet dataSet2 = new FlatXmlDataSetBuilder().setCaseSensitiveTableNames(true).build(TestUtils.getFileReader("xml/assertion_table_name_case_sensitive_with_lower_case.xml"));
         assertTrue("assert not same", dataSet1 != dataSet2);
         assertion.assertEquals(dataSet1, dataSet2);
     }
