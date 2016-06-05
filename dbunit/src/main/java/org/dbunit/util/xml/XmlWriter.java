@@ -664,47 +664,9 @@ public class XmlWriter
 
         for (index = 0; index < strLength; index++)
         {
-            String entity = null;
             final char currentChar = str.charAt(index);
-            switch (currentChar)
-            {
-            case '\t':
-                entity = "&#09;";
-                break;
-            case '\n':
-                if (literally)
-                {
-                    entity = "&#xA;";
-                }
-                break;
-            case '\r':
-                if (literally)
-                {
-                    entity = "&#xD;";
-                }
-                break;
-            case '&':
-                entity = "&amp;";
-                break;
-            case '<':
-                entity = "&lt;";
-                break;
-            case '>':
-                entity = "&gt;";
-                break;
-            case '\"':
-                entity = "&quot;";
-                break;
-            case '\'':
-                entity = "&apos;";
-                break;
-            default:
-                if ((currentChar > 0x7f) || !isValidXmlChar(currentChar))
-                {
-                    entity = "&#" + String.valueOf((int) currentChar) + ";";
-                }
-                break;
-            }
+            final String entity =
+                    convertCharacterToEntity(currentChar, literally);
 
             // If we found something to substitute, then copy over previous
             // data then do the substitution.
@@ -744,6 +706,52 @@ public class XmlWriter
         }
 
         return buffer.toString();
+    }
+
+    protected String convertCharacterToEntity(final char currentChar,
+            final boolean literally)
+    {
+        String entity = null;
+        switch (currentChar)
+        {
+        case '\t':
+            entity = "&#09;";
+            break;
+        case '\n':
+            if (literally)
+            {
+                entity = "&#xA;";
+            }
+            break;
+        case '\r':
+            if (literally)
+            {
+                entity = "&#xD;";
+            }
+            break;
+        case '&':
+            entity = "&amp;";
+            break;
+        case '<':
+            entity = "&lt;";
+            break;
+        case '>':
+            entity = "&gt;";
+            break;
+        case '\"':
+            entity = "&quot;";
+            break;
+        case '\'':
+            entity = "&apos;";
+            break;
+        default:
+            if ((currentChar > 0x7f) || !isValidXmlChar(currentChar))
+            {
+                entity = "&#" + String.valueOf((int) currentChar) + ";";
+            }
+            break;
+        }
+        return entity;
     }
 
     /**
