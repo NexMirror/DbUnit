@@ -745,7 +745,7 @@ public class XmlWriter
             entity = "&apos;";
             break;
         default:
-            if ((currentChar > 0x7f) || !isValidXmlChar(currentChar))
+            if ((currentChar > 0x7f) && !isValidXmlChar(currentChar))
             {
                 entity = "&#" + String.valueOf((int) currentChar) + ";";
             }
@@ -764,11 +764,10 @@ public class XmlWriter
      * Code points outside this set must be entity encoded to be represented in
      * XML.
      *
-     * @param c
-     *            The character to inspect.
+     * @param c The character to inspect. Type is int because unicode char value may exceed Character.MAX_VALUE.
      * @return Whether the specified character is valid in XML.
      */
-    private static final boolean isValidXmlChar(final char c)
+    private static boolean isValidXmlChar(int c)
     {
         switch (c)
         {

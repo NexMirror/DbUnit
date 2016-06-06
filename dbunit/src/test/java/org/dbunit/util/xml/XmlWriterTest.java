@@ -165,5 +165,22 @@ public class XmlWriterTest extends TestCase
 		String actualXml = writer.toString();
 		assertEquals(expectedXml, actualXml);
 	}
-	
+
+
+	public void testNonAsciiValidXmlCharactersInAttributeValue() throws Exception
+	{
+		String expectedText = "привет";
+		String expectedXml = "<COLUMN1 ATTR=\"" + expectedText + "\"/>\n";
+
+		boolean literally = true;
+		Writer writer = new StringWriter();
+		XmlWriter xmlWriter = new XmlWriter(writer);
+		xmlWriter.writeElement("COLUMN1");
+		xmlWriter.writeAttribute("ATTR", expectedText, literally);
+		xmlWriter.endElement();
+		xmlWriter.close();
+
+		String actualXml = writer.toString();
+		assertEquals(expectedXml, actualXml);
+	}
 }
