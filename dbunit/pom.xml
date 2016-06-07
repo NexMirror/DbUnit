@@ -982,7 +982,7 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
       <properties>
         <dbunit.profile>oracle</dbunit.profile>
         <dbunit.profile.driverClass>oracle.jdbc.OracleDriver</dbunit.profile.driverClass>
-        <dbunit.profile.url>jdbc:oracle:thin:@localhost:1521:ORCL</dbunit.profile.url>
+        <dbunit.profile.url>jdbc:oracle:thin:@localhost:1521:XE</dbunit.profile.url>
         <dbunit.profile.schema>DBUNIT</dbunit.profile.schema>
         <dbunit.profile.user>dbunit</dbunit.profile.user>
         <dbunit.profile.password>dbunit</dbunit.profile.password>
@@ -1004,7 +1004,7 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
       <properties>
         <dbunit.profile>oracle</dbunit.profile>
         <dbunit.profile.driverClass>oracle.jdbc.OracleDriver</dbunit.profile.driverClass>
-        <dbunit.profile.url>jdbc:oracle:thin:@localhost:1521:ORCL</dbunit.profile.url>
+        <dbunit.profile.url>jdbc:oracle:thin:@localhost:1521:XE</dbunit.profile.url>
         <dbunit.profile.schema>DBUNIT</dbunit.profile.schema>
         <dbunit.profile.user>dbunit</dbunit.profile.user>
         <dbunit.profile.password>dbunit</dbunit.profile.password>
@@ -1026,7 +1026,7 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
       <properties>
         <dbunit.profile>oracle10</dbunit.profile>
         <dbunit.profile.driverClass>oracle.jdbc.OracleDriver</dbunit.profile.driverClass>
-        <dbunit.profile.url>jdbc:oracle:thin:@localhost:1521:ORCL</dbunit.profile.url>
+        <dbunit.profile.url>jdbc:oracle:thin:@localhost:1521:XE</dbunit.profile.url>
         <dbunit.profile.schema>DBUNIT</dbunit.profile.schema>
         <dbunit.profile.user>dbunit</dbunit.profile.user>
         <dbunit.profile.password>dbunit</dbunit.profile.password>
@@ -1048,7 +1048,7 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
       <properties>
         <dbunit.profile>oracle10</dbunit.profile>
         <dbunit.profile.driverClass>oracle.jdbc.OracleDriver</dbunit.profile.driverClass>
-        <dbunit.profile.url>jdbc:oracle:thin:@localhost:1521:ORCL</dbunit.profile.url>
+        <dbunit.profile.url>jdbc:oracle:thin:@localhost:1521:XE</dbunit.profile.url>
         <dbunit.profile.schema>DBUNIT</dbunit.profile.schema>
         <dbunit.profile.user>dbunit</dbunit.profile.user>
         <dbunit.profile.password>dbunit</dbunit.profile.password>
