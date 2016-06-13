@@ -145,12 +145,12 @@ public class XmlWriterTest extends TestCase
 	   
 	public void testEncodedXmlChar() throws Exception
 	{
-		String expectedText = "&#174;text1&#xA;text2&#xD;text3&#174;";
+		String expectedText = "\u00AEtext1&#xA;text2&#xD;text3\u00AE";
 		String expectedXml = "<COLUMN1 ATTR=\"" + expectedText + "\">" + expectedText + "</COLUMN1>\n";
 
 		boolean literally = true;
         StringBuffer textBuilder = new StringBuffer();
-        String registeredSymbol = new String(new char[] { 174 });
+        String registeredSymbol = new String(new char[] { 0xAE });
         textBuilder.append(registeredSymbol);
         textBuilder.append("text1\ntext2\rtext3");
         textBuilder.append(registeredSymbol);
