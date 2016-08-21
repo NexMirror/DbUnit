@@ -13,13 +13,15 @@
   </properties>
 
   <body>
-    <release version="in scm" date="next" description="DefaultPrepAndExpectedTestCase config, TimestampDataType.typeCast(), escape pattern for table name, DefaultPrepAndExpectedTestCase.verifyData() connection, XlsTable timezone, OracleXMLType, 'true' 'false' for numeric fields, XlsDataSetWriter cellstyle caching, ForeignKeyRelationshipEdge.compareTo, new CI, POM cleanup, ReplacementDataSet and DbUnitAssert case sensitive table names, XmlWriter">
+    <release version="in scm" date="next" description="">
+    </release>
+    <release version="2.5.3" date="Aug 21, 2016" description="DefaultPrepAndExpectedTestCase config, TimestampDataType.typeCast(), escape pattern for table name, DefaultPrepAndExpectedTestCase.verifyData() connection, XlsTable timezone, OracleXMLType, 'true' 'false' for numeric fields, XlsDataSetWriter cellstyle caching, ForeignKeyRelationshipEdge.compareTo, new CI, POM cleanup, ReplacementDataSet and DbUnitAssert case sensitive table names, XmlWriter">
       <action dev="jeffjensen" type="fix" issue="389" due-to="apechinsky">Any characters with code greater than 7f are written to XML attribute value as entity.</action>
       <action dev="jeffjensen" type="fix" issue="386" due-to="rafaelvs">DbUnitAssert table name case sensitive problems.</action>
       <action dev="jeffjensen" type="fix" issue="388" due-to="rafaelvs">ReplacementDataSet "ignores" its decorated DataSet's caseSensitiveTableNames setting.</action>
       <action dev="jeffjensen" type="update" issue="387">Broken links to issues referenced in changes-report.html.</action>
       <action dev="jeffjensen" type="update">POM cleanup: remove "official" profile, consolidate config.</action>
-      <action dev="jeffjensen" type="update">Update site with new CI server info.</action>
+      <action dev="jeffjensen" type="update">Update site with new CI server info: http://dbunit.intertech.com/jenkins</action>
       <action dev="jeffjensen" type="fix" issue="320">Can not obtain relations from several columns.</action>
       <action dev="jeffjensen" type="fix" issue="377" due-to="markarnold">Running out of cell styles in XlsDataSetWriter.</action>
       <action dev="jeffjensen" type="add" issue="313" due-to="weifengli">Allow 'false' -> 0 and 'true' -> 1 for numeric fields.</action>
