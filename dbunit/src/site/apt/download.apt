@@ -9,7 +9,7 @@ Download from Maven Central
 
   dbUnit has not used the SourceForge files feature for downloads for many years.
 
-  dbUnit releases are in Maven Central: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.dbunit%22
+  dbUnit releases are in {{{http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.dbunit%22} Maven Central}}.
 
   The preferred option is to use dbUnit as a dependency to your build.
 
