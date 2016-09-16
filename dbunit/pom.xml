@@ -885,6 +885,21 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
 
   <profiles>
     <profile>
+      <!-- include this profile when running ITs to skip unit tests -->
+      <id>it-config</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <skipTests>true</skipTests>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
       <id>derby</id>
       <properties>
         <dbunit.profile>derby</dbunit.profile>
