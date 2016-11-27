@@ -38,27 +38,27 @@
     <mavenVersion>3.0.4</mavenVersion>
 
     <!-- Maven plugin versions -->
-    <assemblyPluginVersion>2.6</assemblyPluginVersion>
+    <assemblyPluginVersion>3.0.0</assemblyPluginVersion>
     <changelogPluginVersion>2.3</changelogPluginVersion>
-    <changesPluginVersion>2.12</changesPluginVersion>
+    <changesPluginVersion>2.12.1</changesPluginVersion>
     <checkstylePluginVersion>2.17</checkstylePluginVersion>
     <cleanPluginVersion>3.0.0</cleanPluginVersion>
     <coberturaPluginVersion>2.7</coberturaPluginVersion>
-    <compilerPluginVersion>3.5.1</compilerPluginVersion>
+    <compilerPluginVersion>3.6.0</compilerPluginVersion>
     <deployPluginVersion>2.8.2</deployPluginVersion>
     <enforcerPluginVersion>1.4.1</enforcerPluginVersion>
     <failsafePluginVersion>2.19.1</failsafePluginVersion>
     <gpgPluginVersion>1.6</gpgPluginVersion>
     <installPluginVersion>2.5.2</installPluginVersion>
-    <jarPluginVersion>3.0.0</jarPluginVersion>
-    <javadocPluginVersion>2.10.3</javadocPluginVersion>
+    <jarPluginVersion>3.0.2</jarPluginVersion>
     <jdependPluginVersion>2.0</jdependPluginVersion>
+    <javadocPluginVersion>2.10.4</javadocPluginVersion>
     <jxrPluginVersion>2.5</jxrPluginVersion>
-    <pmdPluginVersion>3.6</pmdPluginVersion>
+    <pmdPluginVersion>3.7</pmdPluginVersion>
     <projectInfoReportsPluginVersion>2.9</projectInfoReportsPluginVersion>
     <releasePluginVersion>2.5.3</releasePluginVersion>
-    <resourcesPluginVersion>3.0.0</resourcesPluginVersion>
-    <sitePluginVersion>3.5.1</sitePluginVersion>
+    <resourcesPluginVersion>3.0.1</resourcesPluginVersion>
+    <sitePluginVersion>3.6</sitePluginVersion>
     <sqlPluginVersion>1.5</sqlPluginVersion>
     <surefirePluginVersion>2.19.1</surefirePluginVersion>
 
