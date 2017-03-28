@@ -4,7 +4,7 @@ target
 .project
 *.jar
 
-# Ignoring Intellij Idea project files and directories.  These are personal.
+# Ignoring IntelliJ IDEA project files and directories.  These are personal.
 .idea
 *.iml
 *.ipr
