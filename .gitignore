@@ -3,3 +3,9 @@ target
 .classpath
 .project
 *.jar
+
+# Ignoring Intellij Idea project files and directories.  These are personal.
+.idea
+*.iml
+*.ipr
+*.iws
