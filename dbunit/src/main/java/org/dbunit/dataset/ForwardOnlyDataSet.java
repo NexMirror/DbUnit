@@ -20,6 +20,7 @@
  */
 package org.dbunit.dataset;
 
+import org.dbunit.database.QueryTableIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,7 +104,11 @@ public class ForwardOnlyDataSet extends AbstractDataSet
 
         public boolean next() throws DataSetException
         {
-            return _iterator.next();
+            if(_iterator instanceof QueryTableIterator) {
+                return ((QueryTableIterator) _iterator).nextWithoutClosing();
+            } else {
+                return _iterator.next();
+            }
         }
 
         public ITableMetaData getTableMetaData() throws DataSetException

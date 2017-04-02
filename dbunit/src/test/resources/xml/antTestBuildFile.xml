@@ -252,6 +252,22 @@
     <delete file="${exportDataSet}"/>
   </target>
 
+    <target name="test-export-forward-only-result-set-table-via-config" depends="test-type-clean-insert">
+        <dbunit driver="${dbunit.profile.driverClass}"
+                     url="${dbunit.profile.url}"
+                     schema="${dbunit.profile.schema}"
+                     userid="${dbunit.profile.user}"
+                     password="${dbunit.profile.password}">
+
+            <dbconfig>
+                <property name="resultSetTableFactory" value="org.dbunit.database.ForwardOnlyResultSetTableFactory"/>
+            </dbconfig>
+
+            <export dest="${exportDataSet}" format="flat" doctype="dataset.dtd" />
+        </dbunit>
+        <delete file="${exportDataSet}"/>
+    </target>
+
     <target name="test-export-format-flat-with-encoding" depends="test-type-clean-insert">
       <dbunit driver="${dbunit.profile.driverClass}"
               url="${dbunit.profile.url}"

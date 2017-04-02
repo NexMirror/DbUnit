@@ -227,6 +227,19 @@ public class DbUnitTaskIT extends BuildFileTest
                 + pkTable.getName(), pkTable.getName().equals("PK_TABLE"));
     }
 
+    public void testExportWithForwardOnlyResultSetTable() throws SQLException, DatabaseUnitException
+    {
+        String targetName = "test-export-forward-only-result-set-table-via-config";
+
+        // Test if the correct result set table factory is set according to dbconfig
+        Export export = (Export)getFirstStepFromTarget(targetName);
+        DbUnitTask task = getFirstTargetTask(targetName);
+        IDatabaseConnection connection = task.createConnection();
+        IDataSet dataSetToBeExported = export.getExportDataSet(connection);
+        assertEquals("org.dbunit.database.ForwardOnlyResultSetTableFactory",
+                connection.getConfig().getProperty(DatabaseConfig.PROPERTY_RESULTSET_TABLE_FACTORY).getClass().getName());
+    }
+
     public void testExportFlat()
     {
         String targetName = "test-export-format-flat";

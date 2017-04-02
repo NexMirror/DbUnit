@@ -96,6 +96,14 @@ public class QueryTableIterator implements ITableIterator
         return _index < _tableEntries.size();
     }
 
+    public boolean nextWithoutClosing()
+    {
+        _index++;
+        _currentTable = null;
+
+        return _index < _tableEntries.size();
+    }
+
     /**
      * {@inheritDoc}
      */

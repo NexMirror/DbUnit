@@ -241,7 +241,7 @@ public class Export extends AbstractStep
     protected IDataSet getExportDataSet(IDatabaseConnection connection) 
     throws DatabaseUnitException, SQLException 
     {
-        IDataSet dataset = getDatabaseDataSet(connection, this._tables, false);
+        IDataSet dataset = getDatabaseDataSet(connection, this._tables);
         if (isOrdered()) 
         {
         	// Use topologically sorted database

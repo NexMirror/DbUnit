@@ -32,7 +32,6 @@ import org.apache.tools.ant.types.Reference;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
-import org.dbunit.database.ForwardOnlyResultSetTableFactory;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.datatype.IDataTypeFactory;
 
@@ -511,9 +510,6 @@ public class DbUnitTask extends Task
         }
         DatabaseConfig config = connection.getConfig();
         
-        // Override the default resultset table factory
-        config.setProperty(DatabaseConfig.PROPERTY_RESULTSET_TABLE_FACTORY, new ForwardOnlyResultSetTableFactory());
-
         if(this.dbConfig != null){
             try {
                 this.dbConfig.copyTo(config);

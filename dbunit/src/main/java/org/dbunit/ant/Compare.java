@@ -119,7 +119,7 @@ public class Compare extends AbstractStep
         logger.debug("execute(connection={}) - start", connection);
 
         IDataSet expectedDataset = getSrcDataSet(_src, getFormat(), false);
-        IDataSet actualDataset = getDatabaseDataSet(connection, _tables, false);
+        IDataSet actualDataset = getDatabaseDataSet(connection, _tables);
 
         String[] tableNames = null;
         if (_tables.size() == 0)

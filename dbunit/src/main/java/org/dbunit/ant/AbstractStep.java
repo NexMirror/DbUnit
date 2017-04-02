@@ -30,15 +30,13 @@ import java.util.List;
 
 import org.apache.tools.ant.ProjectComponent;
 import org.dbunit.DatabaseUnitException;
-import org.dbunit.database.CachedResultSetTableFactory;
 import org.dbunit.database.DatabaseConfig;
-import org.dbunit.database.ForwardOnlyResultSetTableFactory;
 import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.database.IResultSetTableFactory;
 import org.dbunit.database.QueryDataSet;
 import org.dbunit.dataset.CachedDataSet;
 import org.dbunit.dataset.CompositeDataSet;
 import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.ForwardOnlyDataSet;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.csv.CsvProducer;
 import org.dbunit.dataset.excel.XlsDataSet;
@@ -76,28 +74,17 @@ public abstract class AbstractStep extends ProjectComponent implements DbUnitTas
 
     
     protected IDataSet getDatabaseDataSet(IDatabaseConnection connection,
-            List tables, boolean forwardonly) throws DatabaseUnitException
+            List tables) throws DatabaseUnitException
     {
     	if (logger.isDebugEnabled())
     	{
-            logger.debug("getDatabaseDataSet(connection={}, tables={}, forwardonly={}) - start",
-            		new Object[] { connection, tables, String.valueOf(forwardonly) });
+            logger.debug("getDatabaseDataSet(connection={}, tables={}) - start",
+            		new Object[] { connection, tables});
     	}
 
         try
         {
-            // Setup the ResultSet table factory
-            IResultSetTableFactory factory = null;
-            if (forwardonly)
-            {
-                factory = new ForwardOnlyResultSetTableFactory();
-            }
-            else
-            {
-                factory = new CachedResultSetTableFactory();
-            }
             DatabaseConfig config = connection.getConfig();
-            config.setProperty(DatabaseConfig.PROPERTY_RESULTSET_TABLE_FACTORY, factory);
 
             // Retrieve the complete database if no tables or queries specified.
             if (tables.size() == 0)
@@ -107,7 +94,14 @@ public abstract class AbstractStep extends ProjectComponent implements DbUnitTas
             }
 
             List queryDataSets = createQueryDataSet(tables, connection);
-			IDataSet[] dataSetsArray = (IDataSet[])queryDataSets.toArray( new IDataSet[queryDataSets.size()] );
+
+            IDataSet[] dataSetsArray = null;
+            if (config.getProperty(DatabaseConfig.PROPERTY_RESULTSET_TABLE_FACTORY)
+                    .getClass().getName().equals("org.dbunit.database.ForwardOnlyResultSetTableFactory")) {
+                dataSetsArray = (IDataSet[]) createForwardOnlyDataSetArray(queryDataSets);
+            } else {
+                dataSetsArray = (IDataSet[]) queryDataSets.toArray(new IDataSet[queryDataSets.size()]);
+            }
             return new CompositeDataSet(dataSetsArray);
         }
         catch (SQLException e)
@@ -116,6 +110,16 @@ public abstract class AbstractStep extends ProjectComponent implements DbUnitTas
         }
     }
 
+
+    private ForwardOnlyDataSet[] createForwardOnlyDataSetArray(List<QueryDataSet> dataSets) throws DataSetException, SQLException {
+        ForwardOnlyDataSet[] forwardOnlyDataSets = new ForwardOnlyDataSet[dataSets.size()];
+
+        for (int i = 0; i < dataSets.size(); i++) {
+            forwardOnlyDataSets[i] = new ForwardOnlyDataSet(dataSets.get(i));
+        }
+
+        return forwardOnlyDataSets;
+    }
    
 	private List createQueryDataSet(List tables, IDatabaseConnection connection) 
 	throws DataSetException, SQLException 

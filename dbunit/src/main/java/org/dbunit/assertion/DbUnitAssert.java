@@ -116,9 +116,9 @@ public class DbUnitAssert
                                     Arrays.asList(ignoreCols)});
 
         final ITable expectedTableFiltered = DefaultColumnFilter
-        .excludedColumnsTable(expectedTable, ignoreCols);
+                .excludedColumnsTable(expectedTable, ignoreCols);
         final ITable actualTableFiltered = DefaultColumnFilter
-        .excludedColumnsTable(actualTable, ignoreCols);
+                .excludedColumnsTable(actualTable, ignoreCols);
         assertEquals(expectedTableFiltered, actualTableFiltered);
     }
 
@@ -147,7 +147,7 @@ public class DbUnitAssert
     {
         if (logger.isDebugEnabled())
             logger.debug(
-                            "assertEqualsByQuery(expectedDataset={}, connection={}, tableName={}, sqlQuery={}, ignoreCols={}) - start",
+                    "assertEqualsByQuery(expectedDataset={}, connection={}, tableName={}, sqlQuery={}, ignoreCols={}) - start",
                     new Object[] { expectedDataset, connection, tableName, sqlQuery,
                             ignoreCols });
 
@@ -181,7 +181,7 @@ public class DbUnitAssert
     {
         if (logger.isDebugEnabled())
             logger.debug(
-                            "assertEqualsByQuery(expectedTable={}, connection={}, tableName={}, sqlQuery={}, ignoreCols={}) - start",
+                    "assertEqualsByQuery(expectedTable={}, connection={}, tableName={}, sqlQuery={}, ignoreCols={}) - start",
                     new Object[] { expectedTable, connection, tableName, sqlQuery,
                             ignoreCols });
 
@@ -216,7 +216,7 @@ public class DbUnitAssert
     {
         if (logger.isDebugEnabled())
             logger.debug(
-                            "assertEquals(expectedDataSet={}, actualDataSet={}, failureHandler={}) - start",
+                    "assertEquals(expectedDataSet={}, actualDataSet={}, failureHandler={}) - start",
                     new Object[] { expectedDataSet, actualDataSet, failureHandler });
 
         // do not continue if same instance
@@ -302,7 +302,7 @@ public class DbUnitAssert
             Column[] additionalColumnInfo) throws DatabaseUnitException 
     {
         logger.debug(
-                        "assertEquals(expectedTable={}, actualTable={}, additionalColumnInfo={}) - start",
+                "assertEquals(expectedTable={}, actualTable={}, additionalColumnInfo={}) - start",
                 new Object[] { expectedTable, actualTable, additionalColumnInfo });
 
         FailureHandler failureHandler = null;
@@ -348,8 +348,8 @@ public class DbUnitAssert
         // Do not continue if same instance
         if (expectedTable == actualTable) {
             logger.debug(
-                            "The given tables reference the same object. Will return immediately. (Table={})",
-                            expectedTable);
+                    "The given tables reference the same object. Will return immediately. (Table={})",
+                    expectedTable);
             return;
         }
 
@@ -364,24 +364,30 @@ public class DbUnitAssert
 
         // Verify row count
         int expectedRowsCount = expectedTable.getRowCount();
-        int actualRowsCount = actualTable.getRowCount();
-        if (expectedRowsCount != actualRowsCount) {
-            String msg = "row count (table=" + expectedTableName + ")";
-            Error error =
-                    failureHandler.createFailure(msg, String
-                            .valueOf(expectedRowsCount), String
-                            .valueOf(actualRowsCount));
-            logger.error(error.toString());
-            throw error;
+        int actualRowsCount = 0;
+        boolean skipRowComparison = false;
+        try {
+            actualRowsCount = actualTable.getRowCount();
+        } catch(UnsupportedOperationException exception) {
+            skipRowComparison = true;
         }
-        // if both tables are empty, it is not necessary to compare columns, as
-        // such
-        // comparison
-        // can fail if column metadata is different (which could occurs when
-        // comparing empty tables)
-        if (expectedRowsCount == 0 && actualRowsCount == 0) {
-            logger.debug("Tables are empty, hence equals.");
-            return;
+        if(!skipRowComparison) {
+            if (expectedRowsCount != actualRowsCount) {
+                String msg = "row count (table=" + expectedTableName + ")";
+                Error error =
+                        failureHandler.createFailure(msg, String
+                                .valueOf(expectedRowsCount), String
+                                .valueOf(actualRowsCount));
+                logger.error(error.toString());
+                throw error;
+            }
+            // if both tables are empty, it is not necessary to compare columns, as
+            // such comparison can fail if column metadata is different (which
+            // could occurs when comparing empty tables)
+            if (expectedRowsCount == 0 && actualRowsCount == 0) {
+                logger.debug("Tables are empty, hence equals.");
+                return;
+            }
         }
 
         // Put the columns into the same order
@@ -508,7 +514,7 @@ public class DbUnitAssert
                 if (skipCompare(columnName, expectedValue, actualValue)) {
                     if (logger.isTraceEnabled()) {
                         logger.trace( "ignoring comparison " + expectedValue + "=" +
-                                actualValue + " on column " + columnName);                        
+                                actualValue + " on column " + columnName);
                     }
                     continue;
                 }
@@ -658,7 +664,7 @@ public class DbUnitAssert
                 FailureHandler failureHandler) {
             if (logger.isDebugEnabled())
                 logger.debug(
-                                "getComparisonDataType(tableName={}, expectedColumn={}, actualColumn={}, failureHandler={}) - start",
+                        "getComparisonDataType(tableName={}, expectedColumn={}, actualColumn={}, failureHandler={}) - start",
                         new Object[] { tableName, expectedColumn, actualColumn,
                                 failureHandler });
 
@@ -679,7 +685,7 @@ public class DbUnitAssert
 
                 // Impossible to determine which data type to use
                 String msg = "Incompatible data types: (table=" + tableName + ", col="
-                + expectedColumn.getColumnName() + ")";
+                        + expectedColumn.getColumnName() + ")";
                 throw failureHandler.createFailure(msg, String
                         .valueOf(expectedDataType), String.valueOf(actualDataType));
             }
