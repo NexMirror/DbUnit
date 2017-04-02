@@ -21,8 +21,6 @@
 
 package org.dbunit.dataset;
 
-import java.util.Collection;
-
 /**
  * Represents a collection of tables.
  *
@@ -63,33 +61,6 @@ public interface IDataSet
     public ITable getTable(String tableName) throws DataSetException;
 
     /**
-     * Adds the specified table.
-     *
-     * @throws AmbiguousTableNameException if dataset already contains a table with
-     *      the same name.
-     * @throws DataSetException for any other type of exception.
-     */
-    public void addTable(ITable table) throws DataSetException;
-
-    /**
-     * Adds the specified tables.
-     *
-     * @throws AmbiguousTableNameException if dataset already contains one of the
-     *      tables withthe same name.
-     * @throws DataSetException for any other type of exception.
-     */
-    public void addTables(Collection<ITable> tables) throws DataSetException;
-
-    /**
-     * Add the tables found in the passed dataset.
-     *
-     * @throws AmbiguousTableNameException if dataset already contains one of the
-     *      tables withthe same name.
-     * @throws DataSetException for any other type of exception.
-     */
-    public void addTables(IDataSet dataSet) throws DataSetException;
-
-    /**
      * Returns tables in this dataset in proper sequence. Multiple tables having
      * the same name but different data may be returned.
      *
@@ -106,7 +77,7 @@ public interface IDataSet
      * Returns an iterator over the tables in this dataset in reverse sequence.
      */
     public ITableIterator reverseIterator() throws DataSetException;
-
+    
     /**
      * Whether or not this dataset handles table names in a case sensitive way or not.
      * @return <code>true</code> if the case sensitivity of table names is used in this dataset.
