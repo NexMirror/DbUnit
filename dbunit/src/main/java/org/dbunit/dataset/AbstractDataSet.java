@@ -21,8 +21,12 @@
 
 package org.dbunit.dataset;
 
+import org.dbunit.database.AmbiguousTableNameException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * This abstract class provides the basic implementation of the IDataSet
@@ -37,9 +41,9 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractDataSet implements IDataSet
 {
     //TODO (matthias) Use a DataSetBuilder PLUS IDataSet to avoid this ugly lazy initialization with loads of protected internals a user must know...
-    
+
     protected OrderedTableNameMap _orderedTableNameMap;
-    
+
     /**
      * Whether or not table names of this dataset are case sensitive.
      * By default case-sensitivity is set to false for datasets
@@ -57,7 +61,7 @@ public abstract class AbstractDataSet implements IDataSet
     public AbstractDataSet()
     {
     }
-    
+
     /**
      * Constructor
      * @param caseSensitiveTableNames Whether or not table names should be case sensitive
@@ -76,7 +80,7 @@ public abstract class AbstractDataSet implements IDataSet
     {
         return this._caseSensitiveTableNames;
     }
-    
+
     /**
      * Creates and returns a new instance of the table names container.
      * Implementors should use this method to retrieve a map which stores
@@ -88,7 +92,7 @@ public abstract class AbstractDataSet implements IDataSet
     {
         return new OrderedTableNameMap(this._caseSensitiveTableNames);
     }
-    
+
     /**
      * Initializes the tables of this dataset
      * @throws DataSetException
@@ -97,14 +101,14 @@ public abstract class AbstractDataSet implements IDataSet
     private void initialize() throws DataSetException
     {
         logger.debug("initialize() - start");
-        
+
         if(_orderedTableNameMap != null)
         {
             logger.debug("The table name map has already been initialized.");
             // already initialized
             return;
         }
-        
+
         // Gather all tables in the OrderedTableNameMap which also makes the duplicate check
         _orderedTableNameMap = this.createTableNameMap();
         ITableIterator iterator = createIterator(false);
@@ -115,7 +119,7 @@ public abstract class AbstractDataSet implements IDataSet
         }
     }
 
-    
+
 //    protected ITable[] cloneTables(ITable[] tables)
 //    {
 //        logger.debug("cloneTables(tables={}) - start", tables);
@@ -167,7 +171,7 @@ public abstract class AbstractDataSet implements IDataSet
         {
             return found;
         }
-        else 
+        else
         {
             throw new NoSuchTableException(tableName);
         }
@@ -178,8 +182,44 @@ public abstract class AbstractDataSet implements IDataSet
         logger.debug("getTables() - start");
 
         initialize();
-        
+
         return (ITable[]) this._orderedTableNameMap.orderedValues().toArray(new ITable[0]);
+    }
+
+    public void addTable(ITable table) throws DataSetException {
+        logger.debug("addTable() - start");
+
+        initialize();
+
+        _orderedTableNameMap.add(table.getTableMetaData().getTableName(), table);
+    }
+
+    public void addTables(Collection<ITable> tables) throws DataSetException
+    {
+        logger.debug("addTables(Collection) - start");
+
+        initialize();
+
+        Iterator<ITable> iterator = tables.iterator();
+        while (iterator.hasNext())
+        {
+            ITable table = iterator.next();
+            _orderedTableNameMap.add(table.getTableMetaData().getTableName(), table);
+        }
+    }
+
+    public void addTables(IDataSet dataSet) throws DataSetException
+    {
+        logger.debug("addTables(IDataSet) - start");
+
+        ITableIterator iterator = dataSet.iterator();
+        initialize();
+
+        while (iterator.next())
+        {
+            ITable table = iterator.getTable();
+            _orderedTableNameMap.add(table.getTableMetaData().getTableName(), table);
+        }
     }
 
     public ITableIterator iterator() throws DataSetException
