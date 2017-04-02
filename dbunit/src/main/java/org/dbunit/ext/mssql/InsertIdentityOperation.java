@@ -228,7 +228,10 @@ public class InsertIdentityOperation extends AbstractOperation
                         sqlBuffer.append(" OFF");
                         statement.execute(sqlBuffer.toString());
                     }
-                    jdbcConnection.commit();
+                    if (wasAutoCommit)
+                    {
+                        jdbcConnection.commit();
+                    }
                 }
             }
         }
