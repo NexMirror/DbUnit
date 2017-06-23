@@ -25,9 +25,12 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.dbunit.dataset.AbstractTableMetaData;
 import org.dbunit.dataset.Column;
+import org.dbunit.dataset.ColumnMetaData;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.DefaultTableMetaData;
 import org.dbunit.dataset.datatype.DataType;
@@ -79,6 +82,13 @@ public class ResultSetTableMetaData extends AbstractTableMetaData
      */
     private DefaultTableMetaData wrappedTableMetaData;
 	private boolean _caseSensitiveMetaData;
+	
+	/**
+	 * Cached metadata for columns.  In the absence of caching, createColumnFromDbMetaData
+	 * will connect to the database and retrieve metadata separately for every column.  Caching
+	 * limits this to one connect-retrieve per table.  
+	 */
+	private Map<String, Map<String, ColumnMetaData>> metadataCache = new HashMap<String, Map<String, ColumnMetaData>>();
 
 	/**
 	 * @param tableName The name of the database table
@@ -260,14 +270,12 @@ public class ResultSetTableMetaData extends AbstractTableMetaData
         
         // All of the retrieved attributes are valid, 
         // so lookup the column via DatabaseMetaData
-        ResultSet columnsResultSet = metadataHandler.getColumns(databaseMetaData, schemaName, tableName);
-
         try
         {
-            // Scroll resultset forward - must have one result which exactly matches the required parameters
-            scrollTo(columnsResultSet, metadataHandler, catalogName, schemaName, tableName, columnName);
-
-            Column column = SQLHelper.createColumn(columnsResultSet, dataTypeFactory, true);
+        	Map<String, ColumnMetaData> allColumnMetadata = getAllColumnMetaData(schemaName, tableName, databaseMetaData, metadataHandler);
+			String columnKey = (!this._caseSensitiveMetaData ? columnName : columnName.toUpperCase());
+        	ColumnMetaData colMeta = allColumnMetadata.get(columnKey);
+            Column column = SQLHelper.createColumn(colMeta, dataTypeFactory, true);
             return column;
         }
         catch(IllegalStateException e)
@@ -277,10 +285,59 @@ public class ResultSetTableMetaData extends AbstractTableMetaData
                     " To get around this you may want to configure a user defined " + IMetadataHandler.class, e);
             return null;
         }
-        finally
-        {
-            SQLHelper.close(columnsResultSet);
-        }
+    }
+    
+    /**
+     * Get all column metadata for the specified table.
+     * The metadata will be retrieved from the cache if already present: 
+     * otherwise it will be pulled from the database and then cached.    
+     * @param schemaName
+     * @param tableName
+     * @param databaseMetaData
+     * @param metadataHandler
+     * @return all column metadata for schema.table
+     * @throws SQLException
+     */
+    private Map<String, ColumnMetaData> getAllColumnMetaData(String schemaName, String tableName, DatabaseMetaData databaseMetaData, IMetadataHandler metadataHandler) throws SQLException {
+    	String key = schemaName + "." + tableName;
+    	if (!this._caseSensitiveMetaData) {
+    		key = key.toUpperCase();
+    	}
+    	Map<String, ColumnMetaData> allColumnMetadata = metadataCache.get(key);
+    	if (allColumnMetadata == null) {
+    		logger.trace("getAllColumnMetaData: going to the database for " + key);
+    		allColumnMetadata = loadColumnMetaData(schemaName, tableName, databaseMetaData, metadataHandler);
+    		metadataCache.put(key, allColumnMetadata);
+    	}
+    	return allColumnMetadata;
+    }
+
+    
+    /**
+     * Load column metadata from the database for the specified table.
+     * The metadata will be pulled from the database and then cached.    
+     * @param schemaName
+     * @param tableName
+     * @param databaseMetaData
+     * @param metadataHandler
+     * @return all column metadata for schema.table
+     * @throws SQLException
+     */
+    private Map<String, ColumnMetaData> loadColumnMetaData(String schemaName, String tableName, DatabaseMetaData databaseMetaData, IMetadataHandler metadataHandler) throws SQLException {
+    	ResultSet columnsResultSet = null;
+    	Map<String, ColumnMetaData> allColumnMetadata = null;
+		try {
+			columnsResultSet = metadataHandler.getColumns(databaseMetaData, schemaName, tableName);
+			allColumnMetadata = new HashMap<String, ColumnMetaData>();
+    		while (columnsResultSet.next()) {
+    			ColumnMetaData colMeta = new ColumnMetaData(columnsResultSet);
+    			String columnKey = (!this._caseSensitiveMetaData ? colMeta.getColumnName() : colMeta.getColumnName().toUpperCase());
+    			allColumnMetadata.put(columnKey, colMeta);
+    		}
+		} finally {
+			SQLHelper.close(columnsResultSet);
+		}
+    	return allColumnMetadata;
     }
 
 
@@ -295,30 +352,7 @@ public class ResultSetTableMetaData extends AbstractTableMetaData
         return (value==null ? null : value.trim());
     }
 
-    private void scrollTo(ResultSet columnsResultSet, IMetadataHandler metadataHandler,
-            String catalog, String schema, String table, String column) 
-    throws SQLException 
-    {
-        while(columnsResultSet.next())
-        {
-            boolean match = metadataHandler.matches(columnsResultSet, catalog, schema, table, column, _caseSensitiveMetaData);
-            if(match)
-            {
-                // All right. Return immediately because the resultSet is positioned on the correct row
-                return;
-            }
-        }
-
-        // If we get here the column could not be found
-        String msg = 
-                "Did not find column '" + column + 
-                "' for <schema.table> '" + schema + "." + table + 
-                "' in catalog '" + catalog + "' because names do not exactly match.";
-
-        throw new IllegalStateException(msg);
-    }
-
-	public Column[] getColumns() throws DataSetException {
+    public Column[] getColumns() throws DataSetException {
 		return this.wrappedTableMetaData.getColumns();
 	}
 
