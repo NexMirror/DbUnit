@@ -32,6 +32,7 @@ import java.util.Locale;
 import org.dbunit.DatabaseUnitRuntimeException;
 import org.dbunit.database.IMetadataHandler;
 import org.dbunit.dataset.Column;
+import org.dbunit.dataset.ColumnMetaData;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.DataTypeException;
 import org.dbunit.dataset.datatype.IDataTypeFactory;
@@ -383,59 +384,43 @@ public class SQLHelper {
     public static final Column createColumn(ResultSet resultSet,
             IDataTypeFactory dataTypeFactory, boolean datatypeWarning)
                     throws SQLException, DataTypeException
-                    {
-        String tableName = resultSet.getString(3);
-        String columnName = resultSet.getString(4);
-        int sqlType = resultSet.getInt(5);
-        //If Types.DISTINCT like SQL DOMAIN, then get Source Date Type of SQL-DOMAIN
-        if(sqlType == java.sql.Types.DISTINCT)
-        {
-            sqlType = resultSet.getInt("SOURCE_DATA_TYPE");
-        }
+	{
+        ColumnMetaData columnMetadata = new ColumnMetaData(resultSet);
+        return createColumn(columnMetadata, dataTypeFactory, datatypeWarning);
+	}
 
-        String sqlTypeName = resultSet.getString(6);
-        //        int columnSize = resultSet.getInt(7);
-        int nullable = resultSet.getInt(11);
-        String remarks = resultSet.getString(12);
-        String columnDefaultValue = resultSet.getString(13);
-        // This is only available since Java 5 - so we can try it and if it does not work default it
-        String isAutoIncrement = Column.AutoIncrement.NO.getKey();
-        try {
-            isAutoIncrement = resultSet.getString(23);
-        }
-        catch (Exception e)
-        {
-            // Ignore this one here
-            final String msg =
-                    "Could not retrieve the 'isAutoIncrement' property"
-                            + " because not yet running on Java 1.5 -"
-                            + " defaulting to NO. Table={}, Column={}";
-            logger.debug(msg, tableName, columnName, e);
-        }
 
+    /**
+     * Utility method to create a {@link Column} object from a SQL {@link ResultSet} object.
+     * 
+     * @param columnMetadata Column metadata
+     * @param dataTypeFactory The factory used to lookup the {@link DataType} for this column
+     * @param datatypeWarning Whether or not a warning should be printed if the column could not
+     * be created because of an unknown datatype.
+     * @return The {@link Column} or <code>null</code> if the column could not be initialized because of an
+     * unknown datatype.
+     * @throws SQLException
+     * @throws DataTypeException
+     * @since 2.4.0
+     */
+    public static final Column createColumn(ColumnMetaData columnMetadata,
+            IDataTypeFactory dataTypeFactory, boolean datatypeWarning)
+                    throws SQLException, DataTypeException
+    {
         // Convert SQL type to DataType
-        DataType dataType =
-                dataTypeFactory.createDataType(sqlType, sqlTypeName, tableName, columnName);
-        if (dataType != DataType.UNKNOWN)
-        {
-            Column column = new Column(columnName, dataType,
-                    sqlTypeName, Column.nullableValue(nullable), columnDefaultValue, remarks,
-                    Column.AutoIncrement.autoIncrementValue(isAutoIncrement));
-            return column;
-        }
-        else
-        {
-            if (datatypeWarning)
-                logger.warn(
-                        tableName + "." + columnName +
-                        " data type (" + sqlType + ", '" + sqlTypeName +
-                        "') not recognized and will be ignored. See FAQ for more information.");
-
+        DataType dataType = columnMetadata.getDataType(dataTypeFactory);
+        if (dataType == DataType.UNKNOWN) {
             // datatype unknown - column not created
+            if (datatypeWarning)
+                logger.warn(columnMetadata.getTableName() + "." + columnMetadata.getColumnName() +
+                        " data type (" + columnMetadata.getSQLType() + ", '" + columnMetadata.getSqlTypeName() +
+                        "') not recognized and will be ignored. See FAQ for more information.");
             return null;
+        } else {
+            return new Column(columnMetadata, dataType);
         }
-                    }
-
+    }
+    
     /**
      * Checks if the given <code>resultSet</code> matches the given schema and table name.
      * The comparison is <b>case sensitive</b>.

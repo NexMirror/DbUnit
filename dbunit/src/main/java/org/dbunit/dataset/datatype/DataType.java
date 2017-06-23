@@ -275,14 +275,11 @@ public abstract class DataType
     {
         return !input.isEmpty() && input.charAt(0) == '[';
     }
+
+    public boolean equals(Object other) {
+    	if (!(other instanceof DataType)) return false;
+    	DataType otherDataType = (DataType) other;
+    	return otherDataType.getSqlType() == this.getSqlType()
+    			&& otherDataType.getSqlTypeName() == this.getSqlTypeName();
+    }
 }
-
-
-
-
-
-
-
-
-
-
