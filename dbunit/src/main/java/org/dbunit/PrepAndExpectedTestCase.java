@@ -35,7 +35,7 @@ public interface PrepAndExpectedTestCase
     /**
      * Configure the test. Call this method before performing the test steps.
      *
-     * @param tables
+     * @param verifyTables
      *            Table definitions to verify after test execution.
      * @param prepDataFiles
      *            The prep data files to load as seed data.
@@ -43,7 +43,8 @@ public interface PrepAndExpectedTestCase
      *            The expected data files to load as expected data.
      * @throws Exception
      */
-    void configureTest(VerifyTableDefinition[] tables, String[] prepDataFiles, String[] expectedDataFiles)
+    void configureTest(VerifyTableDefinition[] verifyTables,
+            String[] prepDataFiles, String[] expectedDataFiles)
             throws Exception;
 
     /**
@@ -57,7 +58,7 @@ public interface PrepAndExpectedTestCase
     /**
      * Convenience method to call configureTest() and preTest().
      *
-     * @param tables
+     * @param verifyTables
      *            Table definitions to verify after test execution.
      * @param prepDataFiles
      *            The prep data files to load as seed data.
@@ -65,12 +66,13 @@ public interface PrepAndExpectedTestCase
      *            The expected data files to load as expected data.
      * @throws Exception
      */
-    void preTest(VerifyTableDefinition[] tables, String[] prepDataFiles, String[] expectedDataFiles) throws Exception;
+    void preTest(VerifyTableDefinition[] verifyTables, String[] prepDataFiles,
+            String[] expectedDataFiles) throws Exception;
 
     /**
      * Run the DbUnit test.
      *
-     * @param tables
+     * @param verifyTables
      *            Table definitions to verify after test execution.
      * @param prepDataFiles
      *            The prep data files to load as seed data.
@@ -82,8 +84,9 @@ public interface PrepAndExpectedTestCase
      * @throws Exception
      * @since 2.5.2
      */
-    Object runTest(VerifyTableDefinition[] verifyTables, String[] prepDataFiles, String[] expectedDataFiles,
-            PrepAndExpectedTestCaseSteps testSteps) throws Exception;
+    Object runTest(VerifyTableDefinition[] verifyTables, String[] prepDataFiles,
+            String[] expectedDataFiles, PrepAndExpectedTestCaseSteps testSteps)
+            throws Exception;
 
     /**
      * Execute all post-test steps. Call this method after performing the test
