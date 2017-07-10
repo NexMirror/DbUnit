@@ -74,6 +74,7 @@
       <item name="Getting Started"   href="/howto.html"/>
       <item name="Best Practices"    href="/bestpractices.html"/>
       <item name="Core Components"   href="/components.html"/>
+      <item name="Data types"        href="/datatypes.html"/>
       <item name="Properties"        href="/properties.html"/>
       <item name="Ant Task"          href="/anttask.html"/>
       <item name="Migration Guide"   href="/migration.html"/>

@@ -97,6 +97,10 @@ public class BytesDataTypeTest extends AbstractDataTypeTest
             "",
             "YWJjZA==",
             new byte[]{0, 1, 2, 3, 4, 5},
+            "[text]This is text with UTF-8 (the default) characters >>àéç<<",
+            "[text UTF-8]This is text with UTF-8 (the default) characters >>àéç<<",
+            "[text]c27ccbf5-6ca1-4bdd-8cb0-bacfea6a5a8b",
+            "[base64]VGhpcyBpcyBhIHRlc3QgZm9yIGJhc2U2NC4K=="
         };
 
         byte[][] expected = {
@@ -104,6 +108,10 @@ public class BytesDataTypeTest extends AbstractDataTypeTest
             new byte[0],
             new byte[]{'a', 'b', 'c', 'd'},
             new byte[]{0, 1, 2, 3, 4, 5},
+            values[4].toString().replaceAll("\\[.*?\\]", "").getBytes("UTF-8"),
+            values[5].toString().replaceAll("\\[.*?\\]", "").getBytes("UTF-8"),
+            values[6].toString().replaceAll("\\[.*?\\]", "").getBytes("UTF-8"),
+            "This is a test for base64.\n".getBytes(),
         };
 
         assertEquals("actual vs expected count", values.length, expected.length);
@@ -123,14 +131,15 @@ public class BytesDataTypeTest extends AbstractDataTypeTest
         File file = new File("LICENSE.txt");
 
         Object[] values = {
+            "[file]" + file.toString(),
             file.toString(),
             file.getAbsolutePath(),
-            file.toURL().toString(),
+            file.toURI().toURL().toString(),
             file,
-            file.toURL(),
+            file.toURI().toURL(),
+            "[url]" + file.toURI().toURL(),
         };
 
-//        System.out.println(file.getAbsolutePath());
         assertEquals("exists", true, file.exists());
 
         for (int i = 0; i < TYPES.length; i++)
@@ -333,11 +342,11 @@ public class BytesDataTypeTest extends AbstractDataTypeTest
             }
         }
     }
-    
+
     public void testSetSqlValue() throws Exception
     {
     	MockPreparedStatement preparedStatement = new MockPreparedStatement();
-    	
+
         Object[] expected = {
                 null,
                 new byte[0],

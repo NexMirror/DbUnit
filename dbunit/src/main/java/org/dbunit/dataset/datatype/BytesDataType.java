@@ -21,19 +21,15 @@
 
 package org.dbunit.dataset.datatype;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Blob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.dbunit.dataset.ITable;
 import org.dbunit.util.Base64;
@@ -55,6 +51,7 @@ public class BytesDataType extends AbstractDataType
     private static final Logger logger = LoggerFactory.getLogger(BytesDataType.class);
 
     private static final int MAX_URI_LENGTH = 256;
+    private static final Pattern inputPattern = Pattern.compile("^\\[(.*?)](.*)");
 
     BytesDataType(String name, int sqlType)
     {
@@ -79,6 +76,18 @@ public class BytesDataType extends AbstractDataType
         return out.toByteArray();
     }
 
+    public byte[] loadFile(String filename) throws IOException {
+        // Not an URL, try as file name
+        File file = new File(filename);
+        return toByteArray(new FileInputStream(file), (int)file.length());
+    }
+
+    public byte[] loadURL(String urlAsString) throws IOException {
+        // Not an URL, try as file name
+        URL url = new URL(urlAsString);
+        return toByteArray(url.openStream(), 0);
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     // DataType class
 
@@ -86,7 +95,7 @@ public class BytesDataType extends AbstractDataType
      * Casts the given value into a byte[] using different strategies. Note
      * that this might sometimes result in undesired behavior when character
      * data (Strings) are used.
-     * 
+     *
      * @see org.dbunit.dataset.datatype.DataType#typeCast(java.lang.Object)
      */
     public Object typeCast(Object value) throws TypeCastException
@@ -105,23 +114,79 @@ public class BytesDataType extends AbstractDataType
 
         if (value instanceof String)
         {
-            String stringValue = (String)value;
+            String stringValue = (String) value;
+
+            // If the string starts with <text [encoding id]>, it means that the user
+            // intentionally wants to transform the text into a blob.
+            //
+            // Example of a valid string:  "<text UTF-8>This is a valid string with the accent 'é'"
+            Matcher matcher = inputPattern.matcher(stringValue);
+            if (matcher.matches())
+            {
+                String commandLine = matcher.group(1).toUpperCase();
+                stringValue = matcher.group(2);
+
+                String[] split = commandLine.split(" ");
+                String command = split[0];
+
+                if (command.equals("TEXT"))
+                {
+                    String encoding = "UTF-8";  // Default
+
+                    if (split.length > 1) {
+                        encoding = split[1];
+                    }
+                    logger.debug("Data explicitly states that given string is text encoded "
+                        + encoding);
+                    try {
+                        return stringValue.getBytes(encoding);
+                    } catch (UnsupportedEncodingException unsupportedEncodingException) {
+                        return "Error:  [text " + encoding + "] has an invalid encoding id.".getBytes();
+                    }
+                }
+                else if (command.equals("BASE64"))
+                {
+                    logger.debug("Data explicitly states that given string is base46");
+                    return Base64.decode(stringValue);
+                }
+                else if (command.equals("FILE"))
+                {
+                    try {
+                        logger.debug("Data explicitly states that given string is a file name");
+                        return loadFile(stringValue);
+                    } catch (IOException e) {
+                        String errMsg = "Could not load file following instruction >>" + value.toString() + "<<";
+                        logger.error(errMsg);
+                        return ("Error:  " + errMsg).getBytes();
+                    }
+                }
+                else if (command.equals("URL"))
+                {
+                    try {
+                        logger.debug("Data explicitly states that given string is a URL");
+                        return loadURL(stringValue);
+                    } catch (IOException e) {
+                        String errMsg = "Could not load URL following instruction >>" + value.toString() + "<<";
+                        logger.error(errMsg);
+                        return ("Error:  " + errMsg).getBytes();
+                    }
+                }
+            }
 
             // Assume not an uri if length greater than max uri length
             if (stringValue.length() == 0 || stringValue.length() > MAX_URI_LENGTH)
             {
             	logger.debug("Assuming given string to be Base64 and not a URI");
-                return Base64.decode((String)value);
+                return Base64.decode((String) value);
             }
 
             try
             {
-            	logger.debug("Assuming given string to be a URI");
+              	logger.debug("Assuming given string to be a URI");
                 try
                 {
                     // Try value as URL
-                    URL url = new URL(stringValue);
-                    return toByteArray(url.openStream(), 0);
+                    return loadURL(stringValue);
                 }
                 catch (MalformedURLException e1)
                 {
@@ -129,14 +194,22 @@ public class BytesDataType extends AbstractDataType
                     try
                     {
                         // Not an URL, try as file name
-                        File file = new File(stringValue);
-                        return toByteArray(new FileInputStream(file), (int)file.length());
+                        return loadFile(stringValue);
                     }
                     catch (FileNotFoundException e2)
                     {
                         logger.debug("Assuming given string to be Base64 and not a URI or File");
                         // Not a file name either
-                        return Base64.decode(stringValue);
+                        byte[] decodedBytes = Base64.decode(stringValue);
+                        if(decodedBytes == null && stringValue.length() > 0) {
+                            // Ok, here the user has not specified the "[text ...]" tag, but
+                            // it looks that its text that should be stored in the blob.  So
+                            // we make a last attempt at doing so.
+                            logger.debug("Assuming given string to be content of the blob, encoded with UTF-8.");
+                            return stringValue.getBytes();
+                        }
+                        else
+                            return decodedBytes;
                     }
                 }
             }
@@ -199,7 +272,7 @@ public class BytesDataType extends AbstractDataType
         {
             byte[] value1cast = (byte[])typeCast(value1);
             byte[] value2cast = (byte[])typeCast(value2);
-    
+
             return compare(value1cast, value2cast);
         }
         catch (ClassCastException e)
@@ -268,7 +341,7 @@ public class BytesDataType extends AbstractDataType
     public void setSqlValue(Object value, int column, PreparedStatement statement)
             throws SQLException, TypeCastException
     {
-    	if (logger.isDebugEnabled()) 
+    	if (logger.isDebugEnabled())
     	{
     		logger.debug("setSqlValue(value={}, column={}, statement={}) - start",
         		new Object[]{value, new Integer(column), statement} );

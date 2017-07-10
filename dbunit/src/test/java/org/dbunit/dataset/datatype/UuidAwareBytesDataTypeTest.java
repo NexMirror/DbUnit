@@ -140,6 +140,15 @@ public class UuidAwareBytesDataTypeTest extends BytesDataTypeTest
         }
     }
 
+    /**
+     * Historically, the wrongly formatted uuids of this test would be recorded
+     * as 'null' in the database.  However, now that the
+     * {@link org.dbunit.dataset.datatype.BytesDataType} class attempts to
+     * save any data it finds, these wrongly formatted uuids now do find
+     * their way into the database, as any other text.
+     *
+     * @throws Exception
+     */
     public void testSetSqlValueWithSomethingThatLooksLikeUuidButIsNot()
             throws Exception
             {
@@ -150,7 +159,7 @@ public class UuidAwareBytesDataTypeTest extends BytesDataTypeTest
             {"2aad615a-d8e1-11e2-b8ed-50e549c9b654",
             "uuid'2aad615a-d8e1-11e2-b8ed-50e549c9b65'"};
 
-        final Object[] expected = {null, null};
+        final byte[][] expected = { given[0].getBytes(), given[1].getBytes()};
 
         final int[] expectedSqlTypesForDataType =
             {Types.BINARY, Types.VARBINARY, Types.LONGVARBINARY};
@@ -176,8 +185,8 @@ public class UuidAwareBytesDataTypeTest extends BytesDataTypeTest
                 final Object actualValue =
                         preparedStatement.getLastSetObjectParamValue();
 
-                assertEquals("Loop " + i + " Type " + dataType, expectedValue,
-                        actualValue);
+                assertEquals("Loop " + i + " Type " + dataType, true,
+                    Arrays.equals((byte[]) expectedValue, (byte[]) actualValue));
             }
         }
     }

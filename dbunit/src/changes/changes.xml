@@ -18,6 +18,7 @@
       <action dev="jeffjensen" type="fix" issue="397" due-to="zdenek-z">Streamed export does not work when it launched from Ant.</action>
       <action dev="jeffjensen" type="fix" issue="309" due-to="bjornbeskow">MSSQL IdentityInsertOperation.execute erroneously always commits.</action>
       <action dev="jeffjensen" type="update" issue="395" due-to="opporancisis">Outdated link on Configurable Features and Properties page.</action>
+      <action dev="jeffjensen" type="add" issue="196" due-to="Hans Deragon">Blobs are now easier to define in flat XML dataset and CSV files using [text &lt;encoding&gt;], [base64] and [file] cues.</action>
     </release>
     <release version="2.5.3" date="Aug 21, 2016" description="DefaultPrepAndExpectedTestCase config, TimestampDataType.typeCast(), escape pattern for table name, DefaultPrepAndExpectedTestCase.verifyData() connection, XlsTable timezone, OracleXMLType, 'true' 'false' for numeric fields, XlsDataSetWriter cellstyle caching, ForeignKeyRelationshipEdge.compareTo, new CI, POM cleanup, ReplacementDataSet and DbUnitAssert case sensitive table names, XmlWriter">
       <action dev="jeffjensen" type="fix" issue="389" due-to="apechinsky">Any characters with code greater than 7f are written to XML attribute value as entity.</action>
