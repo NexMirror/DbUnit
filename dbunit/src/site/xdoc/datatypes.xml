@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <document>
   <properties>
-    <title>Datatypes</title>
+    <title>Data Types</title>
   </properties>
   <body>
     <section>
       <h3>Data types</h3>
       <p>
-        Most of the data types are self explanatory and are adapted to the database you use.
-        Refer to your database documentation about the particularities of the data types
+        Most of the data types are self explanatory and are adapted to the database in use.
+        Refer to the database documentation for its data types specifics.
       </p>
       <p>
-        Here we do document some particularities of the implementation of datatypes within DbUnit.
+        The following sections document data types within dbUnit.
       </p>
       <ol>
         <li>BigInteger</li>
@@ -41,18 +41,16 @@
           <a href="apidocs/org/dbunit/dataset/datatype/BlobDataType.html">Blob</a>
         </h4>
       </a>
-      <p>Blobs contains binary data. DbUnit however processes data with XML or CSV files, which are not binary.
-        To push binary data into a blob from these type of files, use the following syntax for your data:
+      <p>Blobs contain binary data. DbUnit, however, processes data with XML or CSV files containing textual data sets, not binary.
+        To push binary data into a database blob from dbUnit data set files, use the following syntax in a data set field:
       </p>
-      <p>
-        [TEXT|BASE64|FILE|URL &lt;optional argument&gt;]
-      </p>
+      <source>... field_name="[TEXT|BASE64|FILE|URL &lt;optional argument&gt;] optional text"</source>
       <p>
         The table below shows how to use each of the forms available to load binary data into a blob.
       </p>
       <table border="1">
         <tr>
-          <th>Type of data</th>
+          <th>Data Type</th>
           <th>Description</th>
         </tr>
         <tr>
@@ -65,7 +63,6 @@
             Example with UTF-8 encoding:
             <br/>
             <source><![CDATA[
-
 <!DOCTYPE dataset SYSTEM "my-dataset.dtd">
 <dataset>
     <TABLE_WITHBLOB COL0="[TEXT]This is my text, saved in UTF-8 (default) encoding.  Java: bon café!"
@@ -93,7 +90,6 @@
             Example:
             <br/>
             <source><![CDATA[
-
 <!DOCTYPE dataset SYSTEM "my-dataset.dtd">
 <dataset>
     <TABLE_WITHBLOB COL0="[BASE64]VGhpcyBpcyBteSB0ZXh0Lg=="
@@ -111,7 +107,6 @@
             Example:
             <br/>
             <source><![CDATA[
-
 <!DOCTYPE dataset SYSTEM "my-dataset.dtd">
 <dataset>
     <TABLE_WITHBLOB COL0="[FILE /path/to/file/to/download]Following text here is being ignored."
@@ -129,7 +124,6 @@
             Example:
             <br/>
             <source><![CDATA[
-
 <!DOCTYPE dataset SYSTEM "my-dataset.dtd">
 <dataset>
     <TABLE_WITHBLOB COL0="[URL http://path/to/url]Following text here is being ignored."
