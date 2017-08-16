@@ -323,11 +323,14 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
         } catch (final Exception e)
         {
             log.error(TEST_ERROR_MSG, e);
+            // don't verify table data when test execution has errors as:
+            // * a verify data failure masks the test error exception
+            // * tables in unknown state and therefore probably not accurate
+            postTest(false);
             throw e;
-        } finally
-        {
-            postTest();
         }
+
+        postTest();
 
         return result;
     }
