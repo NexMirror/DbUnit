@@ -32,6 +32,10 @@
         </tr>
 -->
         <tr>
+          <td>2017-08-20</td>
+          <td>Release 2.5.4 available. Refer to the <a href="changes-report.html#a2.5.4">changes report</a> for the release contents. Refer to <a href="repos.html">Maven Repositories</a> for obtaining it.</td>
+        </tr>
+        <tr>
           <td>2016-08-21</td>
           <td>Release 2.5.3 available. Refer to the <a href="changes-report.html#a2.5.3">changes report</a> for the release contents. Refer to <a href="repos.html">Maven Repositories</a> for obtaining it.</td>
         </tr>

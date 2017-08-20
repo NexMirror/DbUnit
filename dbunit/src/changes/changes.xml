@@ -13,7 +13,9 @@
   </properties>
 
   <body>
-    <release version="in scm" date="next" description="Doc update, MSSQL IdentityInsertOperation commits, streamed export, blobs in datasets">
+    <release version="in scm" date="next" description="">
+    </release>
+    <release version="2.5.4" date="Aug 20, 2017" description="Doc update, MSSQL IdentityInsertOperation commits, streamed export, blobs in datasets">
       <action dev="jeffjensen" type="update">DefaultPrepAndExpectedTestCase: Don't verify table data when test execution has errors.</action>
       <action dev="jeffjensen" type="fix" issue="400" due-to="sidikcz">Cannot insert null values via jTDS (regression from 374).</action>
       <action dev="jeffjensen" type="add" issue="196" due-to="Hans Deragon">Blobs are now easier to define in flat XML dataset and CSV files using [text &lt;encoding&gt;], [base64] and [file] cues.  See Data Types doc page.</action>
