@@ -25,12 +25,10 @@
 
   <section name="News">
       <table border="1">
-<!--
         <tr>
-          <td>2016-04-12</td>
-          <td>2.5.3-SNAPSHOT in progress. Please try the latest snapshot build and let us know how it works! Refer to the <a href="changes-report.html#in_scm">changes report</a> for the snapshot contents (and any subsequent updates).  Refer to <a href="repos.html">Maven Repositories</a> for obtaining snapshots.</td>
+          <td>2017-08-20</td>
+          <td>2.5.5-SNAPSHOT in progress. Please try the latest snapshot build and let us know how it works! Refer to the <a href="changes-report.html#in_scm">changes report</a> for the snapshot contents (and any subsequent updates).  Refer to <a href="repos.html">Maven Repositories</a> for obtaining snapshots.</td>
         </tr>
--->
         <tr>
           <td>2017-08-20</td>
           <td>Release 2.5.4 available. Refer to the <a href="changes-report.html#a2.5.4">changes report</a> for the release contents. Refer to <a href="repos.html">Maven Repositories</a> for obtaining it.</td>
