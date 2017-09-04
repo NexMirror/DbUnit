@@ -33,30 +33,34 @@ import org.slf4j.LoggerFactory;
 /**
  * Specialized factory that recognizes Postgresql data types.
  * <p>
- * Derived from work by manuel.laflamme</p>
- * 
+ * Derived from work by manuel.laflamme
+ * </p>
+ *
  * @author Jarvis Cochrane (jarvis@cochrane.com.au)
  * @author manuel.laflamme
  * @author Martin Gollogly (zemertz@gmail.com)
  * @since 2.4.5 (Apr 27, 2009)
  */
-public class PostgresqlDataTypeFactory extends DefaultDataTypeFactory {
-
+public class PostgresqlDataTypeFactory extends DefaultDataTypeFactory
+{
     /**
      * Logger for this class
      */
-    private static final Logger logger = LoggerFactory.getLogger(PostgresqlDataTypeFactory.class);
+    private static final Logger logger =
+            LoggerFactory.getLogger(PostgresqlDataTypeFactory.class);
     /**
      * Database product names supported.
      */
-    private static final Collection DATABASE_PRODUCTS = Arrays.asList(new String[] {"PostgreSQL"});
+    private static final Collection DATABASE_PRODUCTS =
+            Arrays.asList(new String[] {"PostgreSQL"});
 
     /**
      * @see org.dbunit.dataset.datatype.IDbProductRelatable#getValidDbProducts()
      */
+    @Override
     public Collection getValidDbProducts()
     {
-      return DATABASE_PRODUCTS;
+        return DATABASE_PRODUCTS;
     }
 
     public static Collection getDatabaseProducts()
@@ -64,51 +68,66 @@ public class PostgresqlDataTypeFactory extends DefaultDataTypeFactory {
         return DATABASE_PRODUCTS;
     }
 
-    public DataType createDataType(int sqlType, String sqlTypeName) throws DataTypeException {
+    @Override
+    public DataType createDataType(final int sqlType, final String sqlTypeName)
+            throws DataTypeException
+    {
         logger.debug("createDataType(sqlType={}, sqlTypeName={})",
-                     String.valueOf(sqlType), sqlTypeName);
+                String.valueOf(sqlType), sqlTypeName);
 
         if (sqlType == Types.OTHER)
+        {
             // Treat Postgresql UUID types as VARCHARS
             if ("uuid".equals(sqlTypeName))
+            {
                 return new UuidType();
-        	// Intervals are custom types
-            else if ("interval".equals(sqlTypeName))
-            	return new IntervalType();
-            else if ("inet".equals(sqlTypeName))
+            } else if ("interval".equals(sqlTypeName))
+            {
+                return new IntervalType();
+            } else if ("inet".equals(sqlTypeName))
+            {
                 return new InetType();
-            else if("geometry".equals(sqlTypeName))
-               return new GeometryType();
-            else if("citext".equals(sqlTypeName))
+            } else if ("geometry".equals(sqlTypeName))
+            {
+                return new GeometryType();
+            } else if ("citext".equals(sqlTypeName))
+            {
                 return new CitextType();
-            else
+            } else
             {
                 // Finally check whether the user defined a custom datatype
-                if(isEnumType(sqlTypeName))
+                if (isEnumType(sqlTypeName))
                 {
-                    if(logger.isDebugEnabled())
-                        logger.debug("Custom enum type used for sqlTypeName {} (sqlType '{}')", 
-                                new Object[] {sqlTypeName, new Integer(sqlType)} );
+                    if (logger.isDebugEnabled())
+                    {
+                        logger.debug(
+                                "Custom enum type used for sqlTypeName {} (sqlType '{}')",
+                                new Object[] {sqlTypeName,
+                                        new Integer(sqlType)});
+                    }
                     return new GenericEnumType(sqlTypeName);
                 }
             }
+        }
 
         return super.createDataType(sqlType, sqlTypeName);
     }
 
     /**
      * Returns a data type for the given sql type name if the user wishes one.
-     * <b>Designed to be overridden by custom implementations extending this class.</b>
-     * Override this method if you have a custom enum type in the database and want
-     * to map it via dbunit.
-     * @param sqlTypeName The sql type name for which users can specify a custom data type.
-     * @return <code>null</code> if the given type name is not a custom
-     * type which is the default implementation.
-     * @since 2.4.6 
+     * <b>Designed to be overridden by custom implementations extending this
+     * class.</b> Override this method if you have a custom enum type in the
+     * database and want to map it via dbunit.
+     *
+     * @param sqlTypeName
+     *            The sql type name for which users can specify a custom data
+     *            type.
+     * @return <code>null</code> if the given type name is not a custom type
+     *         which is the default implementation.
+     * @since 2.4.6
      */
-    public boolean isEnumType(String sqlTypeName) 
+    public boolean isEnumType(final String sqlTypeName)
     {
         return false;
     }
-
 }
