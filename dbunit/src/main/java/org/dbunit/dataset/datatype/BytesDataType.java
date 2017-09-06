@@ -21,6 +21,11 @@
 
 package org.dbunit.dataset.datatype;
 
+import org.dbunit.dataset.ITable;
+import org.dbunit.util.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -30,11 +35,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.dbunit.dataset.ITable;
-import org.dbunit.util.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Manuel Laflamme
@@ -53,7 +53,7 @@ public class BytesDataType extends AbstractDataType
     private static final int MAX_URI_LENGTH = 256;
     private static final Pattern inputPattern = Pattern.compile("^\\[(.*?)](.*)");
 
-    BytesDataType(String name, int sqlType)
+    public BytesDataType(String name, int sqlType)
     {
         super(name, sqlType, byte[].class, false);
     }

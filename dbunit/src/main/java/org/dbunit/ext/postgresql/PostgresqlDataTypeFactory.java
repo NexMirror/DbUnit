@@ -20,15 +20,15 @@
  */
 package org.dbunit.ext.postgresql;
 
-import java.sql.Types;
-import java.util.Arrays;
-import java.util.Collection;
-
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.DataTypeException;
 import org.dbunit.dataset.datatype.DefaultDataTypeFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.Types;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Specialized factory that recognizes Postgresql data types.
@@ -108,6 +108,8 @@ public class PostgresqlDataTypeFactory extends DefaultDataTypeFactory
                     return new GenericEnumType(sqlTypeName);
                 }
             }
+        } else if (sqlType == Types.BIGINT && "oid".equals(sqlTypeName)) {
+            return new PostgreSQLOidDataType();
         }
 
         return super.createDataType(sqlType, sqlTypeName);

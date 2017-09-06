@@ -20,10 +20,11 @@
  */
 package org.dbunit.ext.postgresql;
 
-import java.sql.Types;
 import junit.framework.TestCase;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.IntegerDataType;
+
+import java.sql.Types;
 
 /**
  *
@@ -52,7 +53,7 @@ public class PostgresqlDataTypeFactoryTest extends TestCase {
         DataType result = instance.createDataType(sqlType, sqlTypeName);
         assertTrue(result instanceof UuidType);
     }
-    
+
     public void testCreateIntervalType() throws Exception {
 
         PostgresqlDataTypeFactory instance = new PostgresqlDataTypeFactory();
@@ -76,7 +77,7 @@ public class PostgresqlDataTypeFactoryTest extends TestCase {
         DataType result = instance.createDataType(sqlType, sqlTypeName);
         assertTrue(result instanceof InetType);
     }
-    
+
 
     public void testCreateCitextType() throws Exception {
 
@@ -121,4 +122,14 @@ public class PostgresqlDataTypeFactoryTest extends TestCase {
         assertTrue(result instanceof IntegerDataType);
     }
 
+    public void testPostgreSQLOidType() throws Exception {
+
+        PostgresqlDataTypeFactory instance = new PostgresqlDataTypeFactory();
+
+        int sqlType = Types.BIGINT;
+        String sqlTypeName = "oid";
+
+        DataType result = instance.createDataType(sqlType, sqlTypeName);
+        assertTrue(result instanceof PostgreSQLOidDataType);
+    }
 }

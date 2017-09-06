@@ -13,7 +13,11 @@
   </properties>
 
   <body>
-    <release version="in scm" date="next" description="">
+    <release version="in scm" date="next" description="PostgreSQL OID">
+      <action dev="jeffjensen" type="add" issue="179" due-to="mfrechePgest">
+        Add PostgreSQL OID data type.
+        <dueto name="ibic"/>
+      </action>
     </release>
     <release version="2.5.4" date="Aug 20, 2017" description="Doc update, MSSQL IdentityInsertOperation commits, streamed export, blobs in datasets">
       <action dev="jeffjensen" type="update">DefaultPrepAndExpectedTestCase: Don't verify table data when test execution has errors.</action>
