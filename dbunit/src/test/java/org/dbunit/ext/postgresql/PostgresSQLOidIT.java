@@ -44,6 +44,10 @@ public class PostgresSQLOidIT extends TestCase
         }
     }
 
+    public void testOk()
+    {
+    }
+
     public void xtestOidDataType() throws Exception
     {
         final String testTable = "t2";
@@ -77,14 +81,13 @@ public class PostgresSQLOidIT extends TestCase
                 assertEquals(Types.BIGINT, col.getDataType().getSqlType());
                 assertEquals("oid", col.getSqlTypeName());
             }
-            // THE TEST -> hopefully with no exception!!!
+
             DatabaseOperation.CLEAN_INSERT.execute(_connection, dataSet);
             ids = _connection.createDataSet();
             ITable it = ids.getTable(testTable);
             assertNull(it.getValue(0, "DATA"));
             assertArrayEquals("\\[text UTF-8](Anything)".getBytes(),
                     (byte[]) it.getValue(1, "DATA"));
-
         } catch (Exception e)
         {
             assertEquals("DatabaseOperation.CLEAN_INSERT... no exception",
