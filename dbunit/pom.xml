@@ -67,6 +67,7 @@
     <hamcrestVersion>1.3</hamcrestVersion>
     <logbackVersion>1.1.7</logbackVersion>
     <slf4jVersion>1.7.21</slf4jVersion>
+    <poiVersion>3.17</poiVersion>
 
     <!-- Database driver versions -->
     <derbyDriverVersion>10.4.1.3</derbyDriverVersion>
@@ -333,7 +334,7 @@
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi</artifactId>
-      <version>3.14</version>
+      <version>${poiVersion}</version>
       <exclusions>
         <exclusion>
           <artifactId>log4j</artifactId>
@@ -349,7 +350,7 @@
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-ooxml</artifactId>
-      <version>3.14</version>
+      <version>${poiVersion}</version>
     </dependency>
     <dependency>
       <groupId>postgresql</groupId>
