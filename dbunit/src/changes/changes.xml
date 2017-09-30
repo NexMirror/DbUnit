@@ -13,7 +13,8 @@
   </properties>
 
   <body>
-    <release version="in scm" date="next" description="PostgreSQL OID">
+    <release version="2.5.5-SNAPSHOT" date="TBD" description="PostgreSQL OID, POI 3.17">
+      <action dev="jeffjensen" type="update" issue="205" due-to="msymons81">Use Apache POI 3.17.</action>
       <action dev="jeffjensen" type="add" issue="179" due-to="mfrechePgest">
         Add PostgreSQL OID data type.
         <dueto name="ibic"/>
