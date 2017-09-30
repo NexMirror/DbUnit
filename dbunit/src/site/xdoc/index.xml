@@ -23,43 +23,86 @@
     </p>
   </section>
 
+  <section name="Downloading dbUnit">
+    <p>
+      Refer to <a href="repos.html">Maven Repositories</a> for obtaining releases and snapshots (pre-releases/work in progress).
+    </p>
+  </section>
+
   <section name="News">
       <table border="1">
         <tr>
-          <td>2017-08-20</td>
-          <td>2.5.5-SNAPSHOT in progress. Please try the latest snapshot build and let us know how it works! Refer to the <a href="changes-report.html#in_scm">changes report</a> for the snapshot contents (and any subsequent updates).  Refer to <a href="repos.html">Maven Repositories</a> for obtaining snapshots.</td>
+          <td>2017-09-06</td>
+          <td> 
+            Please try the 2.5.5-SNAPSHOT snapshot build and let us know how it works!
+            <br/>
+            Refer to the <a href="changes-report.html#2.5.5-SNAPSHOT">changes report</a>,
+            the <a href="https://sourceforge.net/p/dbunit/feature-requests/milestone/2.5.5/">feature list</a>,
+            and the <a href="https://sourceforge.net/p/dbunit/bugs/fixed_release/2.5.5/">bug list</a>
+            for the snapshot contents (and any subsequent updates).
+          </td>
         </tr>
         <tr>
           <td>2017-08-20</td>
-          <td>Release 2.5.4 available. Refer to the <a href="changes-report.html#a2.5.4">changes report</a> for the release contents. Refer to <a href="repos.html">Maven Repositories</a> for obtaining it.</td>
+          <td>
+            Release 2.5.4 available.
+            Refer to the <a href="changes-report.html#a2.5.4">changes report</a>,
+            the <a href="https://sourceforge.net/p/dbunit/feature-requests/milestone/2.5.4/">feature list</a>,
+            and the <a href="https://sourceforge.net/p/dbunit/bugs/fixed_release/2.5.4/">bug list</a>
+            for the release contents.
+          </td>
         </tr>
         <tr>
           <td>2016-08-21</td>
-          <td>Release 2.5.3 available. Refer to the <a href="changes-report.html#a2.5.3">changes report</a> for the release contents. Refer to <a href="repos.html">Maven Repositories</a> for obtaining it.</td>
+          <td>
+            Release 2.5.3 available.
+            Refer to the <a href="changes-report.html#a2.5.3">changes report</a>,
+            the <a href="https://sourceforge.net/p/dbunit/feature-requests/milestone/2.5.3/">feature list</a>,
+            and the <a href="https://sourceforge.net/p/dbunit/bugs/fixed_release/2.5.3/">bug list</a>
+            for the release contents.
+          </td>
         </tr>
         <tr>
           <td>2016-04-08</td>
-          <td>Release 2.5.2 available. Refer to the <a href="changes-report.html#a2.5.2">changes report</a> for the release contents. Refer to <a href="repos.html">Maven Repositories</a> for obtaining it.</td>
+          <td>
+            Release 2.5.2 available.
+            Refer to the <a href="changes-report.html#a2.5.2">changes report</a>,
+            the <a href="https://sourceforge.net/p/dbunit/feature-requests/milestone/2.5.2/">feature list</a>,
+            and the <a href="https://sourceforge.net/p/dbunit/bugs/fixed_release/2.5.2/">bug list</a>
+            for the release contents.
+          </td>
         </tr>
         <tr>
           <td>2015-04-11</td>
-          <td>Release 2.5.1 available. Refer to the <a href="changes-report.html#a2.5.1">changes report</a> for the release contents. Refer to <a href="repos.html">Maven Repositories</a> for obtaining it.</td>
+          <td>
+            Release 2.5.1 available.
+            Refer to the <a href="changes-report.html#a2.5.1">changes report</a>,
+            the <a href="https://sourceforge.net/p/dbunit/feature-requests/milestone/2.5.1/">feature list</a>,
+            and the <a href="https://sourceforge.net/p/dbunit/bugs/fixed_release/2.5.1/">bug list</a>
+            for the release contents.
+          </td>
         </tr>
         <tr>
           <td>2014-04-24</td>
-          <td>Release 2.5.0 available. Refer to the <a href="changes-report.html#a2.5.0">changes report</a> for the release contents. Refer to <a href="repos.html">Maven Repositories</a> for obtaining it.</td>
+          <td>
+            Release 2.5.0 available.
+            Refer to the <a href="changes-report.html#a2.5.0">changes report</a>,
+            the <a href="https://sourceforge.net/p/dbunit/feature-requests/milestone/2.5.0/">feature list</a>,
+            and the <a href="https://sourceforge.net/p/dbunit/bugs/fixed_release/2.5.0/">bug list</a>
+            for the release contents.
+          </td>
         </tr>
         <tr>
           <td>2012-09-30</td>
-          <td>Release 2.4.9 available. Refer to the <a href="changes-report.html#a2.4.9">changes report</a> for the release contents. Refer to <a href="repos.html">Maven Repositories</a> for obtaining it.</td>
+          <td>Release 2.4.9 available. Refer to the <a href="changes-report.html#a2.4.9">changes report</a> for the release contents.</td>
         </tr>
         <tr>
           <td>2010-08-31</td>
-          <td>Release 2.4.8 available. Refer to the <a href="changes-report.html#a2.4.8">changes report</a> for the release contents. Refer to <a href="repos.html">Maven Repositories</a> for obtaining it.</td>
+          <td>Release 2.4.8 available. Refer to the <a href="changes-report.html#a2.4.8">changes report</a> for the release contents.</td>
         </tr>
         <tr>
           <td>2009-11-09</td>
-          <td>Release 2.4.7 available. Refer to the <a href="changes-report.html#a2.4.7">changes report</a> for the release contents. Refer to <a href="repos.html">Maven Repositories</a> for obtaining it.</td>
+          <td>Release 2.4.7 available. Refer to the <a href="changes-report.html#a2.4.7">changes report</a> for the release contents.</td>
         </tr>
         <tr>
           <td>2009-10-09</td>
