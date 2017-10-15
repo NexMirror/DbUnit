@@ -284,8 +284,8 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
             String[] prepDataFiles, String[] expectedDataFiles) throws Exception
     {
         log.debug("configureTest: saving instance variables");
-        this.prepDs = makeCompositeDataSet(prepDataFiles);
-        this.expectedDs = makeCompositeDataSet(expectedDataFiles);
+        this.prepDs = makeCompositeDataSet(prepDataFiles, "prep");
+        this.expectedDs = makeCompositeDataSet(expectedDataFiles, "expected");
         this.tableDefs = tables;
     }
 
@@ -575,8 +575,8 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
      * @throws DataSetException
      *             On dbUnit errors.
      */
-    public IDataSet makeCompositeDataSet(String[] dataFiles)
-            throws DataSetException
+    public IDataSet makeCompositeDataSet(String[] dataFiles,
+            final String dataFilesName) throws DataSetException
     {
         if (dataFileLoader == null)
         {
@@ -585,10 +585,12 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
         }
 
         int count = dataFiles.length;
-        log.debug("makeCompositeDataSet: dataFiles count=" + count);
+        log.debug("makeCompositeDataSet: " + dataFilesName + " dataFiles count="
+                + count);
         if (count == 0)
         {
-            log.info("makeCompositeDataSet: Specified zero data files");
+            log.info("makeCompositeDataSet: Specified zero " + dataFilesName
+                    + " data files");
         }
 
         List list = new ArrayList();
