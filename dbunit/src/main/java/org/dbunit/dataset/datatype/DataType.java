@@ -255,6 +255,13 @@ public abstract class DataType
 
         return UNKNOWN;
     }
+    
+    public boolean equals(Object other) {
+    	if (!(other instanceof DataType)) return false;
+    	DataType otherDataType = (DataType) other;
+    	return otherDataType.getSqlType() == this.getSqlType()
+    			&& otherDataType.getSqlTypeName() == this.getSqlTypeName();
+    }
 }
 
 
