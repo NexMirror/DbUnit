@@ -13,7 +13,8 @@
   </properties>
 
   <body>
-    <release version="2.5.5-SNAPSHOT" date="TBD" description="PostgreSQL OID, POI 3.17">
+    <release version="2.5.5-SNAPSHOT" date="TBD" description="PostgreSQL OID, POI 3.17, cache column metadata, ">
+      <action dev="jeffjensen" type="update" issue="401" due-to="jkearns">Cache column metadata for performance improvement.</action>
       <action dev="jeffjensen" type="update" issue="205" due-to="msymons81">Use Apache POI 3.17.</action>
       <action dev="jeffjensen" type="add" issue="179" due-to="mfrechePgest">
         Add PostgreSQL OID data type.
