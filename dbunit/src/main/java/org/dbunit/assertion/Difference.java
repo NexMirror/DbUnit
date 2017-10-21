@@ -23,18 +23,18 @@ package org.dbunit.assertion;
 import org.dbunit.dataset.ITable;
 
 /**
- * Value object to hold the difference of a single data cell 
- * found while comparing data.
+ * Value object to hold the difference of a single data cell found while
+ * comparing data.
  * <p>
  * Inspired by the XMLUnit framework.
  * </p>
- * 
+ *
  * @author gommma (gommma AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
  * @since 2.4.0
  */
-public class Difference 
+public class Difference
 {
     private ITable expectedTable;
     private ITable actualTable;
@@ -42,12 +42,11 @@ public class Difference
     private String columnName;
     private Object expectedValue;
     private Object actualValue;
-    
-    public Difference(ITable expectedTable, ITable actualTable, 
-            int rowIndex, String columnName,
-            Object expectedValue, Object actualValue) 
+
+    public Difference(final ITable expectedTable, final ITable actualTable,
+            final int rowIndex, final String columnName,
+            final Object expectedValue, final Object actualValue)
     {
-        super();
         this.expectedTable = expectedTable;
         this.actualTable = actualTable;
         this.rowIndex = rowIndex;
@@ -55,36 +54,11 @@ public class Difference
         this.expectedValue = expectedValue;
         this.actualValue = actualValue;
     }
-    
-    public ITable getExpectedTable() {
-        return expectedTable;
-    }
 
-
-    public ITable getActualTable() {
-        return actualTable;
-    }
-
-
-    public int getRowIndex() {
-        return rowIndex;
-    }
-
-    public String getColumnName() {
-        return columnName;
-    }
-
-    public Object getExpectedValue() {
-        return expectedValue;
-    }
-
-    public Object getActualValue() {
-        return actualValue;
-    }
-
+    @Override
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        final StringBuffer sb = new StringBuffer();
         sb.append(getClass().getName()).append("[");
         sb.append("expectedTable=").append(expectedTable);
         sb.append(", actualTable=").append(actualTable);
@@ -94,5 +68,35 @@ public class Difference
         sb.append(", actualValue=").append(actualValue);
         sb.append("]");
         return sb.toString();
+    }
+
+    public ITable getExpectedTable()
+    {
+        return expectedTable;
+    }
+
+    public ITable getActualTable()
+    {
+        return actualTable;
+    }
+
+    public int getRowIndex()
+    {
+        return rowIndex;
+    }
+
+    public String getColumnName()
+    {
+        return columnName;
+    }
+
+    public Object getExpectedValue()
+    {
+        return expectedValue;
+    }
+
+    public Object getActualValue()
+    {
+        return actualValue;
     }
 }
