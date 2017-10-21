@@ -32,37 +32,40 @@ import org.dbunit.dataset.ITable;
 
 /**
  * Provides static methods for the most common DbUnit assertion needs.
- * 
- * Although the methods are static, they rely on a {@link DbUnitAssert} instance 
- * to do the work. So, if you need to customize this class behavior, you can create
- * your own {@link DbUnitAssert} extension.
- * 
+ *
+ * Although the methods are static, they rely on a {@link DbUnitAssert} instance
+ * to do the work. So, if you need to customize this class behavior, you can
+ * create your own {@link DbUnitAssert} extension.
+ *
  * @author Manuel Laflamme
  * @author Felipe Leme (dbunit@felipeal.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
  * @since 1.3 (Mar 22, 2002)
  */
-public class Assertion {
-
+public class Assertion
+{
     /**
      * Object that will effectively do the assertions.
      */
     private static final DbUnitAssert INSTANCE = new DbUnitAssert();
 
-    private Assertion() {
+    private Assertion()
+    {
         throw new UnsupportedOperationException(
-        "this class has only static methods");
+                "this class has only static methods");
     }
 
     /**
-     * @see DbUnitAssert#assertEqualsIgnoreCols(IDataSet, IDataSet, String, String[])
+     * @see DbUnitAssert#assertEqualsIgnoreCols(IDataSet, IDataSet, String,
+     *      String[])
      */
     public static void assertEqualsIgnoreCols(final IDataSet expectedDataset,
             final IDataSet actualDataset, final String tableName,
-            final String[] ignoreCols) throws DatabaseUnitException {
-        INSTANCE.assertEqualsIgnoreCols(expectedDataset, actualDataset, tableName,
-                ignoreCols);
+            final String[] ignoreCols) throws DatabaseUnitException
+    {
+        INSTANCE.assertEqualsIgnoreCols(expectedDataset, actualDataset,
+                tableName, ignoreCols);
     }
 
     /**
@@ -70,28 +73,33 @@ public class Assertion {
      */
     public static void assertEqualsIgnoreCols(final ITable expectedTable,
             final ITable actualTable, final String[] ignoreCols)
-    throws DatabaseUnitException {
+            throws DatabaseUnitException
+    {
         INSTANCE.assertEqualsIgnoreCols(expectedTable, actualTable, ignoreCols);
     }
 
     /**
-     * @see DbUnitAssert#assertEqualsByQuery(IDataSet, IDatabaseConnection, String, String, String[])
+     * @see DbUnitAssert#assertEqualsByQuery(IDataSet, IDatabaseConnection,
+     *      String, String, String[])
      */
     public static void assertEqualsByQuery(final IDataSet expectedDataset,
             final IDatabaseConnection connection, final String sqlQuery,
             final String tableName, final String[] ignoreCols)
-    throws DatabaseUnitException, SQLException {
+            throws DatabaseUnitException, SQLException
+    {
         INSTANCE.assertEqualsByQuery(expectedDataset, connection, sqlQuery,
                 tableName, ignoreCols);
     }
 
     /**
-     * @see DbUnitAssert#assertEqualsByQuery(ITable, IDatabaseConnection, String, String, String[])
+     * @see DbUnitAssert#assertEqualsByQuery(ITable, IDatabaseConnection,
+     *      String, String, String[])
      */
     public static void assertEqualsByQuery(final ITable expectedTable,
             final IDatabaseConnection connection, final String tableName,
             final String sqlQuery, final String[] ignoreCols)
-    throws DatabaseUnitException, SQLException {
+            throws DatabaseUnitException, SQLException
+    {
         INSTANCE.assertEqualsByQuery(expectedTable, connection, tableName,
                 sqlQuery, ignoreCols);
     }
@@ -99,8 +107,9 @@ public class Assertion {
     /**
      * @see DbUnitAssert#assertEquals(IDataSet, IDataSet)
      */
-    public static void assertEquals(IDataSet expectedDataSet,
-            IDataSet actualDataSet) throws DatabaseUnitException {
+    public static void assertEquals(final IDataSet expectedDataSet,
+            final IDataSet actualDataSet) throws DatabaseUnitException
+    {
         INSTANCE.assertEquals(expectedDataSet, actualDataSet);
     }
 
@@ -108,25 +117,29 @@ public class Assertion {
      * @see DbUnitAssert#assertEquals(IDataSet, IDataSet, FailureHandler)
      * @since 2.4
      */
-    public static void assertEquals(IDataSet expectedDataSet,
-            IDataSet actualDataSet, FailureHandler failureHandler)
-    throws DatabaseUnitException {
+    public static void assertEquals(final IDataSet expectedDataSet,
+            final IDataSet actualDataSet, final FailureHandler failureHandler)
+            throws DatabaseUnitException
+    {
         INSTANCE.assertEquals(expectedDataSet, actualDataSet, failureHandler);
     }
 
     /**
      * @see DbUnitAssert#assertEquals(ITable, ITable)
      */
-    public static void assertEquals(ITable expectedTable, ITable actualTable)
-    throws DatabaseUnitException {
+    public static void assertEquals(final ITable expectedTable,
+            final ITable actualTable) throws DatabaseUnitException
+    {
         INSTANCE.assertEquals(expectedTable, actualTable);
     }
 
     /**
      * @see DbUnitAssert#assertEquals(ITable, ITable, Column[])
      */
-    public static void assertEquals(ITable expectedTable, ITable actualTable,
-            Column[] additionalColumnInfo) throws DatabaseUnitException {
+    public static void assertEquals(final ITable expectedTable,
+            final ITable actualTable, final Column[] additionalColumnInfo)
+            throws DatabaseUnitException
+    {
         INSTANCE.assertEquals(expectedTable, actualTable, additionalColumnInfo);
     }
 
@@ -134,9 +147,10 @@ public class Assertion {
      * @see DbUnitAssert#assertEquals(ITable, ITable, FailureHandler)
      * @since 2.4
      */
-    public static void assertEquals(ITable expectedTable, ITable actualTable,
-            FailureHandler failureHandler) throws DatabaseUnitException {
+    public static void assertEquals(final ITable expectedTable,
+            final ITable actualTable, final FailureHandler failureHandler)
+            throws DatabaseUnitException
+    {
         INSTANCE.assertEquals(expectedTable, actualTable, failureHandler);
     }
-
 }
