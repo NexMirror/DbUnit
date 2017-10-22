@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
- 
+
 package org.dbunit.dataset;
 
 import org.dbunit.dataset.stream.IDataSetConsumer;
@@ -36,22 +36,14 @@ import org.slf4j.LoggerFactory;
  */
 public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer
 {
-
-    /**
-     * Logger for this class
-     */
     private static final Logger logger = LoggerFactory.getLogger(CachedDataSet.class);
 
-    private OrderedTableNameMap _tables;
-
     private DefaultTable _activeTable;
-    
 
     /**
      * Default constructor.
      */
-    public CachedDataSet()
-    {
+    public CachedDataSet() throws DataSetException {
         super();
         initialize();
     }
@@ -62,15 +54,7 @@ public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer
     public CachedDataSet(IDataSet dataSet) throws DataSetException
     {
         super(dataSet.isCaseSensitiveTableNames());
-
         initialize();
-
-        ITableIterator iterator = dataSet.iterator();
-        while (iterator.next())
-        {
-            ITable table = iterator.getTable();
-            _tables.add(table.getTableMetaData().getTableName(), new CachedTable(table));
-        }
     }
 
     /**
@@ -90,18 +74,12 @@ public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer
     public CachedDataSet(IDataSetProducer producer, boolean caseSensitiveTableNames) throws DataSetException
     {
         super(caseSensitiveTableNames);
-        
         initialize();
 
         producer.setConsumer(this);
         producer.produce();
     }
 
-    private void initialize()
-    {
-        _tables = super.createTableNameMap();
-    }
-    
     ////////////////////////////////////////////////////////////////////////////
     // AbstractDataSet class
 
@@ -110,8 +88,8 @@ public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer
     {
         if(logger.isDebugEnabled())
             logger.debug("createIterator(reversed={}) - start", String.valueOf(reversed));
-        
-        ITable[] tables = (ITable[])_tables.orderedValues().toArray(new ITable[0]);
+
+        ITable[] tables = (ITable[])_orderedTableNameMap.orderedValues().toArray(new ITable[0]);
         return new DefaultTableIterator(tables, reversed);
     }
 
@@ -121,13 +99,13 @@ public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer
     public void startDataSet() throws DataSetException
     {
         logger.debug("startDataSet() - start");
-        _tables = super.createTableNameMap();
+        _orderedTableNameMap = super.createTableNameMap();
     }
 
     public void endDataSet() throws DataSetException
     {
         logger.debug("endDataSet() - start");
-        logger.debug("endDataSet() - the final tableMap is: " + _tables);
+        logger.debug("endDataSet() - the final tableMap is: " + _orderedTableNameMap);
     }
 
     public void startTable(ITableMetaData metaData) throws DataSetException
@@ -141,15 +119,15 @@ public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer
         logger.debug("endTable() - start");
         String tableName = _activeTable.getTableMetaData().getTableName();
         // Check whether the table appeared once before
-        if(_tables.containsTable(tableName))
+        if(_orderedTableNameMap.containsTable(tableName))
         {
-            DefaultTable existingTable = (DefaultTable)_tables.get(tableName);
+            DefaultTable existingTable = (DefaultTable)_orderedTableNameMap.get(tableName);
             // Add all newly collected rows to the existing table
             existingTable.addTableRows(_activeTable);
         }
         else
         {
-            _tables.add(tableName, _activeTable);
+            _orderedTableNameMap.add(tableName, _activeTable);
         }
         _activeTable = null;
     }

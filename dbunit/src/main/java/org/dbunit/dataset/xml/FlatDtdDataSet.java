@@ -37,7 +37,6 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.ITableIterator;
 import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.dataset.NoSuchTableException;
-import org.dbunit.dataset.OrderedTableNameMap;
 import org.dbunit.dataset.stream.IDataSetConsumer;
 import org.dbunit.dataset.stream.IDataSetProducer;
 import org.slf4j.Logger;
@@ -52,13 +51,8 @@ import org.xml.sax.InputSource;
  */
 public class FlatDtdDataSet extends AbstractDataSet implements IDataSetConsumer
 {
-
-    /**
-     * Logger for this class
-     */
     private static final Logger logger = LoggerFactory.getLogger(FlatDtdDataSet.class);
 
-    private OrderedTableNameMap _tableMap;
     private boolean _ready = false;
 
     public FlatDtdDataSet()
@@ -83,9 +77,11 @@ public class FlatDtdDataSet extends AbstractDataSet implements IDataSetConsumer
         producer.produce();
     }
 
-    private void initialize()
+    protected void initialize()
     {
-        _tableMap = super.createTableNameMap();
+        if(_orderedTableNameMap == null) {
+            _orderedTableNameMap = super.createTableNameMap();
+        }
     }
 
     /**
@@ -126,12 +122,12 @@ public class FlatDtdDataSet extends AbstractDataSet implements IDataSetConsumer
             throw new IllegalStateException("Not ready!");
         }
 
-        String[] names = _tableMap.getTableNames();
+        String[] names = _orderedTableNameMap.getTableNames();
         ITable[] tables = new ITable[names.length];
         for (int i = 0; i < names.length; i++)
         {
             String tableName = names[i];
-            ITable table = (ITable)_tableMap.get(tableName);
+            ITable table = (ITable)_orderedTableNameMap.get(tableName);
             if (table == null)
             {
                 throw new NoSuchTableException(tableName);
@@ -156,7 +152,7 @@ public class FlatDtdDataSet extends AbstractDataSet implements IDataSetConsumer
             throw new IllegalStateException("Not ready!");
         }
 
-        return _tableMap.getTableNames();
+        return _orderedTableNameMap.getTableNames();
     }
 
     public ITableMetaData getTableMetaData(String tableName) throws DataSetException
@@ -169,13 +165,7 @@ public class FlatDtdDataSet extends AbstractDataSet implements IDataSetConsumer
             throw new IllegalStateException("Not ready!");
         }
 
-        if (_tableMap.containsTable(tableName))
-        {
-            ITable table = (ITable)_tableMap.get(tableName);
-            return table.getTableMetaData();
-        }
-
-        throw new NoSuchTableException(tableName);
+        return super.getTableMetaData(tableName);
     }
 
     public ITable getTable(String tableName) throws DataSetException
@@ -188,12 +178,7 @@ public class FlatDtdDataSet extends AbstractDataSet implements IDataSetConsumer
             throw new IllegalStateException("Not ready!");
         }
 
-        if (_tableMap.containsTable(tableName))
-        {
-            return (ITable)_tableMap.get(tableName);
-        }
-
-        throw new NoSuchTableException(tableName);
+        return super.getTable(tableName);
     }
 
     ////////////////////////////////////////////////////////////////////////
@@ -218,7 +203,7 @@ public class FlatDtdDataSet extends AbstractDataSet implements IDataSetConsumer
         logger.debug("startTable(metaData={}) - start", metaData);
 
         String tableName = metaData.getTableName();
-        _tableMap.add(tableName, new DefaultTable(metaData));
+        _orderedTableNameMap.add(tableName, new DefaultTable(metaData));
     }
 
     public void endTable() throws DataSetException
@@ -230,16 +215,14 @@ public class FlatDtdDataSet extends AbstractDataSet implements IDataSetConsumer
     {
         // no op
     }
-    
-    
+
     public String toString()
     {
     	StringBuffer sb = new StringBuffer();
     	sb.append(getClass().getName()).append("[");
     	sb.append("_ready=").append(this._ready);
-    	sb.append(", _tableMap=").append(this._tableMap);
+    	sb.append(", _orderedTableNameMap=").append(this._orderedTableNameMap);
     	sb.append("]");
     	return sb.toString();
     }
-
 }
