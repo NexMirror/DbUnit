@@ -97,6 +97,8 @@ public class DatabaseSequenceFilterTest extends TestCase
         IDataSet databaseDataset = connection.createDataSet();
         String[] actualNoFilter = databaseDataset.getTableNames();
         assertEquals("no filter", Arrays.asList(expectedNoFilter), Arrays.asList(actualNoFilter));
+        
+        boolean gotCyclicTablesDependencyException = false;
 
         try
         {
@@ -107,10 +109,9 @@ public class DatabaseSequenceFilterTest extends TestCase
         }
         catch (CyclicTablesDependencyException expected)
         {
-            Set expectedCycle = new HashSet(Arrays.asList(new String[]{"A", "C", "E"}));
-            String expectedMsg = new CyclicTablesDependencyException("D", expectedCycle).getMessage();
-            assertEquals(expectedMsg, expected.getMessage());
+        	gotCyclicTablesDependencyException = true;
         }
+        assertTrue("Expected CyclicTablesDependencyException was not raised", gotCyclicTablesDependencyException);
     }
 
     public void testCaseSensitiveTableNames() throws Exception

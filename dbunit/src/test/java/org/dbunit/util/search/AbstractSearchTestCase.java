@@ -61,18 +61,10 @@ public abstract class AbstractSearchTestCase extends TestCase {
 
     protected void doIt() throws Exception {
         Set actualOutput = fSearch.search(this.fInput, getCallback());
-        assertEquals("sizes does not match", this.fExpectedOutput.size(),
+        assertEquals("Input and output sets do not have the same number of members", 
+        		this.fExpectedOutput.size(),
                 actualOutput.size());
-        Iterator iterExpected = this.fExpectedOutput.iterator();
-        Iterator iterActual = actualOutput.iterator();
-        int i = 0;
-        while (iterExpected.hasNext()) {
-            Object expectedNode = iterExpected.next();
-            Object actualNode = iterActual.next();
-            assertEquals("mismatched element at position " + i, expectedNode,
-                    actualNode);
-            i++;
-        }
+        assertEquals("Sets do not contain the same members", this.fExpectedOutput, actualOutput);
     }
 
     protected void setInput(String[] nodes) {
