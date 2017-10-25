@@ -21,7 +21,6 @@
 package org.dbunit.assertion;
 
 import java.sql.SQLException;
-import java.util.Arrays;
 
 import org.dbunit.Assertion;
 import org.dbunit.DatabaseUnitException;
@@ -49,12 +48,10 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 2.4.0
  */
-public class DbUnitAssert
+public class DbUnitAssert extends DbUnitAssertBase
 {
     private static final Logger logger =
             LoggerFactory.getLogger(DbUnitAssert.class);
-
-    private FailureFactory junitFailureFactory = getJUnitFailureFactory();
 
     /**
      * Compare one table present in two datasets ignoring specified columns.
@@ -199,7 +196,7 @@ public class DbUnitAssert
      * @since 2.4
      */
     public void assertEquals(final IDataSet expectedDataSet,
-            final IDataSet actualDataSet, FailureHandler failureHandler)
+            final IDataSet actualDataSet, final FailureHandler failureHandler)
             throws DatabaseUnitException
     {
         logger.debug(
@@ -214,41 +211,33 @@ public class DbUnitAssert
             return;
         }
 
-        if (failureHandler == null)
-        {
-            logger.debug(
-                    "FailureHandler is null. Using default implementation");
-            failureHandler = getDefaultFailureHandler();
-        }
+        final FailureHandler validFailureHandler =
+                determineFailureHandler(failureHandler);
 
         final String[] expectedNames = getSortedTableNames(expectedDataSet);
         final String[] actualNames = getSortedTableNames(actualDataSet);
 
-        // tables count
-        if (expectedNames.length != actualNames.length)
-        {
-            throw failureHandler.createFailure("table count",
-                    String.valueOf(expectedNames.length),
-                    String.valueOf(actualNames.length));
-        }
+        compareTableCounts(expectedNames, actualNames, validFailureHandler);
 
         // table names in no specific order
-        for (int i = 0; i < expectedNames.length; i++)
-        {
-            if (!actualNames[i].equals(expectedNames[i]))
-            {
-                throw failureHandler.createFailure("tables",
-                        Arrays.asList(expectedNames).toString(),
-                        Arrays.asList(actualNames).toString());
-            }
-        }
+        compareTableNames(expectedNames, actualNames, validFailureHandler);
 
-        // tables
+        compareTables(expectedDataSet, actualDataSet, expectedNames,
+                validFailureHandler);
+    }
+
+    protected void compareTables(final IDataSet expectedDataSet,
+            final IDataSet actualDataSet, final String[] expectedNames,
+            final FailureHandler failureHandler) throws DatabaseUnitException
+    {
         for (int i = 0; i < expectedNames.length; i++)
         {
-            final String name = expectedNames[i];
-            assertEquals(expectedDataSet.getTable(name),
-                    actualDataSet.getTable(name), failureHandler);
+            final String tableName = expectedNames[i];
+
+            final ITable expectedTable = expectedDataSet.getTable(tableName);
+            final ITable actualTable = actualDataSet.getTable(tableName);
+
+            assertEquals(expectedTable, actualTable, failureHandler);
         }
     }
 
@@ -338,7 +327,7 @@ public class DbUnitAssert
      * @since 2.4
      */
     public void assertEquals(final ITable expectedTable,
-            final ITable actualTable, FailureHandler failureHandler)
+            final ITable actualTable, final FailureHandler failureHandler)
             throws DatabaseUnitException
     {
         logger.trace(
@@ -355,50 +344,19 @@ public class DbUnitAssert
             return;
         }
 
-        if (failureHandler == null)
-        {
-            logger.debug(
-                    "FailureHandler is null. Using default implementation");
-            failureHandler = getDefaultFailureHandler();
-        }
+        final FailureHandler validFailureHandler =
+                determineFailureHandler(failureHandler);
 
         final ITableMetaData expectedMetaData =
                 expectedTable.getTableMetaData();
         final ITableMetaData actualMetaData = actualTable.getTableMetaData();
         final String expectedTableName = expectedMetaData.getTableName();
 
-        // Verify row count
-        final int expectedRowsCount = expectedTable.getRowCount();
-        int actualRowsCount = 0;
-        boolean skipRowComparison = false;
-        try
+        final boolean isTablesEmpty = compareRowCounts(expectedTable,
+                actualTable, validFailureHandler, expectedTableName);
+        if (isTablesEmpty)
         {
-            actualRowsCount = actualTable.getRowCount();
-        } catch (final UnsupportedOperationException exception)
-        {
-            skipRowComparison = true;
-        }
-        if (!skipRowComparison)
-        {
-            if (expectedRowsCount != actualRowsCount)
-            {
-                final String msg =
-                        "row count (table=" + expectedTableName + ")";
-                final Error error = failureHandler.createFailure(msg,
-                        String.valueOf(expectedRowsCount),
-                        String.valueOf(actualRowsCount));
-                logger.error(error.toString());
-                throw error;
-            }
-            // if both tables are empty, it is not necessary to compare columns,
-            // as
-            // such comparison can fail if column metadata is different (which
-            // could occurs when comparing empty tables)
-            if (expectedRowsCount == 0 && actualRowsCount == 0)
-            {
-                logger.debug("Tables are empty, hence equals.");
-                return;
-            }
+            return;
         }
 
         // Put the columns into the same order
@@ -406,70 +364,17 @@ public class DbUnitAssert
                 Columns.getSortedColumns(expectedMetaData);
         final Column[] actualColumns = Columns.getSortedColumns(actualMetaData);
 
-        // Verify columns
-        final Columns.ColumnDiff columnDiff =
-                Columns.getColumnDiff(expectedMetaData, actualMetaData);
-        if (columnDiff.hasDifference())
-        {
-            final String message = columnDiff.getMessage();
-            final Error error = failureHandler.createFailure(message,
-                    Columns.getColumnNamesAsString(expectedColumns),
-                    Columns.getColumnNamesAsString(actualColumns));
-            logger.error(error.toString());
-            throw error;
-        }
+        compareColumns(expectedColumns, actualColumns, expectedMetaData,
+                actualMetaData, validFailureHandler);
 
         // Get the datatypes to be used for comparing the sorted columns
         final ComparisonColumn[] comparisonCols =
                 getComparisonColumns(expectedTableName, expectedColumns,
-                        actualColumns, failureHandler);
+                        actualColumns, validFailureHandler);
 
         // Finally compare the data
-        compareData(expectedTable, actualTable, comparisonCols, failureHandler);
-    }
-
-    /**
-     * @return The default failure handler
-     * @since 2.4
-     */
-    protected FailureHandler getDefaultFailureHandler()
-    {
-        return getDefaultFailureHandler(null);
-    }
-
-    /**
-     * @return The default failure handler
-     * @since 2.4
-     */
-    protected FailureHandler getDefaultFailureHandler(
-            final Column[] additionalColumnInfo)
-    {
-        final DefaultFailureHandler failureHandler =
-                new DefaultFailureHandler(additionalColumnInfo);
-        if (junitFailureFactory != null)
-        {
-            failureHandler.setFailureFactory(junitFailureFactory);
-        }
-        return failureHandler;
-    }
-
-    /**
-     * @return the JUnitFailureFactory if JUnit is on the classpath or
-     *         <code>null</code> if JUnit is not on the classpath.
-     */
-    private FailureFactory getJUnitFailureFactory()
-    {
-        try
-        {
-            Class.forName("junit.framework.Assert");
-            // JUnit available
-            return new JUnitFailureFactory();
-        } catch (final ClassNotFoundException e)
-        {
-            // JUnit not available on the classpath return null
-            logger.debug("JUnit does not seem to be on the classpath. " + e);
-        }
-        return null;
+        compareData(expectedTable, actualTable, comparisonCols,
+                validFailureHandler);
     }
 
     /**
@@ -554,71 +459,6 @@ public class DbUnitAssert
                 }
             }
         }
-    }
-
-    /**
-     * Method to last-minute intercept the comparison of a single expected and
-     * actual value. Designed to be overridden in order to skip cell comparison
-     * by specific cell values.
-     *
-     * @param columnName
-     *            The column being compared
-     * @param expectedValue
-     *            The expected value to be compared
-     * @param actualValue
-     *            The actual value to be compared
-     * @return <code>false</code> always so that the comparison is never skipped
-     * @since 2.4
-     */
-    protected boolean skipCompare(final String columnName,
-            final Object expectedValue, final Object actualValue)
-    {
-        return false;
-    }
-
-    /**
-     * @param expectedTableName
-     * @param expectedColumns
-     * @param actualColumns
-     * @param failureHandler
-     *            The {@link FailureHandler} to be used when no datatype can be
-     *            determined
-     * @return The columns to be used for the assertion, including the correct
-     *         datatype
-     * @since 2.4
-     */
-    protected ComparisonColumn[] getComparisonColumns(
-            final String expectedTableName, final Column[] expectedColumns,
-            final Column[] actualColumns, final FailureHandler failureHandler)
-    {
-        final ComparisonColumn[] result =
-                new ComparisonColumn[expectedColumns.length];
-
-        for (int j = 0; j < expectedColumns.length; j++)
-        {
-            final Column expectedColumn = expectedColumns[j];
-            final Column actualColumn = actualColumns[j];
-            result[j] = new ComparisonColumn(expectedTableName, expectedColumn,
-                    actualColumn, failureHandler);
-        }
-        return result;
-    }
-
-    protected String[] getSortedTableNames(final IDataSet dataSet)
-            throws DataSetException
-    {
-        logger.debug("getSortedTableNames(dataSet={}) - start", dataSet);
-
-        final String[] names = dataSet.getTableNames();
-        if (!dataSet.isCaseSensitiveTableNames())
-        {
-            for (int i = 0; i < names.length; i++)
-            {
-                names[i] = names[i].toUpperCase();
-            }
-        }
-        Arrays.sort(names);
-        return names;
     }
 
     /**
