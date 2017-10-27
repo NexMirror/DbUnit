@@ -21,6 +21,7 @@
 package org.dbunit;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.dbunit.database.IDatabaseConnection;
@@ -585,12 +586,39 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
                 actualFilteredTable, expectedFilteredTable.getTableMetaData());
         log.debug("{}: Sorted actual table={}", methodName, actualSortedTable);
 
-        log.debug("{}: Comparing expected table to actual table", methodName);
+        log.debug("{}: Creating additionalColumnInfo", methodName);
         final Column[] additionalColumnInfo =
-                expectedTable.getTableMetaData().getColumns();
+                makeAdditionalColumnInfo(expectedTable, excludeColumns);
+        log.debug("{}: additionalColumnInfo={}", methodName,
+                additionalColumnInfo);
 
+        log.debug("{}: Comparing expected table to actual table", methodName);
         Assertion.assertEquals(expectedSortedTable, actualSortedTable,
                 additionalColumnInfo);
+    }
+
+    /**
+     * Don't add excluded columns to additionalColumnInfo as they are not found
+     * and generate a not found message in the fail message.
+     */
+    protected Column[] makeAdditionalColumnInfo(final ITable expectedTable,
+            final String[] excludeColumns) throws DataSetException
+    {
+        final List<Column> keepColumnsList = new ArrayList<Column>();
+        final List<String> excludeColumnsList = Arrays.asList(excludeColumns);
+
+        final Column[] allColumns =
+                expectedTable.getTableMetaData().getColumns();
+        for (final Column column : allColumns)
+        {
+            final String columnName = column.getColumnName();
+            if (!excludeColumnsList.contains(columnName))
+            {
+                keepColumnsList.add(column);
+            }
+        }
+
+        return keepColumnsList.toArray(new Column[keepColumnsList.size()]);
     }
 
     /**
