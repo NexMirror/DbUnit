@@ -40,9 +40,6 @@ import org.slf4j.LoggerFactory;
  */
 public class DefaultFailureHandler implements FailureHandler
 {
-    /**
-     * Logger for this class
-     */
     private static final Logger logger =
             LoggerFactory.getLogger(DefaultFailureHandler.class);
 
@@ -118,9 +115,7 @@ public class DefaultFailureHandler implements FailureHandler
     {
         // add custom column values information for better identification of
         // mismatching rows
-        final String additionalInfo =
-                buildAdditionalColumnInfo(expectedTable, actualTable, row);
-        return additionalInfo;
+        return buildAdditionalColumnInfo(expectedTable, actualTable, row);
     }
 
     private String buildAdditionalColumnInfo(final ITable expectedTable,
@@ -216,8 +211,7 @@ public class DefaultFailureHandler implements FailureHandler
         {
             tableMetaData.getColumnIndex(columnName);
             // if the column index was resolved the table contains the given
-            // column.
-            // So just use this table
+            // column. So just use this table
             return table;
         } catch (final NoSuchColumnException e)
         {
@@ -228,8 +222,7 @@ public class DefaultFailureHandler implements FailureHandler
                         ((ColumnFilterTable) table).getOriginalMetaData();
                 originalMetaData.getColumnIndex(columnName);
                 // If we get here the column exists - return the table since it
-                // is not filtered
-                // in the CompositeTable.
+                // is not filtered in the CompositeTable.
                 return table;
             } else
             {
@@ -252,34 +245,39 @@ public class DefaultFailureHandler implements FailureHandler
 
     protected String buildMessage(final Difference diff)
     {
-        final int row = diff.getRowIndex();
+        final StringBuilder builder = new StringBuilder(200);
+
+        final int rowNum = diff.getRowIndex();
         final String columnName = diff.getColumnName();
-        final String tableName =
-                diff.getExpectedTable().getTableMetaData().getTableName();
+        final ITable expectedTable = diff.getExpectedTable();
+        final ITable actualTable = diff.getActualTable();
+        final String expectedTableName =
+                expectedTable.getTableMetaData().getTableName();
 
         // example message:
         // "value (table=MYTAB, row=232, column=MYCOL, Additional row info:
         // (column=MyIdCol, expected=444, actual=555)): expected:<123> but
         // was:<1234>"
-        String msg = "value (table=" + tableName + ", row=" + row + ", col="
-                + columnName;
+        builder.append("value (table=").append(expectedTableName);
+        builder.append(", row=").append(rowNum);
+        builder.append(", col=").append(columnName);
 
-        final String additionalInfo =
-                this.getAdditionalInfo(diff.getExpectedTable(),
-                        diff.getActualTable(), row, columnName);
+        final String additionalInfo = this.getAdditionalInfo(expectedTable,
+                actualTable, rowNum, columnName);
         if (additionalInfo != null && !additionalInfo.trim().equals(""))
         {
-            msg += ", " + additionalInfo;
+            builder.append(", ").append(additionalInfo);
         }
-        msg += ")";
 
-        return msg;
+        builder.append(")");
+
+        return builder.toString();
     }
 
     @Override
     public String toString()
     {
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         sb.append(DefaultFailureHandler.class.getName()).append("[");
         sb.append("_additionalColumnInfo=").append(_additionalColumnInfo == null
                 ? "null" : Arrays.asList(_additionalColumnInfo).toString());
