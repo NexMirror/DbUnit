@@ -66,6 +66,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     private IDatabaseTester databaseTester;
     private DataFileLoader dataFileLoader;
 
+    // per test data
     private IDataSet prepDataSet = new DefaultDataSet();
     private IDataSet expectedDataSet = new DefaultDataSet();
     private VerifyTableDefinition[] verifyTableDefs = {};
@@ -132,7 +133,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
             final String[] prepDataFiles, final String[] expectedDataFiles)
             throws Exception
     {
-        log.debug("configureTest: saving instance variables");
+        log.info("configureTest: saving instance variables");
         this.prepDataSet = makeCompositeDataSet(prepDataFiles, "prep");
         this.expectedDataSet =
                 makeCompositeDataSet(expectedDataFiles, "expected");
@@ -170,6 +171,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
         try
         {
             preTest(verifyTables, prepDataFiles, expectedDataFiles);
+            log.info("runTest: running test steps");
             result = testSteps.run();
         } catch (final Exception e)
         {
@@ -262,7 +264,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
      */
     public void setupData() throws Exception
     {
-        log.debug("setupData: setting prep dataset and inserting rows");
+        log.info("setupData: setting prep dataset and inserting rows");
         if (databaseTester == null)
         {
             throw new IllegalStateException(DATABASE_TESTER_IS_NULL_MSG);
@@ -324,18 +326,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
             for (int i = 0; i < tableDefsCount; i++)
             {
                 final VerifyTableDefinition td = verifyTableDefs[i];
-                final String[] excludeColumns = td.getColumnExclusionFilters();
-                final String[] includeColumns = td.getColumnInclusionFilters();
-                final String tableName = td.getTableName();
-
-                log.info("verifyData: Verifying table '{}'", tableName);
-                final ITable expectedTable =
-                        loadTableDataFromDataSet(tableName);
-                final ITable actualTable =
-                        loadTableDataFromDatabase(tableName, connection);
-
-                verifyData(expectedTable, actualTable, excludeColumns,
-                        includeColumns);
+                verifyData(connection, td);
             }
         } catch (final Exception e)
         {
@@ -346,6 +337,24 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
             log.debug("verifyData: Verification done, closing connection");
             connection.close();
         }
+    }
+
+    protected void verifyData(final IDatabaseConnection connection,
+            final VerifyTableDefinition verifyTableDefinition) throws Exception
+    {
+        final String tableName = verifyTableDefinition.getTableName();
+        log.info("verifyData: Verifying table '{}'", tableName);
+
+        final String[] excludeColumns =
+                verifyTableDefinition.getColumnExclusionFilters();
+        final String[] includeColumns =
+                verifyTableDefinition.getColumnInclusionFilters();
+
+        final ITable expectedTable = loadTableDataFromDataSet(tableName);
+        final ITable actualTable =
+                loadTableDataFromDatabase(tableName, connection);
+
+        verifyData(expectedTable, actualTable, excludeColumns, includeColumns);
     }
 
     public ITable loadTableDataFromDataSet(final String tableName)
@@ -440,6 +449,15 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
                 additionalColumnInfo);
 
         log.debug("{}: Comparing expected table to actual table", methodName);
+        compareData(expectedSortedTable, actualSortedTable,
+                additionalColumnInfo);
+    }
+
+    /** Compare the tables, enables easy overriding. */
+    public void compareData(final SortedTable expectedSortedTable,
+            final SortedTable actualSortedTable,
+            final Column[] additionalColumnInfo) throws DatabaseUnitException
+    {
         Assertion.assertEquals(expectedSortedTable, actualSortedTable,
                 additionalColumnInfo);
     }
@@ -631,7 +649,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
      *
      * @see {@link #prepDataSet}.
      *
-     * @param prepDs
+     * @param prepDataSet
      *            The prepDs to set.
      */
     public void setPrepDs(final IDataSet prepDataSet)
@@ -644,7 +662,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
      *
      * @see {@link #expectedDataSet}.
      *
-     * @param expectedDs
+     * @param expectedDataSet
      *            The expectedDs to set.
      */
     public void setExpectedDs(final IDataSet expectedDataSet)
@@ -669,7 +687,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
      *
      * @see {@link #verifyTableDefs}.
      *
-     * @param tableDefs
+     * @param verifyTableDefs
      *            The tableDefs to set.
      */
     public void setTableDefs(final VerifyTableDefinition[] verifyTableDefs)
