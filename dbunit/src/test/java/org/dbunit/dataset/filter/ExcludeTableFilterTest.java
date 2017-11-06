@@ -20,7 +20,9 @@
  */
 package org.dbunit.dataset.filter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 import org.dbunit.dataset.DataSetUtils;
 import org.dbunit.dataset.DefaultDataSet;
@@ -52,6 +54,52 @@ public class ExcludeTableFilterTest extends AbstractTableFilterTest
         String[] validNames = getExpectedNames();
         ExcludeTableFilter filter = new ExcludeTableFilter();
         filter.excludeTable(getExtraTableName());
+
+        for (int i = 0; i < validNames.length; i++)
+        {
+            String validName = validNames[i];
+            assertEquals(validName, true, filter.accept(validName));
+        }
+    }
+
+    public void testAcceptWithAddTableITable() throws Exception
+    {
+        String[] validNames = getExpectedNames();
+        ExcludeTableFilter filter = new ExcludeTableFilter();
+        ITable itable = new DefaultTable(getExtraTableName());
+        filter.addTable(itable);
+
+        for (int i = 0; i < validNames.length; i++)
+        {
+            String validName = validNames[i];
+            assertEquals(validName, true, filter.accept(validName));
+        }
+    }
+
+    public void testAcceptWithAddTableCollection() throws Exception
+    {
+        String[] validNames = getExpectedNames();
+        ExcludeTableFilter filter = new ExcludeTableFilter();
+
+        Collection<ITable> collection = new ArrayList<ITable>();
+        ITable itable = new DefaultTable(getExtraTableName());
+        collection.add(itable);
+
+        filter.addTables(collection);
+
+        for (int i = 0; i < validNames.length; i++)
+        {
+            String validName = validNames[i];
+            assertEquals(validName, true, filter.accept(validName));
+        }
+    }
+
+    public void testAcceptWithAddTableDataSet() throws Exception
+    {
+        String[] validNames = getExpectedNames();
+        ExcludeTableFilter filter = new ExcludeTableFilter();
+
+        filter.addTables(new DefaultDataSet(new DefaultTable(getExtraTableName())));
 
         for (int i = 0; i < validNames.length; i++)
         {

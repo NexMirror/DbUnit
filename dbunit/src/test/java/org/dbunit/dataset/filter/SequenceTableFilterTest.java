@@ -22,13 +22,10 @@ package org.dbunit.dataset.filter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
-import org.dbunit.dataset.DataSetUtils;
-import org.dbunit.dataset.DefaultDataSet;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.ITable;
-import org.dbunit.dataset.LowerCaseDataSet;
+import org.dbunit.dataset.*;
 
 /**
  * @author Manuel Laflamme
@@ -38,7 +35,6 @@ import org.dbunit.dataset.LowerCaseDataSet;
  */
 public class SequenceTableFilterTest extends AbstractTableFilterTest
 {
-
     public SequenceTableFilterTest(String s)
     {
         super(s);
@@ -54,6 +50,58 @@ public class SequenceTableFilterTest extends AbstractTableFilterTest
             String validName = validNames[i];
             assertEquals(validName, true, filter.accept(validName));
         }
+    }
+
+    public void testAcceptWithAddTableITable() throws Exception
+    {
+        String[] validNames = getExpectedNames();
+        SequenceTableFilter filter = new SequenceTableFilter(validNames);
+        ITable itable = new DefaultTable(getExtraTableName());
+        filter.addTable(itable);
+
+        for (int i = 0; i < validNames.length; i++)
+        {
+            String validName = validNames[i];
+            assertEquals(validName, true, filter.accept(validName));
+        }
+
+        assertEquals(getExtraTableName(), true, filter.accept(getExtraTableName()));
+    }
+
+    public void testAcceptWithAddTableCollection() throws Exception
+    {
+        String[] validNames = getExpectedNames();
+        SequenceTableFilter filter = new SequenceTableFilter(validNames);
+
+        Collection<ITable> collection = new ArrayList<ITable>();
+        ITable             itable     = new DefaultTable(getExtraTableName());
+        collection.add(itable);
+
+        filter.addTables(collection);
+
+        for (int i = 0; i < validNames.length; i++)
+        {
+            String validName = validNames[i];
+            assertEquals(validName, true, filter.accept(validName));
+        }
+
+        assertEquals(getExtraTableName(), true, filter.accept(getExtraTableName()));
+    }
+
+    public void testAcceptWithAddTableDataSet() throws Exception
+    {
+        String[] validNames = getExpectedNames();
+        SequenceTableFilter filter = new SequenceTableFilter(validNames);
+
+        filter.addTables(new DefaultDataSet(new DefaultTable(getExtraTableName())));
+
+        for (int i = 0; i < validNames.length; i++)
+        {
+            String validName = validNames[i];
+            assertEquals(validName, true, filter.accept(validName));
+        }
+
+        assertEquals(getExtraTableName(), true, filter.accept(getExtraTableName()));
     }
 
     public void testIsCaseInsensitiveValidName() throws Exception
