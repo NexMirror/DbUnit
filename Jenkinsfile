@@ -1,21 +1,17 @@
 pipeline {
     agent any 
 
-    environment { 
-        MVN_CMD = 'mvn -f dbunit/pom.xml -B -e -U'
-    }
-
     stages {
         stage('compile') { 
             steps {
                 echo 'Compiling...'
-                bat ${MVN_CMD} 'clean test-compile' 
+                bat 'mvn -f dbunit/pom.xml -B -e -U clean test-compile' 
             }
         }
         stage('test: unit') { 
             steps {
                 echo 'Unit Tests...'
-                bat ${MVN_CMD} 'test' 
+                bat 'mvn -f dbunit/pom.xml -B -e -U test' 
             }
             post {
                 always {
@@ -26,7 +22,7 @@ pipeline {
         stage('test: integration: derby') { 
             steps {
                 echo 'Integration Tests...'
-                bat ${MVN_CMD} '-Pit-config,derby verify' 
+                bat 'mvn -f dbunit/pom.xml -B -e -U -Pit-config,derby verify' 
             }
             post {
                 always {
@@ -37,7 +33,7 @@ pipeline {
         stage('test: integration: hsqldb') { 
             steps {
                 echo 'Integration Tests...'
-                bat ${MVN_CMD} '-Pit-config,hsqldb verify' 
+                bat 'mvn -f dbunit/pom.xml -B -e -U -Pit-config,hsqldb verify' 
             }
             post {
                 always {
@@ -48,7 +44,7 @@ pipeline {
         stage('test: integration: h2') { 
             steps {
                 echo 'Integration Tests...'
-                bat ${MVN_CMD} '-Pit-config,h2 verify' 
+                bat 'mvn -f dbunit/pom.xml -B -e -U -Pit-config,h2 verify' 
             }
             post {
                 always {
@@ -59,7 +55,7 @@ pipeline {
         stage('test: integration: mysql') { 
             steps {
                 echo 'Integration Tests...'
-                bat ${MVN_CMD} '-Pit-config,mysql verify' 
+                bat 'mvn -f dbunit/pom.xml -B -e -U -Pit-config,mysql verify' 
             }
             post {
                 always {
@@ -70,7 +66,7 @@ pipeline {
         stage('test: integration: postgresql') { 
             steps {
                 echo 'Integration Tests...'
-                bat ${MVN_CMD} '-Pit-config,postgresql verify' 
+                bat 'mvn -f dbunit/pom.xml -B -e -U -Pit-config,postgresql verify' 
             }
             post {
                 always {
@@ -81,7 +77,7 @@ pipeline {
         stage('test: integration: oracle-ojdbc14') { 
             steps {
                 echo 'Integration Tests...'
-                bat ${MVN_CMD} '-Pit-config,oracle-ojdbc14 verify' 
+                bat 'mvn -f dbunit/pom.xml -B -e -U -Pit-config,oracle-ojdbc14 verify' 
             }
             post {
                 always {
@@ -92,7 +88,7 @@ pipeline {
         stage('test: integration: oracle-ojdbc6') { 
             steps {
                 echo 'Integration Tests...'
-                bat ${MVN_CMD} '-Pit-config,oracle-ojdbc6 verify' 
+                bat 'mvn -f dbunit/pom.xml -B -e -U -Pit-config,oracle-ojdbc6 verify' 
             }
             post {
                 always {
@@ -103,7 +99,7 @@ pipeline {
         stage('test: integration: oracle10-ojdbc14') { 
             steps {
                 echo 'Integration Tests...'
-                bat ${MVN_CMD} '-Pit-config,oracle10-ojdbc14 verify' 
+                bat 'mvn -f dbunit/pom.xml -B -e -U -Pit-config,oracle10-ojdbc14 verify' 
             }
             post {
                 always {
@@ -114,7 +110,7 @@ pipeline {
         stage('test: integration: oracle10-ojdbc6') { 
             steps {
                 echo 'Integration Tests...'
-                bat ${MVN_CMD} '-Pit-config,oracle10-ojdbc6 verify' 
+                bat 'mvn -f dbunit/pom.xml -B -e -U -Pit-config,oracle10-ojdbc6 verify' 
             }
             post {
                 always {
@@ -125,7 +121,7 @@ pipeline {
         stage('test: integration: mssql41') { 
             steps {
                 echo 'Integration Tests...'
-                bat ${MVN_CMD} '-Pit-config,mssql41 verify' 
+                bat 'mvn -f dbunit/pom.xml -B -e -U -Pit-config,mssql41 verify' 
             }
             post {
                 always {
@@ -136,7 +132,7 @@ pipeline {
         stage('test: integration: db2') { 
             steps {
                 echo 'Integration Tests...'
-                bat ${MVN_CMD} '-Pit-config,db2 verify' 
+                bat 'mvn -f dbunit/pom.xml -B -e -U -Pit-config,db2 verify' 
             }
             post {
                 always {
@@ -147,7 +143,7 @@ pipeline {
         stage('deploy: Sonatype OSS') {
             steps {
                 echo 'Deploying...'
-                bat ${MVN_CMD} '-DskipTests deploy'
+                bat 'mvn -f dbunit/pom.xml -B -e -U -DskipTests deploy'
             }
         }
     }
