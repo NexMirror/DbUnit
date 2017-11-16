@@ -149,8 +149,8 @@ pipeline {
     }
 
     post {
-        always {
-        }
+        //always {
+        //}
         success {
             echo 'Success'
         }
