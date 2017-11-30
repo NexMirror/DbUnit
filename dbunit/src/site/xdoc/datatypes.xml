@@ -101,7 +101,7 @@
         <tr>
           <td>FILE</td>
           <td>
-            Insert the content of a binary file in a blob.
+            Insert the content of a binary file in a blob.  The path may contains spaces.
             <br/>
             <br/>
             Example:
@@ -109,7 +109,7 @@
             <source><![CDATA[
 <!DOCTYPE dataset SYSTEM "my-dataset.dtd">
 <dataset>
-    <TABLE_WITHBLOB COL0="[FILE /path/to/file/to/download]Following text here is being ignored."
+    <TABLE_WITHBLOB COL0="[FILE]/path/to file to download"
                     COL1="row 0 col 1"
                     COL2="row 0 col 2"/>
 </dataset>]]></source>
@@ -126,7 +126,7 @@
             <source><![CDATA[
 <!DOCTYPE dataset SYSTEM "my-dataset.dtd">
 <dataset>
-    <TABLE_WITHBLOB COL0="[URL http://path/to/url]Following text here is being ignored."
+    <TABLE_WITHBLOB COL0="[URL]http://url%20here"
                     COL1="row 0 col 1"
                     COL2="row 0 col 2"/>
 </dataset>]]></source>
