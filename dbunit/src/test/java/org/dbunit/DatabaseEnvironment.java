@@ -206,9 +206,3 @@ public class DatabaseEnvironment
     }
 
 }
-
-
-
-
-
-

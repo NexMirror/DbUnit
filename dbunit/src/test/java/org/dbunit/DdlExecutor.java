@@ -21,17 +21,21 @@
 package org.dbunit;
 
 import org.dbunit.testutil.TestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.StringTokenizer;
 
 /**
- * Test Helper class for Executing DDL
+ * Test Helper class for Executing DDL.
  *
  * @author Andrew Landsverk
  * @version $Revision$
@@ -39,21 +43,25 @@ import java.util.StringTokenizer;
  */
 public final class DdlExecutor
 {
+    private static final Logger LOG =
+            LoggerFactory.getLogger(DdlExecutor.class);
+
     private DdlExecutor()
     {
         // no instances
     }
 
     /**
-     * Execute DDL from the file against, dispatches to executeDdlFile
+     * Execute DDL from the file (by name) against the given {@link Connection},
+     * dispatches to executeDdlFile.
      * 
      * @param ddlFileName
-     *            the name of the DDL file to execute
+     *            The name of the DDL file to execute.
      * @param connection
-     *            the connection to execute the DDL against
+     *            The {@link Connection} to execute the DDL against.
      * @param multiLineSupport
-     *            if this DataSource supports passing in all the lines at once
-     *            or if it needs to separate on ;
+     *            If this DataSource supports passing in all the lines at once
+     *            or if it needs to separate on ';'.
      * @throws Exception
      */
     public static void execute(final String ddlFileName,
@@ -65,13 +73,13 @@ public final class DdlExecutor
     }
 
     /**
-     * Executes DDL from the file against the given Connection. Retrieves the
-     * multiLineSupport parameter from the profile.
+     * Executes DDL from the {@link File} against the given {@link Connection}.
+     * Retrieves the multiLineSupport parameter from the profile.
      * 
      * @param ddlFile
-     *            the File object of the DDL file to execute
+     *            The {@link File} object of the DDL file to execute.
      * @param connection
-     *            the connection to execute the DDL against
+     *            The {@link Connection} to execute the DDL against.
      * @throws Exception
      */
     public static void executeDdlFile(final File ddlFile,
@@ -79,40 +87,30 @@ public final class DdlExecutor
     {
         final boolean multiLineSupport = DatabaseEnvironment.getInstance()
                 .getProfile().getProfileMultilineSupport();
+
+        LOG.debug("Executing DDL from file - {}, multiLineSupport={}", ddlFile,
+                multiLineSupport);
+
         executeDdlFile(ddlFile, connection, multiLineSupport);
     }
 
     /**
-     * Execute DDL from the file against the given Connection
+     * Execute DDL from the {@link File} against the given {@link Connection}.
      * 
      * @param ddlFile
-     *            the File object of the DDL file to execute
+     *            The {@link File} object of the DDL file to execute.
      * @param connection
-     *            the connection to execute the DDL against
+     *            The {@link Connection} to execute the DDL against.
      * @param multiLineSupport
-     *            if this DataSource supports passing in all the lines at once
-     *            or if it needs to separate on ;
+     *            If this DataSource supports passing in all the lines at once
+     *            or if it needs to separate on ';'.
      * @throws Exception
      */
     public static void executeDdlFile(final File ddlFile,
             final Connection connection, final boolean multiLineSupport)
             throws Exception
     {
-        final BufferedReader sqlReader =
-                new BufferedReader(new FileReader(ddlFile));
-        final StringBuilder sqlBuffer = new StringBuilder();
-        while (sqlReader.ready())
-        {
-            String line = sqlReader.readLine();
-            if (!line.startsWith("-"))
-            {
-                sqlBuffer.append(line);
-            }
-        }
-
-        sqlReader.close();
-        
-        final String sql = sqlBuffer.toString();
+        final String sql = readSqlFromFile(ddlFile);
 
         if (!multiLineSupport)
         {
@@ -133,12 +131,13 @@ public final class DdlExecutor
     }
 
     /**
-     * Execute an un-prepared SQL statement against the given connection.
+     * Execute an un-prepared SQL statement against the given
+     * {@link Connection}.
      *
      * @param connection
-     *            the Connection to execute against
+     *            The {@link Connection} to execute against
      * @param sql
-     *            the SQL string to execute
+     *            The SQL {@link String} to execute
      * @throws SQLException
      */
     public static void executeSql(final Connection connection, final String sql)
@@ -147,11 +146,33 @@ public final class DdlExecutor
         final Statement statement = connection.createStatement();
         try
         {
+            LOG.trace("Executing SQL = {}", sql);
             statement.execute(sql);
         } finally
         {
             statement.close();
         }
+    }
+
+    private static String readSqlFromFile(final File ddlFile)
+            throws FileNotFoundException, IOException
+    {
+        final BufferedReader sqlReader =
+                new BufferedReader(new FileReader(ddlFile));
+        final StringBuilder sqlBuffer = new StringBuilder();
+        while (sqlReader.ready())
+        {
+            String line = sqlReader.readLine();
+            if (!line.startsWith("-"))
+            {
+                sqlBuffer.append(line);
+            }
+        }
+
+        sqlReader.close();
+
+        final String sql = sqlBuffer.toString();
+        return sql;
     }
 
 }

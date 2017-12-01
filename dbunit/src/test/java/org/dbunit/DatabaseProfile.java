@@ -103,13 +103,13 @@ public class DatabaseProfile
         	return EMPTY_ARRAY;
         }
         
-        List stringList = new ArrayList();
+        List<String> stringList = new ArrayList<String>();
         StringTokenizer tokenizer = new StringTokenizer(property, ",");
         while(tokenizer.hasMoreTokens())
         {
             stringList.add(tokenizer.nextToken().trim());
         }
-        return (String[])stringList.toArray(new String[stringList.size()]);
+        return stringList.toArray(new String[stringList.size()]);
     }
 
 }

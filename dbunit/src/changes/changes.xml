@@ -23,6 +23,7 @@
         Add PostgreSQL OID data type.
         <dueto name="ibic"/>
       </action>
+      <action dev="quantas" type="fix" issue="407">Update DatabaseEnvironment to execute DDL for all database platforms</action>
     </release>
     <release version="2.5.4" date="Aug 20, 2017" description="Doc update, MSSQL IdentityInsertOperation commits, streamed export, blobs in datasets">
       <action dev="jeffjensen" type="update">DefaultPrepAndExpectedTestCase: Don't verify table data when test execution has errors.</action>
