@@ -22,16 +22,12 @@
 package org.dbunit;
 
 import org.dbunit.operation.DatabaseOperation;
-import org.dbunit.testutil.TestUtils;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * @author Manuel Laflamme
@@ -46,42 +42,6 @@ public class H2Environment extends DatabaseEnvironment
     public H2Environment(DatabaseProfile profile) throws Exception
     {
         super(profile);
-
-        // Creates required tables into the hypersonic in-memory database
-        File ddlFile =  TestUtils.getFile("sql/h2.sql");
-        Connection connection = getConnection().getConnection();
-
-        executeDdlFile(ddlFile, connection);
-
-    }
-
-    public static void executeDdlFile(File ddlFile, Connection connection) throws Exception
-    {
-        BufferedReader sqlReader = new BufferedReader(new FileReader(ddlFile));
-        StringBuffer sqlBuffer = new StringBuffer();
-        while (sqlReader.ready())
-        {
-            String line = sqlReader.readLine();
-            if (!line.startsWith("-"))
-            {
-                sqlBuffer.append(line);
-            }
-        }
-
-        String sql = sqlBuffer.toString();
-        executeSql( connection, sql );
-    }
-
-    public static void executeSql( Connection connection, String sql ) throws SQLException {
-        Statement statement = connection.createStatement();
-        try
-        {
-            statement.execute(sql);
-        }
-        finally
-        {
-            statement.close();
-        }
     }
 
     public static Connection createJdbcConnection(String databaseName) throws Exception
@@ -97,13 +57,14 @@ public class H2Environment extends DatabaseEnvironment
                 username, password);
     }
 
+    @Override
     public void closeConnection() throws Exception
     {
         DatabaseOperation.DELETE_ALL.execute(getConnection(), getInitDataSet());
     }
 
     public static void shutdown(Connection connection) throws SQLException {
-        executeSql( connection, "SHUTDOWN IMMEDIATELY" );      
+        DdlExecutor.executeSql( connection, "SHUTDOWN IMMEDIATELY" );
     }
 
     public static void deleteFiles(final String filename) {

@@ -20,13 +20,13 @@
  */
 package org.dbunit.database.search;
 
-import java.io.File;
 import java.sql.Connection;
 import java.util.Set;
 
 import junit.framework.TestCase;
 import junitx.framework.ArrayAssert;
 
+import org.dbunit.DdlExecutor;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 
@@ -56,7 +56,7 @@ public abstract class AbstractMetaDataBasedSearchCallbackTestCase extends TestCa
    
    protected void setUp() throws Exception {
      this.jdbcConnection = HypersonicEnvironment.createJdbcConnection("mem:tempdb");
-     HypersonicEnvironment.executeDdlFile(
+     DdlExecutor.executeDdlFile(
          TestUtils.getFile("sql/" + this.sqlFile),
          this.jdbcConnection
      );

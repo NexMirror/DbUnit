@@ -1,6 +1,5 @@
 package org.dbunit;
 
-import java.io.File;
 import java.sql.Connection;
 import java.util.Set;
 
@@ -73,7 +72,7 @@ public abstract class AbstractHSQLTestCase extends TestCase {
     super.setUp();
 
     this.jdbcConnection = HypersonicEnvironment.createJdbcConnection("mem:tempdb");
-    HypersonicEnvironment.executeDdlFile(TestUtils.getFile(
+    DdlExecutor.executeDdlFile(TestUtils.getFile(
         "sql/" + sqlFile), jdbcConnection);
     this.connection = new DatabaseConnection(jdbcConnection);
     DatabaseConfig config = connection.getConfig();

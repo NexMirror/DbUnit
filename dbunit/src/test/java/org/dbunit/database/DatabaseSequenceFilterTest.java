@@ -23,6 +23,7 @@ package org.dbunit.database;
 import java.sql.Connection;
 import java.util.Arrays;
 
+import org.dbunit.DdlExecutor;
 import org.dbunit.H2Environment;
 import org.dbunit.HypersonicEnvironment;
 import org.dbunit.dataset.FilteredDataSet;
@@ -72,7 +73,7 @@ public class DatabaseSequenceFilterTest extends TestCase
         final String[] expectedFiltered =
                 {"D", "A", "F", "C", "G", "E", "H", "B",};
 
-        HypersonicEnvironment.executeDdlFile(
+        DdlExecutor.executeDdlFile(
                 TestUtils.getFile("sql/hypersonic_fk.sql"), _jdbcConnection);
         final IDatabaseConnection connection =
                 new DatabaseConnection(_jdbcConnection);
@@ -94,7 +95,7 @@ public class DatabaseSequenceFilterTest extends TestCase
     {
         final String[] expectedNoFilter = {"A", "B", "C", "D", "E",};
 
-        HypersonicEnvironment.executeDdlFile(
+        DdlExecutor.executeDdlFile(
                 TestUtils.getFile("sql/hypersonic_cyclic.sql"),
                 _jdbcConnection);
         final IDatabaseConnection connection =
@@ -129,7 +130,7 @@ public class DatabaseSequenceFilterTest extends TestCase
         final String[] expectedFiltered =
                 {"MixedCaseTable", "UPPER_CASE_TABLE"};
 
-        HypersonicEnvironment.executeDdlFile(
+        DdlExecutor.executeDdlFile(
                 TestUtils.getFile("sql/hypersonic_case_sensitive_test.sql"),
                 _jdbcConnection);
         final IDatabaseConnection connection =
@@ -162,7 +163,7 @@ public class DatabaseSequenceFilterTest extends TestCase
     {
         final Connection jdbcConnection =
                 H2Environment.createJdbcConnection("test");
-        H2Environment.executeDdlFile(
+        DdlExecutor.executeDdlFile(
                 TestUtils.getFile("sql/h2_multischema_fk_test.sql"),
                 jdbcConnection);
         final IDatabaseConnection connection =

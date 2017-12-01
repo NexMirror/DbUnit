@@ -39,6 +39,8 @@ public class DatabaseProfile
     private static final String PROFILE_USER = "dbunit.profile.user";
     private static final String PROFILE_PASSWORD = "dbunit.profile.password";
     private static final String PROFILE_UNSUPPORTED_FEATURES = "dbunit.profile.unsupportedFeatures";
+    private static final String PROFILE_DDL = "dbunit.profile.ddl";
+    private static final String PROFILE_MULTILINE_SUPPORT = "dbunit.profile.multiLineSupport";
 
     private final Properties _properties;
 
@@ -82,6 +84,16 @@ public class DatabaseProfile
         return _properties.getProperty(PROFILE_PASSWORD);
     }
 
+    public String getProfileDdl()
+    {
+        return _properties.getProperty(PROFILE_DDL);
+    }
+
+    public boolean getProfileMultilineSupport()
+    {
+        return Boolean.valueOf(_properties.getProperty(PROFILE_MULTILINE_SUPPORT));
+    }
+
     public String[] getUnsupportedFeatures()
     {
         String property = _properties.getProperty(PROFILE_UNSUPPORTED_FEATURES);
@@ -101,8 +113,3 @@ public class DatabaseProfile
     }
 
 }
-
-
-
-
-

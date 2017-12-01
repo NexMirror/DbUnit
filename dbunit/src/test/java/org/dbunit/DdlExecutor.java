@@ -1,0 +1,157 @@
+/*
+ *
+ * The DbUnit Database Testing Framework
+ * Copyright (C)2002-2017, DbUnit.org
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+package org.dbunit;
+
+import org.dbunit.testutil.TestUtils;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.StringTokenizer;
+
+/**
+ * Test Helper class for Executing DDL
+ *
+ * @author Andrew Landsverk
+ * @version $Revision$
+ * @since DbUnit 2.5.5
+ */
+public final class DdlExecutor
+{
+    private DdlExecutor()
+    {
+        // no instances
+    }
+
+    /**
+     * Execute DDL from the file against, dispatches to executeDdlFile
+     * 
+     * @param ddlFileName
+     *            the name of the DDL file to execute
+     * @param connection
+     *            the connection to execute the DDL against
+     * @param multiLineSupport
+     *            if this DataSource supports passing in all the lines at once
+     *            or if it needs to separate on ;
+     * @throws Exception
+     */
+    public static void execute(final String ddlFileName,
+            final Connection connection, final boolean multiLineSupport)
+            throws Exception
+    {
+        final File ddlFile = TestUtils.getFile(ddlFileName);
+        executeDdlFile(ddlFile, connection, multiLineSupport);
+    }
+
+    /**
+     * Executes DDL from the file against the given Connection. Retrieves the
+     * multiLineSupport parameter from the profile.
+     * 
+     * @param ddlFile
+     *            the File object of the DDL file to execute
+     * @param connection
+     *            the connection to execute the DDL against
+     * @throws Exception
+     */
+    public static void executeDdlFile(final File ddlFile,
+            final Connection connection) throws Exception
+    {
+        final boolean multiLineSupport = DatabaseEnvironment.getInstance()
+                .getProfile().getProfileMultilineSupport();
+        executeDdlFile(ddlFile, connection, multiLineSupport);
+    }
+
+    /**
+     * Execute DDL from the file against the given Connection
+     * 
+     * @param ddlFile
+     *            the File object of the DDL file to execute
+     * @param connection
+     *            the connection to execute the DDL against
+     * @param multiLineSupport
+     *            if this DataSource supports passing in all the lines at once
+     *            or if it needs to separate on ;
+     * @throws Exception
+     */
+    public static void executeDdlFile(final File ddlFile,
+            final Connection connection, final boolean multiLineSupport)
+            throws Exception
+    {
+        final BufferedReader sqlReader =
+                new BufferedReader(new FileReader(ddlFile));
+        final StringBuilder sqlBuffer = new StringBuilder();
+        while (sqlReader.ready())
+        {
+            String line = sqlReader.readLine();
+            if (!line.startsWith("-"))
+            {
+                sqlBuffer.append(line);
+            }
+        }
+
+        sqlReader.close();
+        
+        final String sql = sqlBuffer.toString();
+
+        if (!multiLineSupport)
+        {
+            StringTokenizer tokenizer = new StringTokenizer(sql, ";");
+            while (tokenizer.hasMoreTokens())
+            {
+                String token = tokenizer.nextToken();
+                token = token.trim();
+                if (token.length() > 0)
+                {
+                    executeSql(connection, token);
+                }
+            }
+        } else
+        {
+            executeSql(connection, sql);
+        }
+    }
+
+    /**
+     * Execute an un-prepared SQL statement against the given connection.
+     *
+     * @param connection
+     *            the Connection to execute against
+     * @param sql
+     *            the SQL string to execute
+     * @throws SQLException
+     */
+    public static void executeSql(final Connection connection, final String sql)
+            throws SQLException
+    {
+        final Statement statement = connection.createStatement();
+        try
+        {
+            statement.execute(sql);
+        } finally
+        {
+            statement.close();
+        }
+    }
+
+}

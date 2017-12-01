@@ -28,6 +28,7 @@ import java.util.TreeSet;
 import junit.framework.TestCase;
 import junitx.framework.ArrayAssert;
 
+import org.dbunit.DdlExecutor;
 import org.dbunit.HypersonicEnvironment;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -58,7 +59,7 @@ public class TablesDependencyHelperTest extends TestCase {
         this.jdbcConnection = HypersonicEnvironment.createJdbcConnection("mem:tempdb");
         for (int i = 0; i < sqlFileList.length; i++) {
         	File sql = TestUtils.getFile("sql/" + sqlFileList[i]);
-            HypersonicEnvironment.executeDdlFile(sql, this.jdbcConnection);
+            DdlExecutor.executeDdlFile(sql, this.jdbcConnection);
 		}
         this.connection = new DatabaseConnection(jdbcConnection);
     }

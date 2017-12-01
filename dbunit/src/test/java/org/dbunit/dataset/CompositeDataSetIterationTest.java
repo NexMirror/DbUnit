@@ -21,25 +21,20 @@
 
 package org.dbunit.dataset;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.sql.Connection;
-
 import junit.framework.TestCase;
-
+import org.dbunit.DdlExecutor;
 import org.dbunit.HypersonicEnvironment;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
-import org.dbunit.dataset.Column;
-import org.dbunit.dataset.CompositeDataSet;
-import org.dbunit.dataset.DefaultDataSet;
-import org.dbunit.dataset.DefaultTable;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.testutil.TestUtils;
+
+import java.io.FileOutputStream;
+import java.sql.Connection;
 
 
 /**
@@ -57,7 +52,7 @@ public class CompositeDataSetIterationTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		this.jdbcConnection = HypersonicEnvironment.createJdbcConnection("mem:tempdb");
-		HypersonicEnvironment.executeDdlFile(TestUtils.getFile("sql/" + sqlFile), jdbcConnection);
+		DdlExecutor.executeDdlFile(TestUtils.getFile("sql/" + sqlFile), jdbcConnection);
 		this.connection = new DatabaseConnection(jdbcConnection);
 		DatabaseConfig config = connection.getConfig();
 	    config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY,

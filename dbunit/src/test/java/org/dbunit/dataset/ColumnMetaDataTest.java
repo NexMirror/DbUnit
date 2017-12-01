@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Types;
 
 import org.dbunit.AbstractDatabaseIT;
+import org.dbunit.DdlExecutor;
 import org.dbunit.HypersonicEnvironment;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
@@ -26,7 +27,7 @@ public class ColumnMetaDataTest extends AbstractDatabaseIT
     {
         Connection jdbcConnection =
                 HypersonicEnvironment.createJdbcConnection("tempdb");
-        HypersonicEnvironment.executeDdlFile(
+        DdlExecutor.executeDdlFile(
                 TestUtils.getFile("sql/hypersonic_dataset_column_metadata.sql"),
                 jdbcConnection);
         IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);

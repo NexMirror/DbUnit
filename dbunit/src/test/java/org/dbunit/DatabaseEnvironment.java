@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.concurrent.Callable;
 
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
@@ -91,13 +92,26 @@ public class DatabaseEnvironment
         return INSTANCE;
     }
 
-    public DatabaseEnvironment(DatabaseProfile profile) throws Exception
+    public DatabaseEnvironment(DatabaseProfile profile,
+                               Callable<Void> preDdlFunction) throws Exception
     {
+        if (null != preDdlFunction) {
+            preDdlFunction.call();
+        }
+
         _profile = profile;
         File file = TestUtils.getFile("xml/dataSetTest.xml");
         _dataSet = new XmlDataSet(new FileReader(file));
         _databaseTester = new JdbcDatabaseTester( _profile.getDriverClass(),
-            _profile.getConnectionUrl(), _profile.getUser(), _profile.getPassword(), _profile.getSchema() );
+                _profile.getConnectionUrl(), _profile.getUser(), _profile.getPassword(), _profile.getSchema() );
+
+        DdlExecutor.execute("sql/" + _profile.getProfileDdl(), getConnection().getConnection(),
+                profile.getProfileMultilineSupport());
+    }
+
+    public DatabaseEnvironment(DatabaseProfile profile) throws Exception
+    {
+        this(profile, null);
     }
 
     public IDatabaseConnection getConnection() throws Exception

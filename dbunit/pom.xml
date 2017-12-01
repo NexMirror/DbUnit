@@ -59,7 +59,6 @@
     <releasePluginVersion>2.5.3</releasePluginVersion>
     <resourcesPluginVersion>3.0.1</resourcesPluginVersion>
     <sitePluginVersion>3.6</sitePluginVersion>
-    <sqlPluginVersion>1.5</sqlPluginVersion>
     <surefirePluginVersion>2.19.1</surefirePluginVersion>
 
     <!-- Framework versions -->
@@ -555,6 +554,14 @@
                 <name>dbunit.profile.unsupportedFeatures</name>
                 <value>${dbunit.profile.unsupportedFeatures}</value>
               </property>
+              <property>
+                <name>dbunit.profile.ddl</name>
+                <value>${dbunit.profile.ddl}</value>
+              </property>
+              <property>
+                <name>dbunit.profile.multiLineSupport</name>
+                <value>${dbunit.profile.multiLineSupport}</value>
+               </property>
             </systemProperties>
           </configuration>
           <executions>
@@ -623,64 +630,6 @@
           <version>${resourcesPluginVersion}</version>
         </plugin>
         <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>sql-maven-plugin</artifactId>
-          <version>${sqlPluginVersion}</version>
-          <configuration>
-            <driver>${dbunit.profile.driverClass}</driver>
-            <url>${dbunit.profile.url}</url>
-            <username>${dbunit.profile.user}</username>
-            <password>${dbunit.profile.password}</password>
-          </configuration>
-          <dependencies>
-            <dependency>
-              <groupId>hsqldb</groupId>
-              <artifactId>hsqldb</artifactId>
-              <version>${hsqldbDriverVersion}</version>
-            </dependency>
-            <dependency>
-              <groupId>com.oracle</groupId>
-              <artifactId>ojdbc14</artifactId>
-              <version>${oracle10DriverVersion}</version>
-            </dependency>
-            <dependency>
-              <groupId>postgresql</groupId>
-              <artifactId>postgresql</artifactId>
-              <version>${postgresqlDriverVersion}</version>
-            </dependency>
-            <dependency>
-              <groupId>mysql</groupId>
-              <artifactId>mysql-connector-java</artifactId>
-              <version>${mysqlDriverVersion}</version>
-            </dependency>
-            <dependency>
-              <groupId>org.apache.derby</groupId>
-              <artifactId>derby</artifactId>
-              <version>${derbyDriverVersion}</version>
-            </dependency>
-            <dependency>
-              <groupId>com.h2database</groupId>
-              <artifactId>h2</artifactId>
-              <version>${h2DriverVersion}</version>
-            </dependency>
-          </dependencies>
-          <executions>
-            <execution>
-              <id>sql-ddl</id>
-              <phase>pre-integration-test</phase>
-              <goals>
-                <goal>execute</goal>
-              </goals>
-              <configuration>
-                <srcFiles>
-                  <srcFile>src/test/resources/sql/${dbunit.profile.ddl}</srcFile>
-                </srcFiles>
-                <onError>continue</onError>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>${sitePluginVersion}</version>
@@ -731,6 +680,14 @@
               <property>
                 <name>dbunit.profile.unsupportedFeatures</name>
                 <value>${dbunit.profile.unsupportedFeatures}</value>
+              </property>
+              <property>
+                <name>dbunit.profile.ddl</name>
+                <value>${dbunit.profile.ddl}</value>
+              </property>
+              <property>
+                <name>dbunit.profile.multiLineSupport</name>
+                <value>${dbunit.profile.multiLineSupport}</value>
               </property>
             </systemProperties>
           </configuration>
@@ -920,7 +877,8 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
         <dbunit.profile.user>APP</dbunit.profile.user>
         <dbunit.profile.password>APP</dbunit.profile.password>
         <dbunit.profile.unsupportedFeatures>VARBINARY,BLOB,CLOB,TRANSACTION,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
-        <dbunit.profile.ddl>empty.sql</dbunit.profile.ddl> <!-- DDL in DerbyEnvironment -->
+        <dbunit.profile.ddl>derby.sql</dbunit.profile.ddl>
+        <dbunit.profile.multiLineSupport>false</dbunit.profile.multiLineSupport>
       </properties>
       <dependencies>
         <dependency>
@@ -950,7 +908,8 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
         <dbunit.profile.user>sa</dbunit.profile.user>
         <dbunit.profile.password />
         <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
-        <dbunit.profile.ddl>empty.sql</dbunit.profile.ddl> <!-- DDL in HypersonicEnvironment -->
+        <dbunit.profile.ddl>hypersonic.sql</dbunit.profile.ddl>
+        <dbunit.profile.multiLineSupport>true</dbunit.profile.multiLineSupport>
       </properties>
       <dependencies>
         <dependency>
@@ -971,7 +930,8 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
         <dbunit.profile.user>sa</dbunit.profile.user>
         <dbunit.profile.password />
         <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
-        <dbunit.profile.ddl>empty.sql</dbunit.profile.ddl> <!-- DDL in H2Environment -->
+        <dbunit.profile.ddl>h2.sql</dbunit.profile.ddl>
+        <dbunit.profile.multiLineSupport>true</dbunit.profile.multiLineSupport>
       </properties>
       <dependencies>
         <dependency>
@@ -1014,6 +974,7 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
         <dbunit.profile.password>dbunit</dbunit.profile.password>
         <dbunit.profile.unsupportedFeatures>INSERT_IDENTITY,SCROLLABLE_RESULTSET</dbunit.profile.unsupportedFeatures>
         <dbunit.profile.ddl>oracle.sql</dbunit.profile.ddl>
+        <dbunit.profile.multiLineSupport>false</dbunit.profile.multiLineSupport>
       </properties>
       <dependencies>
         <dependency>
@@ -1036,6 +997,7 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
         <dbunit.profile.password>dbunit</dbunit.profile.password>
         <dbunit.profile.unsupportedFeatures>INSERT_IDENTITY,SCROLLABLE_RESULTSET</dbunit.profile.unsupportedFeatures>
         <dbunit.profile.ddl>oracle.sql</dbunit.profile.ddl>
+        <dbunit.profile.multiLineSupport>false</dbunit.profile.multiLineSupport>
       </properties>
       <dependencies>
         <dependency>
@@ -1054,10 +1016,11 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
         <dbunit.profile.driverClass>oracle.jdbc.OracleDriver</dbunit.profile.driverClass>
         <dbunit.profile.url>jdbc:oracle:thin:@localhost:1521:XE</dbunit.profile.url>
         <dbunit.profile.schema>DBUNIT</dbunit.profile.schema>
-        <dbunit.profile.user>dbunit</dbunit.profile.user>
-        <dbunit.profile.password>dbunit</dbunit.profile.password>
+        <dbunit.profile.user>system</dbunit.profile.user>
+        <dbunit.profile.password>oracle</dbunit.profile.password>
         <dbunit.profile.unsupportedFeatures>INSERT_IDENTITY,SCROLLABLE_RESULTSET</dbunit.profile.unsupportedFeatures>
         <dbunit.profile.ddl>oracle.sql</dbunit.profile.ddl>
+        <dbunit.profile.multiLineSupport>false</dbunit.profile.multiLineSupport>
       </properties>
       <dependencies>
         <dependency>
@@ -1080,6 +1043,7 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
         <dbunit.profile.password>dbunit</dbunit.profile.password>
         <dbunit.profile.unsupportedFeatures>INSERT_IDENTITY,SCROLLABLE_RESULTSET</dbunit.profile.unsupportedFeatures>
         <dbunit.profile.ddl>oracle.sql</dbunit.profile.ddl>
+        <dbunit.profile.multiLineSupport>false</dbunit.profile.multiLineSupport>
       </properties>
       <dependencies>
         <dependency>
@@ -1101,6 +1065,7 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
         <dbunit.profile.password>dbunit</dbunit.profile.password>
         <dbunit.profile.unsupportedFeatures>INSERT_IDENTITY,CLOB,BLOB,SCROLLABLE_RESULTSET,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
         <dbunit.profile.ddl>postgresql.sql</dbunit.profile.ddl>
+        <dbunit.profile.multiLineSupport>false</dbunit.profile.multiLineSupport>
       </properties>
       <dependencies>
         <dependency>
@@ -1127,6 +1092,7 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
         <dbunit.profile.password>dbunit</dbunit.profile.password>
         <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
         <dbunit.profile.ddl>mysql.sql</dbunit.profile.ddl>
+        <dbunit.profile.multiLineSupport>false</dbunit.profile.multiLineSupport>
       </properties>
       <dependencies>
         <dependency>
@@ -1153,6 +1119,7 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
         <dbunit.profile.password>dbunit</dbunit.profile.password>
         <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
         <dbunit.profile.ddl>mssql.sql</dbunit.profile.ddl>
+        <dbunit.profile.multiLineSupport>false</dbunit.profile.multiLineSupport>
       </properties>
       <dependencies>
         <dependency>
@@ -1179,6 +1146,7 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
         <dbunit.profile.password>TODO</dbunit.profile.password>
         <dbunit.profile.unsupportedFeatures>TODO</dbunit.profile.unsupportedFeatures>
         <dbunit.profile.ddl>db2xml.sql</dbunit.profile.ddl>
+        <dbunit.profile.multiLineSupport>false</dbunit.profile.multiLineSupport>
       </properties>
       <!-- JH_TODO: db2 dependencies -->
       <dependencies>

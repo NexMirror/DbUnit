@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.dbunit.AbstractDatabaseIT;
+import org.dbunit.DdlExecutor;
 import org.dbunit.HypersonicEnvironment;
 import org.dbunit.dataset.Column;
 import org.dbunit.dataset.Columns;
@@ -41,7 +42,7 @@ public class ResultSetTableMetaDataIT extends AbstractDatabaseIT
     {
         Connection jdbcConnection =
                 HypersonicEnvironment.createJdbcConnection("tempdb");
-        HypersonicEnvironment.executeDdlFile(
+        DdlExecutor.executeDdlFile(
                 TestUtils.getFile("sql/hypersonic_dataset_pattern_test.sql"),
                 jdbcConnection);
         IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
@@ -86,7 +87,7 @@ public class ResultSetTableMetaDataIT extends AbstractDatabaseIT
     {
         Connection jdbcConnection =
                 HypersonicEnvironment.createJdbcConnection("tempdb");
-        HypersonicEnvironment.executeDdlFile(
+        DdlExecutor.executeDdlFile(
                 TestUtils.getFile(
                         "sql/hypersonic_dataset_metadata_coherence.sql"),
                 jdbcConnection);

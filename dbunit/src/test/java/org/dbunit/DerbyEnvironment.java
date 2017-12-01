@@ -21,18 +21,10 @@
 
 package org.dbunit;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.StringTokenizer;
-
-import org.dbunit.testutil.TestUtils;
 import org.dbunit.util.FileHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.util.concurrent.Callable;
 
 /**
  * @author Manuel Laflamme
@@ -41,85 +33,20 @@ import org.slf4j.LoggerFactory;
  */
 public class DerbyEnvironment extends DatabaseEnvironment
 {
-	private static Logger logger = LoggerFactory.getLogger(DerbyEnvironment.class);
-	
-	
+
 	public DerbyEnvironment(DatabaseProfile profile) throws Exception
 	{
-		super(profile);
+		super(profile, new Callable<Void>() {
+            public Void call() throws Exception {
+                // Delete the old database if exists before creating a new one in "getConnection()"
+                // The name of the db is specified in the profile.properties and is created on the fly
+                // when the connection is retrieved the first time
+                FileHelper.deleteDirectory(new File("./target/derby_db"));
 
-		// Delete the old database if exists before creating a new one in "getConnection()"
-		// The name of the db is specified in the profile.properties and is created on the fly
-		// when the connection is retrieved the first time
-		FileHelper.deleteDirectory(new File("./target/derby_db"));
-
-		File ddlFile = TestUtils.getFile("sql/derby.sql");
-		Connection connection = getConnection().getConnection();
-
-		executeDdlFile(ddlFile, connection);
+                return null;
+            }
+        });
 	}
-
-	public static void executeDdlFile(File ddlFile, Connection connection) throws Exception
-	{
-		BufferedReader sqlReader = new BufferedReader(new FileReader(ddlFile));
-		StringBuffer sqlBuffer = new StringBuffer();
-		while (sqlReader.ready())
-		{
-			String line = sqlReader.readLine();
-			if (!line.startsWith("-"))
-			{
-				sqlBuffer.append(line);
-			}
-		}
-
-		String sql = sqlBuffer.toString();
-		StringTokenizer tokenizer = new StringTokenizer(sql, ";");
-		while (tokenizer.hasMoreTokens()) {
-			String token = tokenizer.nextToken();
-			token = token.trim();
-			if (token.length() > 0) {
-				executeSql( connection, token );
-			}
-		}
-		logger.info("Executed file " + ddlFile);
-	}
-
-	public static void executeSql( Connection connection, String sql ) throws SQLException {
-		Statement statement = connection.createStatement();
-		try
-		{
-			statement.execute(sql);
-		}
-		finally
-		{
-			statement.close();
-		}
-	}
-
-//  public static void shutdown(Connection connection) throws SQLException {
-//    executeSql( connection, "SHUTDOWN IMMEDIATELY" );      
-//  }
-
-//  public static void deleteFiles(final String filename) {
-//    File[] files = new File(".").listFiles(new FilenameFilter()
-//        {
-//            public boolean accept(File dir, String name)
-//            {
-//                if (name.indexOf(filename) != -1)
-//                {
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
-//
-//for (int i = 0; i < files.length; i++)
-//{
-//    File file = files[i];
-//    file.delete();
-//}
-//  }
-  
 }
 
 

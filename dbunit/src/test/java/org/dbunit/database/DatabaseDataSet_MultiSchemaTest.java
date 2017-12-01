@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 import java.sql.Connection;
 import java.util.Arrays;
 
+import org.dbunit.DdlExecutor;
 import org.dbunit.H2Environment;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
@@ -63,7 +64,7 @@ public class DatabaseDataSet_MultiSchemaTest
     {
         // create database and schemas for tests
         connectionDdl = H2Environment.createJdbcConnection(DATABASE);
-        H2Environment.executeDdlFile(TestUtils.getFile(SETUP_DDL_FILE),
+        DdlExecutor.executeDdlFile(TestUtils.getFile(SETUP_DDL_FILE),
                 connectionDdl);
     }
 
