@@ -106,7 +106,7 @@ public class DatabaseEnvironment
                 _profile.getConnectionUrl(), _profile.getUser(), _profile.getPassword(), _profile.getSchema() );
 
         DdlExecutor.execute("sql/" + _profile.getProfileDdl(), getConnection().getConnection(),
-                profile.getProfileMultilineSupport());
+                profile.getProfileMultilineSupport(), true);
     }
 
     public DatabaseEnvironment(DatabaseProfile profile) throws Exception
