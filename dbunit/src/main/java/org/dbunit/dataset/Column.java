@@ -130,16 +130,6 @@ public class Column
         _remarks = remarks;
         _autoIncrement = autoIncrement;
     }
-    
-    public Column(ColumnMetaData metadata, DataType dataType) {
-    	_columnName = metadata.getColumnName(); 
-		_dataType = dataType;
-		_sqlTypeName = metadata.getSqlTypeName();
-		_nullable = Column.nullableValue(metadata.getNullable());
-		_defaultValue = metadata.getColumnDefault();
-		_remarks = metadata.getRemarks();
-		_autoIncrement = Column.AutoIncrement.autoIncrementValue(metadata.getAutoincrement());
-    }
 
     public boolean hasDefaultValue()
     {
@@ -327,10 +317,6 @@ public class Column
         {
             return _name;
         }
-        
-        public boolean equals(Object other) {
-        	return (other instanceof Nullable && ((Nullable) other).toString() == this.toString());
-        }
     }
     
     
@@ -402,10 +388,6 @@ public class Column
         public String toString()
         {
             return "autoIncrement=" + key;
-        }
-        
-        public boolean equals(Object other) {
-        	return (other instanceof AutoIncrement && ((AutoIncrement) other).getKey() == this.key);
         }
     }
 
