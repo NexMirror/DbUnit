@@ -83,6 +83,10 @@ public class DatabaseEnvironment
             {
                 INSTANCE = new H2Environment(profile);
             }
+            else if (profileName.equals("mssql"))
+            {
+                INSTANCE = new MsSqlEnvironment(profile);
+            }
             else
             {
                 INSTANCE = new DatabaseEnvironment(profile);
