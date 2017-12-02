@@ -110,7 +110,7 @@ public final class DdlExecutor
         final boolean multiLineSupport = DatabaseEnvironment.getInstance()
                 .getProfile().getProfileMultilineSupport();
 
-        LOG.debug("Executing DDL from file - {}, multiLineSupport={}", ddlFile,
+        LOG.debug("Executing DDL from file={}, multiLineSupport={}", ddlFile,
                 multiLineSupport);
 
         executeDdlFile(ddlFile, connection, multiLineSupport);
@@ -209,7 +209,7 @@ public final class DdlExecutor
         final Statement statement = connection.createStatement();
         try
         {
-            LOG.debug("Executing SQL = {}", sql);
+            LOG.debug("Executing SQL={}", sql);
             statement.execute(sql);
         } catch (SQLSyntaxErrorException exception)
         {
@@ -217,7 +217,7 @@ public final class DdlExecutor
             {
                 throw exception;
             }
-            LOG.debug("Ignoring error executing DDL - {}",
+            LOG.debug("Ignoring error executing DDL={}",
                     exception.getMessage());
         } finally
         {
