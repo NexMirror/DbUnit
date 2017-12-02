@@ -39,7 +39,7 @@ import java.util.StringTokenizer;
  *
  * @author Andrew Landsverk
  * @version $Revision$
- * @since DbUnit 2.5.5
+ * @since DbUnit 2.6.0
  */
 public final class DdlExecutor
 {

@@ -13,17 +13,16 @@
   </properties>
 
   <body>
-    <release version="2.5.5-SNAPSHOT" date="TBD" description="PostgreSQL OID, POI 3.17, cache column metadata, Java 8 tests, ">
+    <release version="2.6.0-SNAPSHOT" date="TBD" description="PostgreSQL OID, POI 3.17, Java 8 tests, Fixed database integration tests, ">
+      <action dev="quantas" type="fix" issue="407">Fixed all database integration tests to work again</action>
       <action dev="jeffjensen" type="update" issue="195" due-to="jkearns">Update tests to support build running Java 8.</action>
       <action dev="jeffjensen" type="update" issue="200" due-to="deragon">CachedDataSet has redundant code.</action>
       <action dev="jeffjensen" type="update" issue="199" due-to="deragon">FlatDtdDataSet has redundant code.</action>
-      <action dev="jeffjensen" type="update" issue="401" due-to="jkearns">Cache column metadata for significant performance improvement.</action>
       <action dev="jeffjensen" type="update" issue="205" due-to="msymons81">Use Apache POI 3.17.</action>
       <action dev="jeffjensen" type="add" issue="179" due-to="mfrechePgest">
         Add PostgreSQL OID data type.
         <dueto name="ibic"/>
       </action>
-      <action dev="quantas" type="fix" issue="407">Update DatabaseEnvironment to execute DDL for all database platforms</action>
     </release>
     <release version="2.5.4" date="Aug 20, 2017" description="Doc update, MSSQL IdentityInsertOperation commits, streamed export, blobs in datasets">
       <action dev="jeffjensen" type="update">DefaultPrepAndExpectedTestCase: Don't verify table data when test execution has errors.</action>
