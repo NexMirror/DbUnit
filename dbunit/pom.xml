@@ -65,8 +65,8 @@
     <junitVersion>4.12</junitVersion>
     <hamcrestVersion>1.3</hamcrestVersion>
     <logbackVersion>1.1.7</logbackVersion>
-    <slf4jVersion>1.7.21</slf4jVersion>
     <poiVersion>3.17</poiVersion>
+    <slf4jVersion>1.7.21</slf4jVersion>
 
     <!-- Database driver versions -->
     <derbyDriverVersion>10.4.1.3</derbyDriverVersion>
@@ -93,7 +93,7 @@
     <tag>HEAD</tag>
   </scm>
   <issueManagement>
-    <system>SourceForge</system>
+    <system>SourceForge2</system>
     <!-- old: <url>http://sourceforge.net/tracker/?group_id=47439</url> -->
     <url>http://sourceforge.net/p/dbunit/bugs/</url>
     <!-- features; how to have both? <url>http://sourceforge.net/p/dbunit/feature-requests/</url> -->
@@ -829,7 +829,9 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
           </toAddresses>
           <urlDownload>http://dbunit.sourceforge.net/repos.html</urlDownload>
           <issueLinkTemplatePerSystem>
-            <sourceforge><![CDATA[https://sourceforge.net/p/dbunit/bugs/%ISSUE%]]></sourceforge>
+            <sfbugs><![CDATA[https://sourceforge.net/p/dbunit/bugs/%ISSUE%]]></sfbugs>
+            <sffeatures><![CDATA[https://sourceforge.net/p/dbunit/feature-requests/%ISSUE%]]></sffeatures>
+            <sfmerges><![CDATA[https://sourceforge.net/p/dbunit/code.git/merge-requests/%ISSUE%]]></sfmerges>
           </issueLinkTemplatePerSystem>
         </configuration>
         <reportSets>

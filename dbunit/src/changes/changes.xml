@@ -13,58 +13,59 @@
   </properties>
 
   <body>
-    <release version="2.6.0-SNAPSHOT" date="TBD" description="PostgreSQL OID, POI 3.17, Java 8 tests, Fixed database integration tests, ">
-      <action dev="quantas" type="fix" issue="407">Fixed all database integration tests to work again</action>
-      <action dev="jeffjensen" type="update" issue="195" due-to="jkearns">Update tests to support build running Java 8.</action>
-      <action dev="jeffjensen" type="update" issue="200" due-to="deragon">CachedDataSet has redundant code.</action>
-      <action dev="jeffjensen" type="update" issue="199" due-to="deragon">FlatDtdDataSet has redundant code.</action>
-      <action dev="jeffjensen" type="update" issue="205" due-to="msymons81">Use Apache POI 3.17.</action>
-      <action dev="jeffjensen" type="add" issue="179" due-to="mfrechePgest">
+    <release version="2.6.0-SNAPSHOT" date="TBD" description="PostgreSQL OID, POI 3.17, Java 8 tests, database integration tests, changes links, ">
+      <action dev="jeffjensen" type="fix" issue="352" system="sfbugs">Fix changes report tracker links (Bugs, Features) to support both.</action>
+      <action dev="quantas" type="fix" issue="407" system="sfbugs">Fix all database integration tests to work again.</action>
+      <action dev="jeffjensen" type="update" issue="195" system="sffeatures" due-to="jkearns">Update tests to support build running Java 8.</action>
+      <action dev="jeffjensen" type="update" issue="200" system="sffeatures" due-to="deragon">CachedDataSet has redundant code.</action>
+      <action dev="jeffjensen" type="update" issue="199" system="sffeatures" due-to="deragon">FlatDtdDataSet has redundant code.</action>
+      <action dev="jeffjensen" type="update" issue="205" system="sffeatures" due-to="msymons81">Use Apache POI 3.17.</action>
+      <action dev="jeffjensen" type="add" issue="179" system="sffeatures" due-to="mfrechePgest">
         Add PostgreSQL OID data type.
         <dueto name="ibic"/>
       </action>
     </release>
     <release version="2.5.4" date="Aug 20, 2017" description="Doc update, MSSQL IdentityInsertOperation commits, streamed export, blobs in datasets">
       <action dev="jeffjensen" type="update">DefaultPrepAndExpectedTestCase: Don't verify table data when test execution has errors.</action>
-      <action dev="jeffjensen" type="fix" issue="400" due-to="sidikcz">Cannot insert null values via jTDS (regression from 374).</action>
-      <action dev="jeffjensen" type="add" issue="196" due-to="deragon">Blobs are now easier to define in flat XML dataset and CSV files using [text &lt;encoding&gt;], [base64] and [file] cues.  See Data Types doc page.</action>
-      <action dev="jeffjensen" type="update" issue="198" due-to="mureinik">Fix Ohloh to the update Open Hub terminology.</action>
-      <action dev="jeffjensen" type="fix" issue="397" due-to="zdenek-z">Streamed export does not work when it launched from Ant.</action>
-      <action dev="jeffjensen" type="fix" issue="309" due-to="bjornbeskow">MSSQL IdentityInsertOperation.execute erroneously always commits.</action>
-      <action dev="jeffjensen" type="update" issue="395" due-to="opporancisis">Outdated link on Configurable Features and Properties page.</action>
+      <action dev="jeffjensen" type="fix" system="sfbugs" issue="400" due-to="sidikcz">Cannot insert null values via jTDS (regression from 374).</action>
+      <action dev="jeffjensen" type="add" system="sffeatures" issue="196" due-to="deragon">Blobs are now easier to define in flat XML dataset and CSV files using [text &lt;encoding&gt;], [base64] and [file] cues.  See Data Types doc page.</action>
+      <action dev="jeffjensen" type="update" system="sffeatures" issue="198" due-to="mureinik">Fix Ohloh to the update Open Hub terminology.</action>
+      <action dev="jeffjensen" type="fix" system="sfbugs" issue="397" due-to="zdenek-z">Streamed export does not work when it launched from Ant.</action>
+      <action dev="jeffjensen" type="fix" system="sfbugs" issue="309" due-to="bjornbeskow">MSSQL IdentityInsertOperation.execute erroneously always commits.</action>
+      <action dev="jeffjensen" type="update" system="sfbugs" issue="395" due-to="opporancisis">Outdated link on Configurable Features and Properties page.</action>
     </release>
     <release version="2.5.3" date="Aug 21, 2016" description="DefaultPrepAndExpectedTestCase config, TimestampDataType.typeCast(), escape pattern for table name, DefaultPrepAndExpectedTestCase.verifyData() connection, XlsTable timezone, OracleXMLType, 'true' 'false' for numeric fields, XlsDataSetWriter cellstyle caching, ForeignKeyRelationshipEdge.compareTo, new CI, POM cleanup, ReplacementDataSet and DbUnitAssert case sensitive table names, XmlWriter">
-      <action dev="jeffjensen" type="fix" issue="389" due-to="apechinsky">Any characters with code greater than 7f are written to XML attribute value as entity.</action>
-      <action dev="jeffjensen" type="fix" issue="386" due-to="rafaelvs">DbUnitAssert table name case sensitive problems.</action>
-      <action dev="jeffjensen" type="fix" issue="388" due-to="rafaelvs">ReplacementDataSet "ignores" its decorated DataSet's caseSensitiveTableNames setting.</action>
-      <action dev="jeffjensen" type="update" issue="387">Broken links to issues referenced in changes-report.html.</action>
+      <action dev="jeffjensen" type="fix" system="sfbugs" issue="389" due-to="apechinsky">Any characters with code greater than 7f are written to XML attribute value as entity.</action>
+      <action dev="jeffjensen" type="fix" system="sfbugs" issue="386" due-to="rafaelvs">DbUnitAssert table name case sensitive problems.</action>
+      <action dev="jeffjensen" type="fix" system="sfbugs" issue="388" due-to="rafaelvs">ReplacementDataSet "ignores" its decorated DataSet's caseSensitiveTableNames setting.</action>
+      <action dev="jeffjensen" type="update" system="sfbugs" issue="387">Broken links to issues referenced in changes-report.html.</action>
       <action dev="jeffjensen" type="update">POM cleanup: remove "official" profile, consolidate config.</action>
       <action dev="jeffjensen" type="update">Update site with new CI server info: http://dbunit.intertech.com/jenkins</action>
-      <action dev="jeffjensen" type="fix" issue="320">Can not obtain relations from several columns.</action>
-      <action dev="jeffjensen" type="fix" issue="377" due-to="markarnold">Running out of cell styles in XlsDataSetWriter.</action>
-      <action dev="jeffjensen" type="add" issue="313" due-to="weifengli">Allow 'false' -> 0 and 'true' -> 1 for numeric fields.</action>
-      <action dev="jeffjensen" type="fix" issue="374" due-to="sidikcz">Unable to insert row with Oracle XMLType.</action>
-      <action dev="jeffjensen" type="fix" issue="371" due-to="markarnold">Add test showing XlsTable timezone issue first reported in issue 280.</action>
-      <action dev="jeffjensen" type="fix" issue="280" due-to="mnt40">Don't add timezone offset for XlsTable.</action>
+      <action dev="jeffjensen" type="fix" system="sfbugs" issue="320">Can not obtain relations from several columns.</action>
+      <action dev="jeffjensen" type="fix" system="sfbugs" issue="377" due-to="markarnold">Running out of cell styles in XlsDataSetWriter.</action>
+      <action dev="jeffjensen" type="add" system="sfbugs" issue="313" due-to="weifengli">Allow 'false' -> 0 and 'true' -> 1 for numeric fields.</action>
+      <action dev="jeffjensen" type="fix" system="sfbugs" issue="374" due-to="sidikcz">Unable to insert row with Oracle XMLType.</action>
+      <action dev="jeffjensen" type="fix" system="sfbugs" issue="371" due-to="markarnold">Add test showing XlsTable timezone issue first reported in issue 280.</action>
+      <action dev="jeffjensen" type="fix" system="sfbugs" issue="280" due-to="mnt40">Don't add timezone offset for XlsTable.</action>
       <action dev="jeffjensen" type="fix">DefaultPrepAndExpectedTestCase.verifyData() uses databaseTester.getConnection() and should use DatabaseTestCase.getConnection().</action>
       <action dev="jeffjensen" type="fix">AbstractDatabaseConnection.createTable(String) ignores escape pattern for table name.</action>
-      <action dev="jeffjensen" type="fix" issue="380" due-to="fs5">TimestampDataType.typeCast() fails on non-local timezones.</action>
-      <action dev="jeffjensen" type="fix" issue="383">DefaultPrepAndExpectedTestCase doesn't handle all DatabaseConfig access approaches, missing dbUnit lifecycle steps.</action>
+      <action dev="jeffjensen" type="fix" system="sfbugs" issue="380" due-to="fs5">TimestampDataType.typeCast() fails on non-local timezones.</action>
+      <action dev="jeffjensen" type="fix" system="sfbugs" issue="383">DefaultPrepAndExpectedTestCase doesn't handle all DatabaseConfig access approaches, missing dbUnit lifecycle steps.</action>
     </release>
     <release version="2.5.2" date="Apr 8, 2016" description="Lost dbunit.org, toString() tables, respect DEFAULTs, multi-schema, PrepAndExpectedTestCaseSteps">
-      <action dev="jeffjensen" type="fix" issue="368" due-to="warwing">Multi schema support in FlatXmlDataSets.</action>
-      <action dev="jeffjensen" type="add" issue="185" due-to="mattias78">Do not explicitly insert null into NOT NULL columns with DEFAULT.</action>
-      <action dev="jeffjensen" type="add" issue="187">Add toString() to XlsTable and StreamingIterator.</action>
-      <action dev="jeffjensen" type="update" issue="367">dbunit.org domain owner did not renew it; fix links.</action>
+      <action dev="jeffjensen" type="fix" system="sfbugs" issue="368" due-to="warwing">Multi schema support in FlatXmlDataSets.</action>
+      <action dev="jeffjensen" type="add" system="sffeatures" issue="185" due-to="mattias78">Do not explicitly insert null into NOT NULL columns with DEFAULT.</action>
+      <action dev="jeffjensen" type="add" system="sffeatures" issue="187">Add toString() to XlsTable and StreamingIterator.</action>
+      <action dev="jeffjensen" type="update" system="sfbugs" issue="367">dbunit.org domain owner did not renew it; fix links.</action>
       <action dev="jeffjensen" type="update">Make AbstractDataFileLoader.loadDataSet public and pull up to DataFileLoader interface.</action>
-      <action dev="jeffjensen" type="add" issue="189" due-to="zemertz">Postgres CITEXT data type support.</action>
+      <action dev="jeffjensen" type="add" system="sffeatures" issue="189" due-to="zemertz">Postgres CITEXT data type support.</action>
       <action dev="jeffjensen" type="add">Add PrepAndExpectedTestCaseSteps for lambdas and eliminating try/catch/finally template for PrepAndExpectedTestCase.</action>
     </release>
     <release version="2.5.1" date="April 11, 2015" description="allowEmptyFields property, column aliases POI 3.11, ">
-      <action dev="jeffjensen" type="update" issue="PR-6" due-to="kazuhito-m">Upgrade Apache POI library from "3.2-FINAL" to "3.11".  Pull request 6, Enhancement 161.</action>
-      <action dev="jeffjensen" type="fix" issue="348" due-to="tm14258">dBUnit does not pick up column aliases.</action>
-      <action dev="jeffjensen" type="add" issue="363" due-to="adko">Add allowEmptyFields feature flag/property to prevent fail-fast and allow empty string fields.</action>
-      <action dev="jeffjensen" type="fix" issue="361" due-to="drissamri">BigIntegerDataType.setSqlValue() NPE when value is null.</action>
+      <action dev="jeffjensen" type="update" system="sffeatures" issue="161" due-to="kazuhito-m">Upgrade Apache POI library from "3.2-FINAL" to "3.11".  Pull request 6, Enhancement 161.</action>
+      <action dev="jeffjensen" type="fix" system="sfbugs" issue="348" due-to="tm14258">dBUnit does not pick up column aliases.</action>
+      <action dev="jeffjensen" type="add" system="sfbugs" issue="363" due-to="adko">Add allowEmptyFields feature flag/property to prevent fail-fast and allow empty string fields.</action>
+      <action dev="jeffjensen" type="fix" system="sfbugs" issue="361" due-to="drissamri">BigIntegerDataType.setSqlValue() NPE when value is null.</action>
     </release>
     <release version="2.5.0" date="Apr 24, 2014" description="CSV dataset, PostGres, Sonatype OSSRH, logging, Java 1.5, MySQL, UUIDs, autoincrement, DTD implied columns">
       <action dev="jeffjensen" type="add" issue="3578765" due-to="jeffjensen">Use Sonatype OSSRH for snapshots and release sync to Central.</action>
@@ -76,13 +77,13 @@
       <action dev="jeffjensen" type="update" due-to="jeffjensen">Update SLF4J and LogBack to latest versions.</action>
       <action dev="jeffjensen" type="update" due-to="jeffjensen">Update compileSource to 1.5.</action>
       <action dev="jeffjensen" type="update" due-to="jeffjensen">Update JUnit version to 4.11.</action>
-      <action dev="jeffjensen" type="fix" issue="349" due-to="rburgst">H2DataTypeFactory does not properly support UUID data type.</action>
-      <action dev="jeffjensen" type="fix" issue="340" due-to="djeanprost">DBUnit 2.4.9 needs java 6 to run.</action>
-      <action dev="jeffjensen" type="fix" issue="313" due-to="weifengli">MySqlDataTypeFactory saves TINYINT(1) as String.</action>
-      <action dev="jeffjensen" type="add" issue="178" due-to="timurstrekalov">Special dataset syntax for UUIDs mapped to binary fields.</action>
-      <action dev="jeffjensen" type="update" issue="343" due-to="gavenkoa">Broken link on http://www.dbunit.org/issue-tracking.html.</action>
-      <action dev="jeffjensen" type="fix" issue="335" due-to="mrhcon01">SQLHelper Oracle Issue (autoincrement metadata problem).</action>
-      <action dev="jeffjensen" type="add" issue="184" due-to="mattias78">Columns with defaults should be #IMPLIED in generated DTD.</action>
+      <action dev="jeffjensen" type="fix" system="sfbugs" issue="349" due-to="rburgst">H2DataTypeFactory does not properly support UUID data type.</action>
+      <action dev="jeffjensen" type="fix" system="sfbugs" issue="340" due-to="djeanprost">DBUnit 2.4.9 needs java 6 to run.</action>
+      <action dev="jeffjensen" type="fix" system="sfbugs" issue="313" due-to="weifengli">MySqlDataTypeFactory saves TINYINT(1) as String.</action>
+      <action dev="jeffjensen" type="add" system="sffeatures" issue="178" due-to="timurstrekalov">Special dataset syntax for UUIDs mapped to binary fields.</action>
+      <action dev="jeffjensen" type="update" system="sfbugs" issue="343" due-to="gavenkoa">Broken link on http://www.dbunit.org/issue-tracking.html.</action>
+      <action dev="jeffjensen" type="fix" system="sfbugs" issue="335" due-to="mrhcon01">SQLHelper Oracle Issue (autoincrement metadata problem).</action>
+      <action dev="jeffjensen" type="add" system="sffeatures" issue="184" due-to="mattias78">Columns with defaults should be #IMPLIED in generated DTD.</action>
     </release>
     <release version="2.4.9" date="Sep 30, 2012" description="Additional toString()s, schema name usage, logging, timestamp, unique ID, table name in Operation exceptions, build with JDK 6.">
       <action dev="jeffjensen" type="add" issue="3573007" due-to="jeffjensen">Change build to use current compiler on path vs 1.4.  This is first dbUnit release done with JDK 6.  If you encounter problems, please open a bug tracker item.</action>
