@@ -38,6 +38,10 @@ import java.sql.DatabaseMetaData;
  */
 public class Column
 {
+
+    /**
+     * Logger for this class
+     */
     private static final Logger logger = LoggerFactory.getLogger(Column.class);
 
     /**
@@ -51,8 +55,7 @@ public class Column
     /**
      * Indicates that the nullability of columns is unknown.
      */
-    public static final Nullable NULLABLE_UNKNOWN =
-            new Nullable("nullableUnknown");
+    public static final Nullable NULLABLE_UNKNOWN = new Nullable("nullableUnknown");
 
     private final String _columnName;
     private final DataType _dataType;
@@ -65,10 +68,8 @@ public class Column
     /**
      * Creates a Column object. This constructor set nullable to true.
      *
-     * @param columnName
-     *            the column name
-     * @param dataType
-     *            the data type
+     * @param columnName the column name
+     * @param dataType the data type
      */
     public Column(String columnName, DataType dataType)
     {
@@ -94,54 +95,32 @@ public class Column
 
     /**
      * Creates a Column object.
-     * 
-     * @param columnName
-     *            The name of the column
-     * @param dataType
-     *            The DbUnit {@link DataType} of the column
-     * @param sqlTypeName
-     *            The SQL name of the column which comes from the JDBC driver.
-     *            See value 'TYPE_NAME' in
-     *            {@link DatabaseMetaData#getColumns(String, String, String, String)}
-     * @param nullable
-     *            whether or not the column is nullable
-     * @param defaultValue
-     *            The default value on the DB for this column. Can be
-     *            <code>null</code>.
+     * @param columnName The name of the column
+     * @param dataType The DbUnit {@link DataType} of the column
+     * @param sqlTypeName The SQL name of the column which comes from the JDBC driver.
+     * See value 'TYPE_NAME' in {@link DatabaseMetaData#getColumns(String, String, String, String)}
+     * @param nullable whether or not the column is nullable
+     * @param defaultValue The default value on the DB for this column. Can be <code>null</code>.
      */
     public Column(String columnName, DataType dataType, String sqlTypeName,
             Nullable nullable, String defaultValue)
     {
-        this(columnName, dataType, sqlTypeName, nullable, defaultValue, null,
-                null);
+        this(columnName, dataType, sqlTypeName, nullable, defaultValue, null, null);
     }
 
     /**
      * Creates a Column object.
-     * 
-     * @param columnName
-     *            The name of the column
-     * @param dataType
-     *            The DbUnit {@link DataType} of the column
-     * @param sqlTypeName
-     *            The SQL name of the column which comes from the JDBC driver.
-     *            See value 'TYPE_NAME' in
-     *            {@link DatabaseMetaData#getColumns(String, String, String, String)}
-     * @param nullable
-     *            whether or not the column is nullable
-     * @param defaultValue
-     *            The default value on the DB for this column. Can be
-     *            <code>null</code>.
-     * @param remarks
-     *            The remarks on the DB for this column. Can be
-     *            <code>null</code>.
-     * @param autoIncrement
-     *            The auto increment setting for this column. Can be
-     *            <code>null</code>.
+     * @param columnName The name of the column
+     * @param dataType The DbUnit {@link DataType} of the column
+     * @param sqlTypeName The SQL name of the column which comes from the JDBC driver.
+     * See value 'TYPE_NAME' in {@link DatabaseMetaData#getColumns(String, String, String, String)}
+     * @param nullable whether or not the column is nullable
+     * @param defaultValue The default value on the DB for this column. Can be <code>null</code>.
+     * @param remarks The remarks on the DB for this column. Can be <code>null</code>.
+     * @param autoIncrement The auto increment setting for this column. Can be <code>null</code>.
      */
     public Column(String columnName, DataType dataType, String sqlTypeName,
-            Nullable nullable, String defaultValue, String remarks,
-            AutoIncrement autoIncrement)
+            Nullable nullable, String defaultValue, String remarks, AutoIncrement autoIncrement)
     {
         _columnName = columnName;
         _dataType = dataType;
@@ -151,29 +130,27 @@ public class Column
         _remarks = remarks;
         _autoIncrement = autoIncrement;
     }
-
-    public Column(ColumnMetaData metadata, DataType dataType)
-    {
-        _columnName = metadata.getColumnName();
-        _dataType = dataType;
-        _sqlTypeName = metadata.getSqlTypeName();
-        _nullable = Column.nullableValue(metadata.getNullable());
-        _defaultValue = metadata.getColumnDefault();
-        _remarks = metadata.getRemarks();
-        _autoIncrement = Column.AutoIncrement
-                .autoIncrementValue(metadata.getAutoincrement());
+    
+    public Column(ColumnMetaData metadata, DataType dataType) {
+    	_columnName = metadata.getColumnName(); 
+		_dataType = dataType;
+		_sqlTypeName = metadata.getSqlTypeName();
+		_nullable = Column.nullableValue(metadata.getNullable());
+		_defaultValue = metadata.getColumnDefault();
+		_remarks = metadata.getRemarks();
+		_autoIncrement = Column.AutoIncrement.autoIncrementValue(metadata.getAutoincrement());
     }
 
     public boolean hasDefaultValue()
     {
         return _defaultValue != null;
     }
-
+    
     public boolean isNotNullable()
     {
-        return _nullable == Column.NO_NULLS;
+        return _nullable== Column.NO_NULLS;
     }
-
+    
     /**
      * Returns this column name.
      */
@@ -207,14 +184,14 @@ public class Column
     }
 
     /**
-     * @return The default value the database uses for this column if not
-     *         specified in the insert column list
+     * @return The default value the database uses for this column 
+     * if not specified in the insert column list
      */
     public String getDefaultValue()
     {
         return _defaultValue;
     }
-
+    
     /**
      * @return The remarks set on the database for this column
      * @since 2.4.3
@@ -223,7 +200,7 @@ public class Column
     {
         return _remarks;
     }
-
+    
     /**
      * @return The auto-increment property for this column
      * @since 2.4.3
@@ -232,54 +209,51 @@ public class Column
     {
         return _autoIncrement;
     }
-
+    
     /**
      * Returns the appropriate Nullable constant according specified JDBC
      * DatabaseMetaData constant.
      *
-     * @param nullable
-     *            one of the following constants
-     *            {@link java.sql.DatabaseMetaData#columnNoNulls},
-     *            {@link java.sql.DatabaseMetaData#columnNullable},
-     *            {@link java.sql.DatabaseMetaData#columnNullableUnknown}
+     * @param nullable one of the following constants
+     * {@link java.sql.DatabaseMetaData#columnNoNulls},
+     * {@link java.sql.DatabaseMetaData#columnNullable},
+     * {@link java.sql.DatabaseMetaData#columnNullableUnknown}
      */
     public static Nullable nullableValue(int nullable)
     {
-        if (logger.isDebugEnabled())
-            logger.debug("nullableValue(nullable={}) - start",
-                    String.valueOf(nullable));
+        if(logger.isDebugEnabled())
+            logger.debug("nullableValue(nullable={}) - start", String.valueOf(nullable));
 
         switch (nullable)
         {
-        case DatabaseMetaData.columnNoNulls:
-            return NO_NULLS;
+            case DatabaseMetaData.columnNoNulls:
+                return NO_NULLS;
 
-        case DatabaseMetaData.columnNullable:
-            return NULLABLE;
+            case DatabaseMetaData.columnNullable:
+                return NULLABLE;
 
-        case DatabaseMetaData.columnNullableUnknown:
-            return NULLABLE_UNKNOWN;
+            case DatabaseMetaData.columnNullableUnknown:
+                return NULLABLE_UNKNOWN;
 
-        default:
-            throw new IllegalArgumentException(
-                    "Unknown constant value " + nullable);
+            default:
+                throw new IllegalArgumentException("Unknown constant value "
+                        + nullable);
         }
     }
 
     /**
      * Returns the appropriate Nullable constant.
      *
-     * @param nullable
-     *            <code>true</code> if null is allowed
+     * @param nullable <code>true</code> if null is allowed
      */
     public static Nullable nullableValue(boolean nullable)
     {
-        if (logger.isDebugEnabled())
-            logger.debug("nullableValue(nullable={}) - start",
-                    String.valueOf(nullable));
-
+        if(logger.isDebugEnabled())
+            logger.debug("nullableValue(nullable={}) - start", String.valueOf(nullable));
+        
         return nullable ? NULLABLE : NO_NULLS;
     }
+    
 
     ////////////////////////////////////////////////////////////////////////////
     // Object class
@@ -293,30 +267,23 @@ public class Column
     {
         logger.debug("equals(o={}) - start", o);
 
-        if (this == o)
-            return true;
-        if (!(o instanceof Column))
-            return false;
+        if (this == o) return true;
+        if (!(o instanceof Column)) return false;
 
-        final Column column = (Column) o;
+        final Column column = (Column)o;
 
-        if (!_columnName.equals(column._columnName))
-            return false;
-        if (!_dataType.equals(column._dataType))
-            return false;
-        if (!_nullable.equals(column._nullable))
-            return false;
-        if (!_sqlTypeName.equals(column._sqlTypeName))
-            return false;
-
+        if (!_columnName.equals(column._columnName)) return false;
+        if (!_dataType.equals(column._dataType)) return false;
+        if (!_nullable.equals(column._nullable)) return false;
+        if (!_sqlTypeName.equals(column._sqlTypeName)) return false;
+        
         // Default value is nullable
-        if (_defaultValue == null)
-        {
-            if (column._defaultValue != null)
+        if (_defaultValue==null){
+            if(column._defaultValue!=null)
                 return false;
-        } else
-        {
-            if (!_defaultValue.equals(column._defaultValue))
+        }
+        else{
+            if(!_defaultValue.equals(column._defaultValue))
                 return false;
         }
 
@@ -330,22 +297,22 @@ public class Column
         result = 29 * result + _dataType.hashCode();
         result = 29 * result + _sqlTypeName.hashCode();
         result = 29 * result + _nullable.hashCode();
-        result = 29 * result
-                + (_defaultValue == null ? 0 : _defaultValue.hashCode());
+        result = 29 * result + (_defaultValue==null? 0 : _defaultValue.hashCode());
         return result;
     }
 
     /**
      * Specifies nullable usage.
      * 
-     * @author Manuel Laflamme
-     * @author Last changed by: $Author$
-     * @version $Revision$ $Date$
-     * @since Feb 17, 2002
-     * @see Column
+	 * @author Manuel Laflamme
+	 * @author Last changed by: $Author$
+	 * @version $Revision$ $Date$
+	 * @since Feb 17, 2002
+	 * @see Column
      */
     public static class Nullable
     {
+
         private final String _name;
 
         private Nullable(String name)
@@ -360,17 +327,15 @@ public class Column
         {
             return _name;
         }
-
-        public boolean equals(Object other)
-        {
-            return (other instanceof Nullable
-                    && ((Nullable) other).toString() == this.toString());
+        
+        public boolean equals(Object other) {
+        	return (other instanceof Nullable && ((Nullable) other).toString() == this.toString());
         }
     }
-
+    
+    
     /**
-     * Enumeration for valid auto-increment values provided by JDBC driver
-     * implementations.
+     * Enumeration for valid auto-increment values provided by JDBC driver implementations.
      * 
      * @author gommma
      * @author Last changed by: $Author$
@@ -382,59 +347,50 @@ public class Column
     {
         public static final AutoIncrement YES = new AutoIncrement("YES");
         public static final AutoIncrement NO = new AutoIncrement("NO");
-        public static final AutoIncrement UNKNOWN =
-                new AutoIncrement("UNKNOWN");
-
+        public static final AutoIncrement UNKNOWN = new AutoIncrement("UNKNOWN");
+        
         /**
          * Logger for this class
          */
-        private static final Logger LOGGER =
-                LoggerFactory.getLogger(AutoIncrement.class);
+        private static final Logger LOGGER = LoggerFactory.getLogger(AutoIncrement.class);
 
         private final String key;
-
         private AutoIncrement(String key)
         {
             this.key = key;
         }
-
-        public String getKey()
+        
+        public String getKey() 
         {
             return key;
         }
 
         /**
-         * Searches the enumeration type for the given String provided by the
-         * JDBC driver.
+         * Searches the enumeration type for the given String provided by the JDBC driver.
          * <p>
          * If the parameter <code>autoIncrementValue</code>
          * <ul>
-         * <li>equalsIgnoreCase &quot;YES&quot; or equals &quot;1&quot; then
-         * {@link AutoIncrement#YES} is returned</li>
+         * <li>equalsIgnoreCase &quot;YES&quot; or equals &quot;1&quot; then {@link AutoIncrement#YES} is returned</li>
          * <li></li>
          * </ul>
          * </p>
-         * 
-         * @param isAutoIncrement
-         *            The String from the JDBC driver.
+         * @param isAutoIncrement The String from the JDBC driver.
          * @return The enumeration
          */
-        public static AutoIncrement autoIncrementValue(String isAutoIncrement)
+        public static AutoIncrement autoIncrementValue(String isAutoIncrement) 
         {
-            if (LOGGER.isDebugEnabled())
-                logger.debug("autoIncrementValue(isAutoIncrement={}) - start",
-                        isAutoIncrement);
-
+            if(LOGGER.isDebugEnabled())
+                logger.debug("autoIncrementValue(isAutoIncrement={}) - start", isAutoIncrement);
+            
             AutoIncrement result = AutoIncrement.UNKNOWN;
-
-            if (isAutoIncrement != null)
+            
+            if(isAutoIncrement != null)
             {
-                if (isAutoIncrement.equalsIgnoreCase("YES")
-                        || isAutoIncrement.equals("1"))
+                if(isAutoIncrement.equalsIgnoreCase("YES") || isAutoIncrement.equals("1"))
                 {
                     result = AutoIncrement.YES;
-                } else if (isAutoIncrement.equalsIgnoreCase("NO")
-                        || isAutoIncrement.equals("0"))
+                }
+                else if(isAutoIncrement.equalsIgnoreCase("NO") || isAutoIncrement.equals("0"))
                 {
                     result = AutoIncrement.NO;
                 }
@@ -442,15 +398,15 @@ public class Column
             return result;
         }
 
+
         public String toString()
         {
             return "autoIncrement=" + key;
         }
-
-        public boolean equals(Object other)
-        {
-            return (other instanceof AutoIncrement
-                    && ((AutoIncrement) other).getKey() == this.key);
+        
+        public boolean equals(Object other) {
+        	return (other instanceof AutoIncrement && ((AutoIncrement) other).getKey() == this.key);
         }
     }
+
 }
