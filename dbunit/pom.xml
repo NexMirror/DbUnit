@@ -1016,8 +1016,8 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
         <dbunit.profile.driverClass>oracle.jdbc.OracleDriver</dbunit.profile.driverClass>
         <dbunit.profile.url>jdbc:oracle:thin:@localhost:1521:XE</dbunit.profile.url>
         <dbunit.profile.schema>DBUNIT</dbunit.profile.schema>
-        <dbunit.profile.user>system</dbunit.profile.user>
-        <dbunit.profile.password>oracle</dbunit.profile.password>
+        <dbunit.profile.user>dbunit</dbunit.profile.user>
+        <dbunit.profile.password>dbunit</dbunit.profile.password>
         <dbunit.profile.unsupportedFeatures>INSERT_IDENTITY,SCROLLABLE_RESULTSET</dbunit.profile.unsupportedFeatures>
         <dbunit.profile.ddl>oracle.sql</dbunit.profile.ddl>
         <dbunit.profile.multiLineSupport>false</dbunit.profile.multiLineSupport>
