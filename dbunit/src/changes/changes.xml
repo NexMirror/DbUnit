@@ -15,7 +15,14 @@
   <body>
     <release version="2.6.0-SNAPSHOT" date="TBD" description="PostgreSQL OID, POI 3.17, Java 8 tests, database integration tests, changes links, ">
       <action dev="jeffjensen" type="fix" issue="352" system="sfbugs">Fix changes report tracker links (Bugs, Features) to support both.</action>
-      <action dev="quantas" type="fix" issue="407" system="sfbugs">Fix all database integration tests to work again.</action>
+      <action dev="quantas" type="fix" system="sfbugs">
+        Fix all database integration tests to work again.
+        <fixes issue="407" />
+        <fixes issue="408" />
+        <fixes issue="409" />
+        <fixes issue="410" />
+        <fixes issue="411" />
+      </action>
       <action dev="jeffjensen" type="update" issue="195" system="sffeatures" due-to="jkearns">Update tests to support build running Java 8.</action>
       <action dev="jeffjensen" type="update" issue="200" system="sffeatures" due-to="deragon">CachedDataSet has redundant code.</action>
       <action dev="jeffjensen" type="update" issue="199" system="sffeatures" due-to="deragon">FlatDtdDataSet has redundant code.</action>
