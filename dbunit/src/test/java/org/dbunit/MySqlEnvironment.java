@@ -36,9 +36,20 @@ public class MySqlEnvironment extends DatabaseEnvironment
         super(profile);
     }
 
+    @Override
     protected void setupDatabaseConfig(DatabaseConfig config)
     {
         config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
+    }
+
+    /**
+     * Preserve case for MySQL
+     * @see DatabaseEnvironment#convertString(String)
+     */
+    @Override
+    public String convertString(String str)
+    {
+        return str;
     }
 
 }
