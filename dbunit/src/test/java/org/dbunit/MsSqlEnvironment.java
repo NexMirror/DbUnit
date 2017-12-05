@@ -36,4 +36,13 @@ public class MsSqlEnvironment extends DatabaseEnvironment
                 new MsSqlDataTypeFactory());
     }
 
+    /**
+     * Preserve case for MS SQL
+     * @see DatabaseEnvironment#convertString(String)
+     */
+    @Override
+    public String convertString(final String str)
+    {
+        return str;
+    }
 }

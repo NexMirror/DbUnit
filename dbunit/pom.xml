@@ -1119,7 +1119,7 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
         <dbunit.profile.schema>dbo</dbunit.profile.schema>
         <dbunit.profile.user>dbunit</dbunit.profile.user>
         <dbunit.profile.password>dbunit</dbunit.profile.password>
-        <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
+        <dbunit.profile.unsupportedFeatures>INSERT_IDENTITY,BLOB,CLOB,SCROLLABLE_RESULTSET,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
         <dbunit.profile.ddl>mssql.sql</dbunit.profile.ddl>
         <dbunit.profile.multiLineSupport>false</dbunit.profile.multiLineSupport>
       </properties>
