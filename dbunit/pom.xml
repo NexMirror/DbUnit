@@ -52,7 +52,7 @@
     <installPluginVersion>2.5.2</installPluginVersion>
     <jarPluginVersion>3.0.2</jarPluginVersion>
     <jdependPluginVersion>2.0</jdependPluginVersion>
-    <javadocPluginVersion>2.10.4</javadocPluginVersion>
+    <javadocPluginVersion>3.0.0</javadocPluginVersion>
     <jxrPluginVersion>2.5</jxrPluginVersion>
     <pmdPluginVersion>3.7</pmdPluginVersion>
     <projectInfoReportsPluginVersion>2.9</projectInfoReportsPluginVersion>
@@ -598,6 +598,13 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>${javadocPluginVersion}</version>
+          <!--
+            see https://sourceforge.net/p/dbunit/code.git/merge-requests/25/
+            FIXME remove -Xdoclint:none after JavaDoc cleanup.
+          -->
+          <configuration>
+            <doclint>none</doclint>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -812,7 +819,7 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
             see https://sourceforge.net/p/dbunit/code.git/merge-requests/25/
             FIXME remove -Xdoclint:none after JavaDoc cleanup.
           -->
-          <additionalparam>-Xdoclint:none</additionalparam>
+          <doclint>none</doclint>
         </configuration>
       </plugin>
       <plugin>
