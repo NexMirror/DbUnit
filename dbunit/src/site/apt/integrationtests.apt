@@ -60,10 +60,13 @@ Database Properties
 
   * dbunit.profile.ddl - database-specific DDL script to create tables
 
+  * dbunit.profile.multiLineSupport - true if database supports SQL line continuation
+
   []
 
-  These properties are all configured with defaults per test profile.
-  You can override these defaults in ~/.m2/settings.xml:
+  The Maven database integration test profiles each define these properties.
+  You can override the profile property values by setting them in Maven's settings.xml file,
+  located in ~/.m2/settings.xml:
 
 ---
 <settings>
@@ -78,7 +81,9 @@ Database Properties
 </settings>
 ---
 
-Running HSQLDB Integration Tests
+Running Integration Tests with Maven
+
+* Running HSQLDB Integration Tests
 
   Nothing special is required.
 
@@ -88,7 +93,7 @@ Running HSQLDB Integration Tests
 mvn clean verify
 ---
 
-Running Oracle Integration Tests
+* Running Oracle Integration Tests
 
   [[1]] Install Oracle database.  This can be on your local machine, or you can use any Oracle database you have access to.
 
@@ -110,7 +115,7 @@ mvn clean verify -Poracle10-ojdbc14
 mvn clean verify -Poracle10-ojdbc6
 ---
 
-Running PostgreSQL Integration Tests
+* Running PostgreSQL Integration Tests
 
   [[1]] Install PostgreSQL database.  This can be on your local machine, or you can use any PostgreSQL database you have access to.
 
@@ -140,7 +145,7 @@ mvn clean verify -Poracle-default,postgresql
 
   <<Note:>> Currently the oracle-default profile is required, along with the postgresql profile, to ensure all JARs required on the compile-time classpath in Maven.
 
-Running MySQL Integration Tests
+* Running MySQL Integration Tests
 
   [[1]] Install MySQL database.  This can be on your local machine, or you can use any MySQL database you have access to.
 
@@ -171,7 +176,7 @@ mvn clean verify -Poracle-default,mysql
 
   <<Note:>> Currently the oracle-default profile is required, along with the mysql profile, to ensure all JARs required on the compile-time classpath in Maven.
 
-Running Apache Derby Integration Tests
+* Running Apache Derby Integration Tests
 
   Nothing special is required.
 
@@ -183,7 +188,7 @@ mvn clean verify -Poracle-default,derby
 
   <<Note:>> Currently the oracle-default profile is required, along with the derby profile, to ensure all JARs required on the compile-time classpath in Maven.
 
-Running H2 Integration Tests
+* Running H2 Integration Tests
 
   Nothing special is required.
 
@@ -195,5 +200,18 @@ mvn clean verify -Poracle-default,h2
 
   <<Note:>> Currently the oracle-default profile is required, along with the h2 profile, to ensure all JARs required on the compile-time classpath in Maven.
 
-TODO: Other databases, notably mssql, db2.
+* TODO: Other databases, notably mssql, db2.
 
+Running Integration Tests with IDEs
+
+* Eclipse / Maven Integration
+
+  The m2e plugin has an "Active Maven Profile" setting in a project's properties which activates the specified profile(s) during builds.
+  Access it from the project's context menu:
+
+---
+  (project context menu) -> Properties -> Maven -> Active Maven Profiles
+---
+
+  Enter the Maven profile name(s) to always run,
+  including the integration test profiles such as "derby".
