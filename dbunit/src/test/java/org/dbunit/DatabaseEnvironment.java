@@ -27,8 +27,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.concurrent.Callable;
 import java.util.Properties;
+import java.util.concurrent.Callable;
 
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
@@ -46,7 +46,8 @@ import org.slf4j.LoggerFactory;
  */
 public class DatabaseEnvironment
 {
-    private static final Logger logger = LoggerFactory.getLogger(DatabaseEnvironment.class);
+    private static final Logger logger =
+            LoggerFactory.getLogger(DatabaseEnvironment.class);
 
     private static DatabaseEnvironment INSTANCE = null;
 
@@ -56,38 +57,41 @@ public class DatabaseEnvironment
     private IDatabaseTester _databaseTester = null;
 
     /**
-     * Optional "dbunit.properties" is loaded if present and
-     * merged with System properties and the whole set is returned.
+     * Optional "dbunit.properties" is loaded if present and merged with System
+     * properties and the whole set is returned.
      * <p>
-     * If absent (which is the normal scenario), only System
-     * properties are returned.
+     * If absent (which is the normal scenario), only System properties are
+     * returned.
      * <p>
-     * "dbunit.properties" is useful for environment which make
-     * it difficult if not impossible to use Maven's profiles.
-     * Example is IntelliJ IDEA which when calling Junit tests,
-     * bypass Maven completely.  Since profiles are not used,
-     * database configuration is not properly set and tests fail.
-     * "dbunit.properties" contains the missing properties which
-     * a profile would set.
+     * "dbunit.properties" is useful for environment which make it difficult if
+     * not impossible to use Maven's profiles. Example is IntelliJ IDEA which
+     * when calling Junit tests, bypass Maven completely. Since profiles are not
+     * used, database configuration is not properly set and tests fail.
+     * "dbunit.properties" contains the missing properties which a profile would
+     * set.
      * <p>
      * Following is an example of the content of "dbunit.properties":
      * <p>
-     * DATABASE_PROFILE=h2
-     * dbunit.profile.driverClass=org.hsqldb.jdbcDriver
+     * DATABASE_PROFILE=h2 dbunit.profile.driverClass=org.hsqldb.jdbcDriver
      * dbunit.profile.url=jdbc:hsqldb:mem:.
      * <p>
      * Simply create "dbunit.properties" under "src/test/resources".
      *
      * @return Merged DbUnit and System properties.
-     * @throws IOException Thrown if an error occurs when attempting to read "dbunit.properties".
+     * @throws IOException
+     *             Thrown if an error occurs when attempting to read
+     *             "dbunit.properties".
      */
-    protected static Properties getProperties() throws IOException {
-        Properties dbUnitProperties = new Properties();
-        InputStream inputStream = DatabaseEnvironment.class.getClassLoader()
-          .getResourceAsStream("dbunit.properties");
+    protected static Properties getProperties() throws IOException
+    {
+        final Properties dbUnitProperties = new Properties();
+        final InputStream inputStream = DatabaseEnvironment.class
+                .getClassLoader().getResourceAsStream("dbunit.properties");
 
-        if (inputStream == null) {
-            // No DbUnit properties.  Sending back only System properties together/
+        if (inputStream == null)
+        {
+            // No DbUnit properties. Sending back only System properties
+            // together/
             return System.getProperties();
         }
 
@@ -104,42 +108,35 @@ public class DatabaseEnvironment
     {
         if (INSTANCE == null)
         {
-            DatabaseProfile profile = new DatabaseProfile(getProperties());
+            final DatabaseProfile profile =
+                    new DatabaseProfile(getProperties());
 
-            String profileName = profile.getActiveProfile();
+            final String profileName = profile.getActiveProfile();
             if (profileName == null || profileName.equals("hsqldb"))
             {
                 INSTANCE = new HypersonicEnvironment(profile);
-            }
-            else if (profileName.equals("oracle"))
+            } else if (profileName.equals("oracle"))
             {
                 INSTANCE = new OracleEnvironment(profile);
-            }
-            else if (profileName.equals("oracle10"))
+            } else if (profileName.equals("oracle10"))
             {
                 INSTANCE = new Oracle10Environment(profile);
-            }
-            else if (profileName.equals("postgresql"))
+            } else if (profileName.equals("postgresql"))
             {
                 INSTANCE = new PostgresqlEnvironment(profile);
-            }
-            else if (profileName.equals("mysql"))
+            } else if (profileName.equals("mysql"))
             {
                 INSTANCE = new MySqlEnvironment(profile);
-            }
-            else if (profileName.equals("derby"))
+            } else if (profileName.equals("derby"))
             {
                 INSTANCE = new DerbyEnvironment(profile);
-            }
-            else if (profileName.equals("h2"))
+            } else if (profileName.equals("h2"))
             {
                 INSTANCE = new H2Environment(profile);
-            }
-            else if (profileName.equals("mssql"))
+            } else if (profileName.equals("mssql"))
             {
                 INSTANCE = new MsSqlEnvironment(profile);
-            }
-            else
+            } else
             {
                 INSTANCE = new DatabaseEnvironment(profile);
             }
@@ -148,24 +145,27 @@ public class DatabaseEnvironment
         return INSTANCE;
     }
 
-    public DatabaseEnvironment(DatabaseProfile profile,
-                               Callable<Void> preDdlFunction) throws Exception
+    public DatabaseEnvironment(final DatabaseProfile profile,
+            final Callable<Void> preDdlFunction) throws Exception
     {
-        if (null != preDdlFunction) {
+        if (null != preDdlFunction)
+        {
             preDdlFunction.call();
         }
 
         _profile = profile;
-        File file = TestUtils.getFile("xml/dataSetTest.xml");
+        final File file = TestUtils.getFile("xml/dataSetTest.xml");
         _dataSet = new XmlDataSet(new FileReader(file));
-        _databaseTester = new JdbcDatabaseTester( _profile.getDriverClass(),
-                _profile.getConnectionUrl(), _profile.getUser(), _profile.getPassword(), _profile.getSchema() );
+        _databaseTester = new JdbcDatabaseTester(_profile.getDriverClass(),
+                _profile.getConnectionUrl(), _profile.getUser(),
+                _profile.getPassword(), _profile.getSchema());
 
-        DdlExecutor.execute("sql/" + _profile.getProfileDdl(), getConnection().getConnection(),
+        DdlExecutor.execute("sql/" + _profile.getProfileDdl(),
+                getConnection().getConnection(),
                 profile.getProfileMultilineSupport(), true);
     }
 
-    public DatabaseEnvironment(DatabaseProfile profile) throws Exception
+    public DatabaseEnvironment(final DatabaseProfile profile) throws Exception
     {
         this(profile, null);
     }
@@ -174,25 +174,26 @@ public class DatabaseEnvironment
     {
         // First check if the current connection is still valid and open
         // The connection may have been closed by a consumer
-        if(_connection != null && _connection.getConnection().isClosed()){
+        if (_connection != null && _connection.getConnection().isClosed())
+        {
             // Reset the member so that a new connection will be created
             _connection = null;
         }
 
         if (_connection == null)
         {
-            String name = _profile.getDriverClass();
+            final String name = _profile.getDriverClass();
             Class.forName(name);
-            Connection connection = DriverManager.getConnection(
-                    _profile.getConnectionUrl(), _profile.getUser(),
-                    _profile.getPassword());
-            _connection = new DatabaseConnection(connection,
-                    _profile.getSchema());
+            final Connection connection =
+                    DriverManager.getConnection(_profile.getConnectionUrl(),
+                            _profile.getUser(), _profile.getPassword());
+            _connection =
+                    new DatabaseConnection(connection, _profile.getSchema());
         }
         return _connection;
     }
 
-    protected void setupDatabaseConfig(DatabaseConfig config)
+    protected void setupDatabaseConfig(final DatabaseConfig config)
     {
         // Override in subclasses as necessary.
     }
@@ -221,12 +222,12 @@ public class DatabaseEnvironment
         return _profile;
     }
 
-    public boolean support(TestFeature feature)
+    public boolean support(final TestFeature feature)
     {
-        String[] unsupportedFeatures = _profile.getUnsupportedFeatures();
+        final String[] unsupportedFeatures = _profile.getUnsupportedFeatures();
         for (int i = 0; i < unsupportedFeatures.length; i++)
         {
-            String unsupportedFeature = unsupportedFeatures[i];
+            final String unsupportedFeature = unsupportedFeatures[i];
             if (feature.toString().equals(unsupportedFeature))
             {
                 return false;
@@ -237,27 +238,30 @@ public class DatabaseEnvironment
     }
 
     /**
-     * Returns the string converted as an identifier according to the metadata rules of the database environment.
-     * Most databases convert all metadata identifiers to uppercase.
-     * PostgreSQL converts identifiers to lowercase.
+     * Returns the string converted as an identifier according to the metadata
+     * rules of the database environment. Most databases convert all metadata
+     * identifiers to uppercase. PostgreSQL converts identifiers to lowercase.
      * MySQL preserves case.
-     * @param str The identifier.
+     *
+     * @param str
+     *            The identifier.
      * @return The identifier converted according to database rules.
      */
-    public String convertString(String str)
+    public String convertString(final String str)
     {
         return str == null ? null : str.toUpperCase();
     }
 
+    @Override
     public String toString()
     {
-    	StringBuffer sb = new StringBuffer();
-    	sb.append(getClass().getName()).append("[");
-    	sb.append("_profile=").append(_profile);
-    	sb.append(", _connection=").append(_connection);
-    	sb.append(", _dataSet=").append(_dataSet);
-    	sb.append(", _databaseTester=").append(_databaseTester);
-    	sb.append("]");
-    	return sb.toString();
+        final StringBuffer sb = new StringBuffer();
+        sb.append(getClass().getName()).append("[");
+        sb.append("_profile=").append(_profile);
+        sb.append(", _connection=").append(_connection);
+        sb.append(", _dataSet=").append(_dataSet);
+        sb.append(", _databaseTester=").append(_databaseTester);
+        sb.append("]");
+        return sb.toString();
     }
 }
