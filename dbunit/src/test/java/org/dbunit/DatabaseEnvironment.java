@@ -46,6 +46,9 @@ import org.slf4j.LoggerFactory;
  */
 public class DatabaseEnvironment
 {
+    private static final String DBUNIT_PROPERTIES_FILENAME =
+            "dbunit.properties";
+
     private static final Logger logger =
             LoggerFactory.getLogger(DatabaseEnvironment.class);
 
@@ -84,24 +87,20 @@ public class DatabaseEnvironment
      */
     protected static Properties getProperties() throws IOException
     {
-        final Properties dbUnitProperties = new Properties();
-        final InputStream inputStream = DatabaseEnvironment.class
-                .getClassLoader().getResourceAsStream("dbunit.properties");
+        final Properties properties = System.getProperties();
 
-        if (inputStream == null)
+        final InputStream inputStream =
+                DatabaseEnvironment.class.getClassLoader()
+                        .getResourceAsStream(DBUNIT_PROPERTIES_FILENAME);
+        if (inputStream != null)
         {
-            // No DbUnit properties. Sending back only System properties
-            // together/
-            return System.getProperties();
+            logger.info("Loaded properties from file '{}'",
+                    DBUNIT_PROPERTIES_FILENAME);
+            properties.load(inputStream);
+            inputStream.close();
         }
 
-        logger.info("Properties from file 'dbunit.properties' loaded");
-        dbUnitProperties.load(inputStream);
-        inputStream.close();
-
-        // Merging DbUnit properties and System properties together.
-        dbUnitProperties.putAll(System.getProperties());
-        return dbUnitProperties;
+        return properties;
     }
 
     public static DatabaseEnvironment getInstance() throws Exception
