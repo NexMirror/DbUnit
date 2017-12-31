@@ -23,9 +23,12 @@ package org.dbunit;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.concurrent.Callable;
+import java.util.Properties;
 
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
@@ -33,6 +36,8 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.XmlDataSet;
 import org.dbunit.testutil.TestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Manuel Laflamme
@@ -41,6 +46,8 @@ import org.dbunit.testutil.TestUtils;
  */
 public class DatabaseEnvironment
 {
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseEnvironment.class);
+
     private static DatabaseEnvironment INSTANCE = null;
 
     private DatabaseProfile _profile = null;
@@ -48,11 +55,56 @@ public class DatabaseEnvironment
     private IDataSet _dataSet = null;
     private IDatabaseTester _databaseTester = null;
 
+    /**
+     * Optional "dbunit.properties" is loaded if present and
+     * merged with System properties and the whole set is returned.
+     * <p>
+     * If absent (which is the normal scenario), only System
+     * properties are returned.
+     * <p>
+     * "dbunit.properties" is useful for environment which make
+     * it difficult if not impossible to use Maven's profiles.
+     * Example is IntelliJ IDEA which when calling Junit tests,
+     * bypass Maven completely.  Since profiles are not used,
+     * database configuration is not properly set and tests fail.
+     * "dbunit.properties" contains the missing properties which
+     * a profile would set.
+     * <p>
+     * Following is an example of the content of "dbunit.properties":
+     * <p>
+     * DATABASE_PROFILE=h2
+     * dbunit.profile.driverClass=org.hsqldb.jdbcDriver
+     * dbunit.profile.url=jdbc:hsqldb:mem:.
+     * <p>
+     * Simply create "dbunit.properties" under "src/test/resources".
+     *
+     * @return Merged DbUnit and System properties.
+     * @throws IOException Thrown if an error occurs when attempting to read "dbunit.properties".
+     */
+    protected static Properties getProperties() throws IOException {
+        Properties dbUnitProperties = new Properties();
+        InputStream inputStream = DatabaseEnvironment.class.getClassLoader()
+          .getResourceAsStream("dbunit.properties");
+
+        if (inputStream == null) {
+            // No DbUnit properties.  Sending back only System properties together/
+            return System.getProperties();
+        }
+
+        logger.info("Properties from file 'dbunit.properties' loaded");
+        dbUnitProperties.load(inputStream);
+        inputStream.close();
+
+        // Merging DbUnit properties and System properties together.
+        dbUnitProperties.putAll(System.getProperties());
+        return dbUnitProperties;
+    }
+
     public static DatabaseEnvironment getInstance() throws Exception
     {
         if (INSTANCE == null)
         {
-            DatabaseProfile profile = new DatabaseProfile(System.getProperties());
+            DatabaseProfile profile = new DatabaseProfile(getProperties());
 
             String profileName = profile.getActiveProfile();
             if (profileName == null || profileName.equals("hsqldb"))
@@ -126,7 +178,7 @@ public class DatabaseEnvironment
             // Reset the member so that a new connection will be created
             _connection = null;
         }
-        
+
         if (_connection == null)
         {
             String name = _profile.getDriverClass();
@@ -142,9 +194,9 @@ public class DatabaseEnvironment
 
     protected void setupDatabaseConfig(DatabaseConfig config)
     {
-//         override in subclasses as necessary
+        // Override in subclasses as necessary.
     }
-    
+
     public IDatabaseTester getDatabaseTester()
     {
         return _databaseTester;
@@ -196,7 +248,7 @@ public class DatabaseEnvironment
     {
         return str == null ? null : str.toUpperCase();
     }
-    
+
     public String toString()
     {
     	StringBuffer sb = new StringBuffer();
@@ -208,5 +260,4 @@ public class DatabaseEnvironment
     	sb.append("]");
     	return sb.toString();
     }
-
 }
