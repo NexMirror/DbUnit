@@ -73,33 +73,6 @@ Java file headers
 ---
 
 
-Running the DbUnit Test suite
+Running the DbUnit Tests
 
-* IDE setup (Intellij IDEA, Eclipse, etc...)
-
-** dbunit.properties - Setup profiles without Maven - <A must when working within an IDE>.
-
-  "dbunit.properties" is useful for environments which make it difficult if
-  not impossible to use Maven's profiles.  For instance, the IDE IntelliJ IDEA
-  which when calling JUnit tests, bypass Maven completely.  Since in this
-  circumstance, Maven's profiles are not used, database configuration is not
-  properly set and tests fail.
-
-  <<<dbunit.properties>>> contains the missing properties which a profile
-  would set.  It is an optional file and is not provided by DbUnit; one must
-  create it under <<<src/test/resources>>>.
-
-  Following is an example of the content of <<<dbunit.properties>>> that works
-  for activating the profile <<<h2>>>:
-
----
-    dbunit.profile=h2
-    dbunit.profile.driverClass=org.h2.Driver
-    dbunit.profile.url=jdbc:h2:target/h2/test
-    dbunit.profile.schema=PUBLIC
-    dbunit.profile.user=sa
-    dbunit.profile.password=
-    dbunit.profile.ddl=h2.sql
-    dbunit.profile.unsupportedFeatures=BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY,XML_TYPE
-    dbunit.profile.multiLineSupport=true
----
+  Please refer to {{{/integrationtests.html}Integration Tests}} for setup and running them.
