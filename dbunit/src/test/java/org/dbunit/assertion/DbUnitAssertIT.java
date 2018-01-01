@@ -448,9 +448,9 @@ public class DbUnitAssertIT extends TestCase
         }
         catch (ComparisonFailure expected)
         {
-            assertEquals("9", expected.getExpected());
+            assertEquals("10", expected.getExpected());
             assertEquals("1", expected.getActual());
-            assertEquals("table count expected:<[9]> but was:<[1]>", expected.getMessage());
+            assertEquals("table count expected:<1[0]> but was:<1[]>", expected.getMessage());
         }
     }
 

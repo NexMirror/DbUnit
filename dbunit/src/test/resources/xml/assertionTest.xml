@@ -10,6 +10,8 @@
 	<TEST_TABLE_WITH_DIFFERENT_NAME COLUMN0="row 1 col 0" COLUMN1="row 1 col 1" COLUMN2="row 1 col 2" COLUMN3="row 1 col 3"/>
 	<TEST_TABLE_WITH_WRONG_VALUE COLUMN0="row 0 col 0" COLUMN1="row 0 col 1" COLUMN2="row 0 col 2" COLUMN3="row 0 col 3"/>
 	<TEST_TABLE_WITH_WRONG_VALUE COLUMN0="row 1 col 0" COLUMN1="row 1 col 1" COLUMN2="wrong value" COLUMN3="row 1 col 3"/>
+	<TEST_TABLE_WITH_WRONG_VALUE_ALL_ROWS COLUMN0="row 0 col 0" COLUMN1="row 0 col 1" COLUMN2="wrong value" COLUMN3="row 0 col 3"/>
+	<TEST_TABLE_WITH_WRONG_VALUE_ALL_ROWS COLUMN0="row 1 col 0" COLUMN1="row 1 col 1" COLUMN2="wrong value" COLUMN3="row 1 col 3"/>
 	<TEST_TABLE_WITH_DIFFERENT_COLUMN_NAMES COLUMN4="row 0 col 0" COLUMN5="row 0 col 1" COLUMN6="row 0 col 2" COLUMN7="row 0 col 3"/>
 	<TEST_TABLE_WITH_DIFFERENT_COLUMN_NAMES COLUMN4="row 1 col 0" COLUMN5="row 1 col 1" COLUMN6="row 1 col 2" COLUMN7="row 1 col 3"/>
 	<TEST_TABLE_WITH_DIFFERENT_COLUMN_SEQUENCE COLUMN3="row 0 col 3" COLUMN2="row 0 col 2" COLUMN1="row 0 col 1" COLUMN0="row 0 col 0"/>
@@ -18,6 +20,3 @@
 	<TEST_TABLE_WITH_3_COLUMNS COLUMN0="row 0 col 0" COLUMN1="row 0 col 1" COLUMN2="row 0 col 2"/>
 	<TEST_TABLE_WITH_3_COLUMNS COLUMN0="row 1 col 0" COLUMN1="row 1 col 1" COLUMN2="row 1 col 2"/>
 </dataset>
-
-
-
