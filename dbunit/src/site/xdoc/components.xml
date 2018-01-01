@@ -357,6 +357,12 @@ dataSet.addReplacementObject("[NULL]", null);]]></source>
       is a strategy for comparing values, a data comparison definition.
       </p>
       <p>
+      <a name="VerifyTableDefinition" href="/apidocs/org/dbunit/VerifyTableDefinition.html">VerifyTableDefinition</a>
+      directly supports using 
+      <a name="ValueComparer" href="/apidocs/org/dbunit/assertion/comparer/value/ValueComparer.html">ValueComparer</a>
+      in the definition..
+      </p>
+      <p>
       Refer to 
       <a name="Data_Comparisons" href="/datacomparisons.html">Data Comparisons</a>
       for more information.
