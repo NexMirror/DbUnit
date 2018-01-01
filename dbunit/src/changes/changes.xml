@@ -13,8 +13,8 @@
   </properties>
 
   <body>
-    <release version="2.6.0-SNAPSHOT" date="TBD" description="PostgreSQL OID, POI 3.17, Java 8 tests, database integration tests, changes links, devguide.apt created, dbunit.properties, expected and definition tables verifier, JavaDoc gen, JDK 8">
-      <action dev="jeffjensen" type="update" issue="219" system="sffeatures" due-to="jeffjensen">Update compileSource to 1.8.</action>
+    <release version="2.6.0-SNAPSHOT" date="TBD" description="ValueComparers, PostgreSQL OID, POI 3.17, Java 8 tests, database integration tests, changes links, devguide.apt created, dbunit.properties, expected and definition tables verifier, JavaDoc gen, JDK 8">
+      <action dev="jeffjensen" type="add" issue="208" system="sffeatures">ValueComparer: DbUnitAssert: add assert method that strategizes the compare algorithm on a per column basis.</action>
       <action dev="quantas" type="add" issue="220" system="sffeatures">Add Dockerfiles for running ITs: MySQL, Oracle 11, Postgres and SQL Server</action>
       <action dev="jeffjensen" type="fix" issue="396" system="sfbugs">Fix JavaDoc gen</action>
       <action dev="jeffjensen" type="update" issue="207" system="sffeatures">DefaultPrepAndExpectedTestCase: VerifyTableDefinitions and expected tables can silently mismatch, add ExpectedDataSetAndVerifyTableDefinitionVerifier</action>

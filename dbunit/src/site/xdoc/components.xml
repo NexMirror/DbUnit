@@ -28,6 +28,10 @@
           <td>Abstract class representing an operation performed on the database before and after each test.</td>
         </tr>
         <tr>
+          <td><a href="#valuecomparer">ValueComparer</a></td>
+          <td>Interface representing a strategy for comparing values, typically columns.</td>
+        </tr>
+        <tr>
           <td><a href="#verifytabledefinition">VerifyTableDefinition</a></td>
           <td>Interface representing how to verify a table meets expectations.</td>
         </tr>
@@ -346,6 +350,28 @@ dataSet.addReplacementObject("[NULL]", null);]]></source>
         or InsertIdentityOperation.REFRESH instead of those defined in DatabaseOperation.</td>
         </tr>
       </table>
+    </section>
+    <section name="ValueComparer" id="valuecomparer">
+      <p>
+      <a name="ValueComparer" href="/apidocs/org/dbunit/assertion/comparer/value/ValueComparer.html">ValueComparer</a>
+      is a strategy for comparing values, a data comparison definition.
+      </p>
+      <p>
+      Refer to 
+      <a name="Data_Comparisons" href="/datacomparisons.html">Data Comparisons</a>
+      for more information.
+      </p>
+      <subsection name="ValueComparers" id="valuecomparers">
+      <p>
+      <a name="ValueComparers" href="/apidocs/org/dbunit/assertion/comparer/value/ValueComparers.html">ValueComparers</a>
+      is a class of static 
+      <a name="ValueComparer" href="/apidocs/org/dbunit/assertion/comparer/value/ValueComparer.html">ValueComparer</a>
+      instances.
+      Please create a feature request for new
+      <a name="ValueComparer" href="/apidocs/org/dbunit/assertion/comparer/value/ValueComparer.html">ValueComparer</a>
+      ideas we can add to this class.
+      </p>
+      </subsection>
     </section>
     <section name="VerifyTableDefinition" id="verifytabledefinition">
       <p>

@@ -66,6 +66,10 @@
     <menu name="Using DbUnit">
       <item name="About DbUnit"      href="/index.html"/>
       <item name="Database Testing"  href="/intro.html"/>
+      <item name="Data Comparisons"  href="/datacomparisons.html">
+        <item name="Equality"        href="/datacomparisons/equality.html"/>
+        <item name="ValueComparer"   href="/datacomparisons/valuecomparer.html"/>
+      </item>
       <item name="Getting Started"   href="/howto.html"/>
       <item name="Test Cases"        href="/testcases.html">
         <item name="DataSourceBasedDBTestCase"  href="/testcases/DataSourceBasedDBTestCase.html"/>
