@@ -33,6 +33,7 @@ import org.dbunit.dataset.ITable;
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
  * @since 2.4.0
+ * @since 2.6.0 added failMessage
  */
 public class Difference
 {
@@ -42,10 +43,20 @@ public class Difference
     private String columnName;
     private Object expectedValue;
     private Object actualValue;
+    private String failMessage;
 
     public Difference(final ITable expectedTable, final ITable actualTable,
             final int rowIndex, final String columnName,
             final Object expectedValue, final Object actualValue)
+    {
+        this(expectedTable, actualTable, rowIndex, columnName, expectedValue,
+                actualValue, "");
+    }
+
+    public Difference(final ITable expectedTable, final ITable actualTable,
+            final int rowIndex, final String columnName,
+            final Object expectedValue, final Object actualValue,
+            final String failMessage)
     {
         this.expectedTable = expectedTable;
         this.actualTable = actualTable;
@@ -53,12 +64,13 @@ public class Difference
         this.columnName = columnName;
         this.expectedValue = expectedValue;
         this.actualValue = actualValue;
+        this.failMessage = failMessage;
     }
 
     @Override
     public String toString()
     {
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         sb.append(getClass().getName()).append("[");
         sb.append("expectedTable=").append(expectedTable);
         sb.append(", actualTable=").append(actualTable);
@@ -66,6 +78,7 @@ public class Difference
         sb.append(", columnName=").append(columnName);
         sb.append(", expectedValue=").append(expectedValue);
         sb.append(", actualValue=").append(actualValue);
+        sb.append(", failMessage=").append(failMessage);
         sb.append("]");
         return sb.toString();
     }
@@ -98,5 +111,15 @@ public class Difference
     public Object getActualValue()
     {
         return actualValue;
+    }
+
+    public String getFailMessage()
+    {
+        return failMessage;
+    }
+
+    public void setFailMessage(final String failMessage)
+    {
+        this.failMessage = failMessage;
     }
 }

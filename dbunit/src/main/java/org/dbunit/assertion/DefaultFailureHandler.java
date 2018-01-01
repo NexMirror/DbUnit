@@ -251,6 +251,9 @@ public class DefaultFailureHandler implements FailureHandler
         final String columnName = diff.getColumnName();
         final ITable expectedTable = diff.getExpectedTable();
         final ITable actualTable = diff.getActualTable();
+
+        addFailMessage(diff, builder);
+
         final String expectedTableName =
                 expectedTable.getTableMetaData().getTableName();
 
@@ -272,6 +275,22 @@ public class DefaultFailureHandler implements FailureHandler
         builder.append(")");
 
         return builder.toString();
+    }
+
+    protected void addFailMessage(final Difference diff,
+            final StringBuilder builder)
+    {
+        final String failMessage = diff.getFailMessage();
+        final boolean isFailMessage = isFailMessage(failMessage);
+        if (isFailMessage)
+        {
+            builder.append(failMessage).append(": ");
+        }
+    }
+
+    protected boolean isFailMessage(final String failMessage)
+    {
+        return failMessage != null && !failMessage.isEmpty();
     }
 
     @Override
