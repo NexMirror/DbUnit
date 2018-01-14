@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.Column;
 import org.dbunit.dataset.CompositeDataSet;
@@ -229,6 +230,9 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     private IDataSet prepDataSet = new DefaultDataSet();
     private IDataSet expectedDataSet = new DefaultDataSet();
     private VerifyTableDefinition[] verifyTableDefs = {};
+
+    private ExpectedDataSetAndVerifyTableDefinitionVerifier expectedDataSetAndVerifyTableDefinitionVerifier =
+            new DefaultExpectedDataSetAndVerifyTableDefinitionVerifier();
 
     /** Create new instance. */
     public DefaultPrepAndExpectedTestCase()
@@ -460,6 +464,10 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
         }
 
         final IDatabaseConnection connection = getConnection();
+
+        final DatabaseConfig config = connection.getConfig();
+        expectedDataSetAndVerifyTableDefinitionVerifier.verify(verifyTableDefs,
+                expectedDataSet, config);
 
         try
         {
@@ -828,5 +836,17 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     public void setTableDefs(final VerifyTableDefinition[] verifyTableDefs)
     {
         this.verifyTableDefs = verifyTableDefs;
+    }
+
+    public ExpectedDataSetAndVerifyTableDefinitionVerifier getExpectedDataSetAndVerifyTableDefinitionVerifier()
+    {
+        return expectedDataSetAndVerifyTableDefinitionVerifier;
+    }
+
+    public void setExpectedDataSetAndVerifyTableDefinitionVerifier(
+            final ExpectedDataSetAndVerifyTableDefinitionVerifier expectedDataSetAndVerifyTableDefinitionVerifier)
+    {
+        this.expectedDataSetAndVerifyTableDefinitionVerifier =
+                expectedDataSetAndVerifyTableDefinitionVerifier;
     }
 }

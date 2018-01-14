@@ -71,6 +71,8 @@ public class DatabaseConfig
 			"http://www.dbunit.org/properties/fetchSize";
 	public static final String PROPERTY_METADATA_HANDLER =
 	        "http://www.dbunit.org/properties/metadataHandler";
+	public static final String PROPERTY_ALLOW_VERIFYTABLEDEFINITION_EXPECTEDTABLE_COUNT_MISMATCH =
+	        "http://www.dbunit.org/properties/allowVerifytabledefinitionExpectedtableCountMismatch";
 
     public static final String FEATURE_CASE_SENSITIVE_TABLE_NAMES =
         "http://www.dbunit.org/features/caseSensitiveTableNames";
@@ -105,6 +107,7 @@ public class DatabaseConfig
         new ConfigProperty(FEATURE_DATATYPE_WARNING, Boolean.class, false),
         new ConfigProperty(FEATURE_SKIP_ORACLE_RECYCLEBIN_TABLES, Boolean.class, false),
         new ConfigProperty(FEATURE_ALLOW_EMPTY_FIELDS, Boolean.class, false),
+        new ConfigProperty(PROPERTY_ALLOW_VERIFYTABLEDEFINITION_EXPECTEDTABLE_COUNT_MISMATCH, Boolean.class, false),
     };
 
     /**
@@ -153,6 +156,9 @@ public class DatabaseConfig
         setProperty(PROPERTY_BATCH_SIZE, DEFAULT_BATCH_SIZE);
         setProperty(PROPERTY_FETCH_SIZE, DEFAULT_FETCH_SIZE);
         setProperty(PROPERTY_METADATA_HANDLER, new DefaultMetadataHandler());
+        setProperty(
+                PROPERTY_ALLOW_VERIFYTABLEDEFINITION_EXPECTEDTABLE_COUNT_MISMATCH,
+                Boolean.FALSE);
 
         this.configurator = new Configurator(this);
     }

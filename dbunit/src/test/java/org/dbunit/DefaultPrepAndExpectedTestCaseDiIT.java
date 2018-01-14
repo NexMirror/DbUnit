@@ -18,17 +18,21 @@ import org.slf4j.LoggerFactory;
  * @since 2.4.8
  */
 public class DefaultPrepAndExpectedTestCaseDiIT extends TestCase {
-    private final Logger LOG =
-            LoggerFactory.getLogger(DefaultPrepAndExpectedTestCaseDiIT.class);
-
     private static final String PREP_DATA_FILE_NAME = "/xml/flatXmlDataSetTest.xml";
     private static final String EXP_DATA_FILE_NAME = "/xml/flatXmlDataSetTestChanged.xml";
 
     private static final VerifyTableDefinition TEST_TABLE =
-            new VerifyTableDefinition("TEST_TABLE", new String[] {});
-
+            makeVerifyTableDefinition("TEST_TABLE");
     private static final VerifyTableDefinition SECOND_TABLE =
-            new VerifyTableDefinition("SECOND_TABLE", new String[] {});
+            makeVerifyTableDefinition("SECOND_TABLE");
+    private static final VerifyTableDefinition EMPTY_TABLE =
+            makeVerifyTableDefinition("EMPTY_TABLE");
+    private static final VerifyTableDefinition PK_TABLE =
+            makeVerifyTableDefinition("PK_TABLE");
+    private static final VerifyTableDefinition ONLY_PK_TABLE =
+            makeVerifyTableDefinition("ONLY_PK_TABLE");
+    private static final VerifyTableDefinition EMPTY_MULTITYPE_TABLE =
+            makeVerifyTableDefinition("EMPTY_MULTITYPE_TABLE");
 
     private final DataFileLoader dataFileLoader = new FlatXmlDataFileLoader();
 
@@ -37,6 +41,12 @@ public class DefaultPrepAndExpectedTestCaseDiIT extends TestCase {
     private IDatabaseTester databaseTester;
 
     private DefaultPrepAndExpectedTestCase tc;
+
+    private static VerifyTableDefinition makeVerifyTableDefinition(
+            String tableName)
+    {
+        return new VerifyTableDefinition(tableName, new String[] {});
+    }
 
     protected void setUp() throws Exception {
         dbEnv = DatabaseEnvironment.getInstance();
@@ -52,7 +62,8 @@ public class DefaultPrepAndExpectedTestCaseDiIT extends TestCase {
         // use same files to have no data comparison fails
         String[] prepDataFiles = {PREP_DATA_FILE_NAME};
         String[] expectedDataFiles = {PREP_DATA_FILE_NAME};
-        VerifyTableDefinition[] tables = {TEST_TABLE, SECOND_TABLE};
+        VerifyTableDefinition[] tables = {TEST_TABLE, SECOND_TABLE, EMPTY_TABLE,
+                PK_TABLE, ONLY_PK_TABLE, EMPTY_MULTITYPE_TABLE};
 
         tc.configureTest(tables, prepDataFiles, expectedDataFiles);
         tc.preTest();
@@ -71,7 +82,8 @@ public class DefaultPrepAndExpectedTestCaseDiIT extends TestCase {
     public void testFailRun() throws Exception {
         String[] prepDataFiles = {PREP_DATA_FILE_NAME};
         String[] expectedDataFiles = {EXP_DATA_FILE_NAME};
-        VerifyTableDefinition[] tables = {TEST_TABLE, SECOND_TABLE};
+        VerifyTableDefinition[] tables = {TEST_TABLE, SECOND_TABLE, EMPTY_TABLE,
+                PK_TABLE, ONLY_PK_TABLE, EMPTY_MULTITYPE_TABLE};
 
         tc.configureTest(tables, prepDataFiles, expectedDataFiles);
         tc.preTest();

@@ -22,19 +22,29 @@ public class DefaultPrepAndExpectedTestCaseExtIT extends
     private static final String EXP_DATA_FILE_NAME = "/xml/flatXmlDataSetTestChanged.xml";
 
     private static final VerifyTableDefinition TEST_TABLE =
-            new VerifyTableDefinition("TEST_TABLE", new String[] {});
-
+            makeVerifyTableDefinition("TEST_TABLE");
     private static final VerifyTableDefinition SECOND_TABLE =
-            new VerifyTableDefinition("SECOND_TABLE", new String[] {});
-
-    private final Logger LOG =
-            LoggerFactory.getLogger(DefaultPrepAndExpectedTestCaseExtIT.class);
+            makeVerifyTableDefinition("SECOND_TABLE");
+    private static final VerifyTableDefinition EMPTY_TABLE =
+            makeVerifyTableDefinition("EMPTY_TABLE");
+    private static final VerifyTableDefinition PK_TABLE =
+            makeVerifyTableDefinition("PK_TABLE");
+    private static final VerifyTableDefinition ONLY_PK_TABLE =
+            makeVerifyTableDefinition("ONLY_PK_TABLE");
+    private static final VerifyTableDefinition EMPTY_MULTITYPE_TABLE =
+            makeVerifyTableDefinition("EMPTY_MULTITYPE_TABLE");
 
     private final DataFileLoader dataFileLoader = new FlatXmlDataFileLoader();
 
     private DatabaseEnvironment dbEnv;
     private IDatabaseConnection connection;
     private IDatabaseTester databaseTester;
+
+    private static VerifyTableDefinition makeVerifyTableDefinition(
+            String tableName)
+    {
+        return new VerifyTableDefinition(tableName, new String[] {});
+    }
 
     protected void setUp() throws Exception {
         dbEnv = DatabaseEnvironment.getInstance();
@@ -52,7 +62,8 @@ public class DefaultPrepAndExpectedTestCaseExtIT extends
     public void testSuccessRun() throws Exception {
         String[] prepDataFiles = {PREP_DATA_FILE_NAME};
         String[] expectedDataFiles = {PREP_DATA_FILE_NAME};
-        VerifyTableDefinition[] tables = {TEST_TABLE, SECOND_TABLE};
+        VerifyTableDefinition[] tables = {TEST_TABLE, SECOND_TABLE, EMPTY_TABLE,
+                PK_TABLE, ONLY_PK_TABLE, EMPTY_MULTITYPE_TABLE};
 
         configureTest(tables, prepDataFiles, expectedDataFiles);
         preTest();
@@ -71,7 +82,8 @@ public class DefaultPrepAndExpectedTestCaseExtIT extends
     public void testFailRun() throws Exception {
         String[] prepDataFiles = {PREP_DATA_FILE_NAME};
         String[] expectedDataFiles = {EXP_DATA_FILE_NAME};
-        VerifyTableDefinition[] tables = {TEST_TABLE, SECOND_TABLE};
+        VerifyTableDefinition[] tables = {TEST_TABLE, SECOND_TABLE, EMPTY_TABLE,
+                PK_TABLE, ONLY_PK_TABLE, EMPTY_MULTITYPE_TABLE};
 
         configureTest(tables, prepDataFiles, expectedDataFiles);
         preTest();
