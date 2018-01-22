@@ -1,0 +1,277 @@
+  ---
+dbUnit Test Cases
+  ---
+Jeff Jensen
+  ---
+2018-01-18
+
+Overview
+
+ dbUnit has multiple base test case classes.
+ All extend {{{/apidocs/org/dbunit/DBTestCase.html}DBTestCase}} and the top
+ level {{{/apidocs/org/dbunit/DBTestCase.html}DatabaseTestCase}}.
+
+DataSourceBasedDBTestCase
+
+ TBD
+
+DefaultPrepAndExpectedTestCase
+
+* Overview
+
+ {{{/apidocs/org/dbunit/PrepAndExpectedTestCase.html}PrepAndExpectedTestCase}},
+ and its default implementation 
+ {{{/apidocs/org/dbunit/DefaultPrepAndExpectedTestCase.html}DefaultPrepAndExpectedTestCase}}, 
+ is a test case supporting prep data and expected data.
+
+  * Prep data is the setup data needed in the database for the test to run.
+
+  * Expected data is the data needed to compare if the test ran successfully.
+
+ Use this class in two ways:
+
+  [[1]]Dependency inject it as its interface into a test class.
+  Configure a bean of its interface, injecting a IDatabaseTester and a
+  DataFileLoader using the databaseTester and a dataFileLoader properties.
+
+---
+@Inject
+private PrepAndExpectedTestCase testCase;
+---
+
+  [[1]]Extend it in a test class.
+  Obtain IDatabaseTester and DataFileLoader instances (possibly dependency
+  injecting them into the test class) and set them accordingly, probably in a
+  setup type of method, such as:
+
+---
+@Before
+public void setDbunitTestDependencies()
+{
+    setDatabaseTester(databaseTester);
+    setDataFileLoader(dataFileLoader);
+}
+---
+
+ To setup, execute, and clean up tests, call the configureTest(), preTest(),
+ and postTest() methods. Note there is a preTest() convenience method that
+ takes the same parameters as the configureTest() method; use it instead of
+ using both configureTest() and preTest().
+
+ Where the test case calls those methods depends on data needs:
+
+  * For the whole test case, i.e. in setUp() and tearDown() or @Before
+  and @After.
+
+  * In each test method.
+
+  * Or some combination of both test case setup/teardown and test methods.
+
+* Configuration Example Using Spring
+
+ The following configuration shows customizing
+ {{{/apidocs/org/dbunit/database/DatabaseConfig.html}DatabaseConfig}} and
+ enables dependency injecting the created
+ {{{/apidocs/org/dbunit/PrepAndExpectedTestCase.html}PrepAndExpectedTestCase}}.
+
+---
+private class MyPrepAndExpectedTestCase
+        extends DefaultPrepAndExpectedTestCase {
+    public MyPrepAndExpectedTestCase(
+            final DataFileLoader dataFileLoader,
+            final IDatabaseTester databaseTester) {
+        super(dataFileLoader, databaseTester);
+    }
+
+    @Override
+    protected void setUpDatabaseConfig(final DatabaseConfig config) {
+        // set properties if needed
+        config.setProperty(DatabaseConfig.XXXX, true);
+    }
+}
+
+/**
+ * Create dbUnit {@link PrepAndExpectedTestCase} for running dbUnit database
+ * tests.
+ *
+ * @param dataFileLoader
+ *            The {@link DataFileLoader} used to load the test's specified
+ *            data files.
+ * @param databaseTester
+ *            The {@link IDatabaseTester} used to run the tests against the
+ *            database.
+ * @return Configured dbUnit {@link PrepAndExpectedTestCase} for running
+ *         dbUnit database tests.
+ */
+@Bean
+public PrepAndExpectedTestCase prepAndExpectedTestCase(
+        final DataFileLoader dataFileLoader,
+        final IDatabaseTester databaseTester) {
+    return new MyPrepAndExpectedTestCase(dataFileLoader, databaseTester);
+}
+
+/**
+ * Create dbUnit {@link DataFileLoader} for loading the test's dbUnit data
+ * files.
+ *
+ * @param ddr
+ *            Your local class containing the replacement definitions.
+ * @return Configured dbUnit {@link DataFileLoader} for loading the test's
+ *         dbUnit data files.
+ */
+@Bean
+public DataFileLoader dataFileLoader(final DbunitDataReplacement ddr) {
+    final Map<String, Object> replacementObjects =
+            ddr.getReplacementObjects();
+    final Map<String, Object> replacementSubstrings =
+            ddr.getReplacementSubstrings();
+    return new FlatXmlDataFileLoader(replacementObjects,
+            replacementSubstrings);
+}
+
+/**
+ * Create dbUnit {@link IDatabaseTester}.
+ * 
+ * @param dataSource
+ *            The {@link DataSource} for the dbUnit test to use.
+ * @return Configured dbUnit {@link IDatabaseTester}.
+ */
+@Bean
+public IDatabaseTester databaseTester(final DataSource dataSource) {
+    final DataSource dataSourceProxy =
+            new TransactionAwareDataSourceProxy(dataSource);
+
+    final IDatabaseTester databaseTester =
+            new DataSourceDatabaseTester(dataSourceProxy);
+    databaseTester.setTearDownOperation(DatabaseOperation.DELETE_ALL);
+
+    return databaseTester;
+}
+---
+
+* When Each Test Method Requires Different Prep and Expected Data
+  
+  Often, each test method requires its own prep and expected data, then the test
+  methods will look something like the following:
+
+---
+@Inject
+private PrepAndExpectedTestCase testCase;
+
+@Test
+public void testExample() throws Exception
+{
+    try
+    {
+        final String[] prepDataFiles = {}; // define prep files
+        final String[] expectedDataFiles = {}; // define expected files
+        final VerifyTableDefinition[] tables = {}; // define tables to verify
+
+        testCase.preTest(tables, prepDataFiles, expectedDataFiles);
+
+        // execute test steps
+    } catch (Exception e)
+    {
+        log.error("Test error.", e);
+        throw e;
+    } finally
+    {
+        testCase.postTest();
+    }
+}
+---
+
+* When All Test Methods Share the Same Prep and/or Expected Data
+
+ If each test method can share all of the prep and/or expected data, then use
+ setUp() for the configureTest() and preTest() calls and tearDown() for the
+ postTest() call. The methods will look something like the following:
+
+---
+@Override
+protected void setUp() throws Exception
+{
+    setDatabaseTester(databaseTester);
+    setDataFileLoader(dataFileLoader);
+
+    String[] prepDataFiles = {}; // define prep files
+    String[] expectedDataFiles = {}; // define expected files
+    VerifyTableDefinition[] tables = {}; // define tables to verify
+
+    preTest(tables, prepDataFiles, expectedDataFiles);
+
+    // call this if overriding setUp() and databaseTester & dataFileLoader
+    // are already set.
+    super.setUp();
+}
+
+@Override
+protected void tearDown() throws Exception
+{
+    postTest();
+    super.tearDown();
+}
+
+@Test
+public void testExample() throws Exception
+{
+    // execute test steps
+}
+---
+
+ Note that it is unlikely that all test methods can share the same expected data.
+
+* Sharing Common (but not all) Prep or Expected Data Among Test Methods
+
+ Put common data in one or more files and pass the needed ones in the correct
+ data file array.
+
+* Java 8+ and Anonymous Interfaces
+
+ {{{/changes-report.html#a2.5.2}Release 2.5.2}} introduced interface
+ {{{/apidocs/org/dbunit/PrepAndExpectedTestCaseSteps.html}PrepAndExpectedTestCaseSteps}}
+ and the
+ {{{/apidocs/org/dbunit/PrepAndExpectedTestCase.html#runTest-org.dbunit.VerifyTableDefinition:A-java.lang.String:A-java.lang.String:A-org.dbunit.PrepAndExpectedTestCaseSteps-}PrepAndExpectedTestCase#runTest(VerifyTableDefinition[], String[], String[], PrepAndExpectedTestCaseSteps)}}
+ method. This allows for encapsulating test steps into an anonymous inner
+ class or a Java 8+ lambda and avoiding the try/catch/finally template in
+ tests.
+
+---
+@Inject
+private PrepAndExpectedTestCase testCase;
+
+@Test
+public void testExample() throws Exception
+{
+    final String[] prepDataFiles = {}; // define prep files
+    final String[] expectedDataFiles = {}; // define expected files
+    final VerifyTableDefinition[] tables = {}; // define tables to verify
+    final PrepAndExpectedTestCaseSteps testSteps = () -> {
+        // execute test steps
+
+        return null; // or an object for use outside the Steps
+    };
+
+    testCase.runTest(tables, prepDataFiles, expectedDataFiles, testSteps);
+}
+---
+
+* Notes
+
+ [[1]]For additional examples, refer to the ITs
+ 
+ [[1]]To change the setup or teardown operation (e.g. change the teardown to
+ org.dbunit.operation.DatabaseOperation.DELETE_ALL), set the setUpOperation or
+ tearDownOperation property on the databaseTester.
+ 
+ [[1]]To set DatabaseConfig features/properties, one way is to extend this
+ class and override the setUpDatabaseConfig(DatabaseConfig config) method from
+ DatabaseTestCase.
+
+JdbcBasedDBTestCase
+
+  TBD
+
+JndiBasedDBTestCase
+
+  TBD
