@@ -15,14 +15,15 @@ DataSourceBasedDBTestCase
 
  TBD
 
-DefaultPrepAndExpectedTestCase
+PrepAndExpectedTestCase
 
 * Overview
 
  {{{/apidocs/org/dbunit/PrepAndExpectedTestCase.html}PrepAndExpectedTestCase}},
  and its default implementation 
  {{{/apidocs/org/dbunit/DefaultPrepAndExpectedTestCase.html}DefaultPrepAndExpectedTestCase}}, 
- is a test case supporting prep data and expected data.
+ is a test case formally supporting prep data and expected data concepts and
+ definitions.
 
   * Prep data is the setup data needed in the database for the test to run.
 
@@ -53,19 +54,25 @@ public void setDbunitTestDependencies()
 }
 ---
 
- To setup, execute, and clean up tests, call the configureTest(), preTest(),
- and postTest() methods. Note there is a preTest() convenience method that
- takes the same parameters as the configureTest() method; use it instead of
- using both configureTest() and preTest().
+ PrepAndExpectedTestCase has two ways to setup, execute, and clean up tests:
 
- Where the test case calls those methods depends on data needs:
+  [[1]] Encapsulate the test steps in
+  {{{/apidocs/org/dbunit/PrepAndExpectedTestCaseSteps.html}PrepAndExpectedTestCaseSteps}}
+  and call the runTest() method.
+  Note, this requires {{{/changes-report.html#a2.5.2}Release 2.5.2}} and newer.
 
-  * For the whole test case, i.e. in setUp() and tearDown() or @Before
-  and @After.
+  [[1]] Call the configureTest(), preTest(),
+  and postTest() methods. Note there is a preTest() convenience method that
+  takes the same parameters as the configureTest() method; use it instead of
+  using both configureTest() and preTest().
+  Where the test calls those methods depends on data needs:
 
-  * In each test method.
+    * For the whole test case, i.e. in setUp() and tearDown() or @Before
+    and @After.
 
-  * Or some combination of both test case setup/teardown and test methods.
+    * In each test method.
+
+    * Or some combination of both test case setup/teardown and test methods.
 
 * Configuration Example Using Spring
 
@@ -149,7 +156,7 @@ public IDatabaseTester databaseTester(final DataSource dataSource) {
 }
 ---
 
-* When Each Test Method Requires Different Prep and Expected Data
+* When Each Test Method in a Class Requires Different Prep and Expected Data
   
   Often, each test method requires its own prep and expected data, then the test
   methods will look something like the following:
@@ -163,9 +170,9 @@ public void testExample() throws Exception
 {
     try
     {
+        final VerifyTableDefinition[] tables = {}; // define tables to verify
         final String[] prepDataFiles = {}; // define prep files
         final String[] expectedDataFiles = {}; // define expected files
-        final VerifyTableDefinition[] tables = {}; // define tables to verify
 
         testCase.preTest(tables, prepDataFiles, expectedDataFiles);
 
@@ -181,7 +188,7 @@ public void testExample() throws Exception
 }
 ---
 
-* When All Test Methods Share the Same Prep and/or Expected Data
+* When All Test Methods in a Class Share the Same Prep and/or Expected Data
 
  If each test method can share all of the prep and/or expected data, then use
  setUp() for the configureTest() and preTest() calls and tearDown() for the
@@ -194,9 +201,9 @@ protected void setUp() throws Exception
     setDatabaseTester(databaseTester);
     setDataFileLoader(dataFileLoader);
 
+    VerifyTableDefinition[] tables = {}; // define tables to verify
     String[] prepDataFiles = {}; // define prep files
     String[] expectedDataFiles = {}; // define expected files
-    VerifyTableDefinition[] tables = {}; // define tables to verify
 
     preTest(tables, prepDataFiles, expectedDataFiles);
 
@@ -243,9 +250,9 @@ private PrepAndExpectedTestCase testCase;
 @Test
 public void testExample() throws Exception
 {
+    final VerifyTableDefinition[] tables = {}; // define tables to verify
     final String[] prepDataFiles = {}; // define prep files
     final String[] expectedDataFiles = {}; // define expected files
-    final VerifyTableDefinition[] tables = {}; // define tables to verify
     final PrepAndExpectedTestCaseSteps testSteps = () -> {
         // execute test steps
 

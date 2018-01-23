@@ -38,9 +38,11 @@ public interface PrepAndExpectedTestCase
      * @param verifyTables
      *            Table definitions to verify after test execution.
      * @param prepDataFiles
-     *            The prep data files to load as seed data.
+     *            The prep data files (as classpath resources) to load and
+     *            insert contents into the database as seed data.
      * @param expectedDataFiles
-     *            The expected data files to load as expected data.
+     *            The expected data files (as classpath resources) to load as
+     *            expected data and verify actual data matches at test end.
      * @throws Exception
      */
     void configureTest(VerifyTableDefinition[] verifyTables,
@@ -61,9 +63,11 @@ public interface PrepAndExpectedTestCase
      * @param verifyTables
      *            Table definitions to verify after test execution.
      * @param prepDataFiles
-     *            The prep data files to load as seed data.
+     *            The prep data files (as classpath resources) to load and
+     *            insert contents into the database as seed data.
      * @param expectedDataFiles
-     *            The expected data files to load as expected data.
+     *            The expected data files (as classpath resources) to load as
+     *            expected data and verify actual data matches at test end.
      * @throws Exception
      */
     void preTest(VerifyTableDefinition[] verifyTables, String[] prepDataFiles,
@@ -75,9 +79,11 @@ public interface PrepAndExpectedTestCase
      * @param verifyTables
      *            Table definitions to verify after test execution.
      * @param prepDataFiles
-     *            The prep data files to load as seed data.
+     *            The prep data files (as classpath resources) to load and
+     *            insert contents into the database as seed data.
      * @param expectedDataFiles
-     *            The expected data files to load as expected data.
+     *            The expected data files (as classpath resources) to load as
+     *            expected data and verify actual data matches at test end.
      * @param testSteps
      *            The test steps to run.
      * @return User defined object from running the test steps.
