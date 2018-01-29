@@ -42,7 +42,8 @@ public class DefaultPrepAndExpectedTestCaseTest extends TestCase
 
         tc.configureTest(tables, prepDataFiles, expectedDataFiles);
 
-        assertEquals("Configured tables do not match expected.", tables, tc.getTableDefs());
+        assertEquals("Configured tables do not match expected.", tables,
+                tc.getVerifyTableDefs());
 
         IDataSet expPrepDs = dataFileLoader.load(PREP_DATA_FILE_NAME);
         Assertion.assertEquals(expPrepDs, tc.getPrepDataset());

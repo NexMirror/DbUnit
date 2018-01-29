@@ -712,7 +712,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
      *
      * @return The tableDefs.
      */
-    public VerifyTableDefinition[] getTableDefs()
+    public VerifyTableDefinition[] getVerifyTableDefs()
     {
         return verifyTableDefs;
     }
@@ -725,7 +725,8 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
      * @param verifyTableDefs
      *            The tableDefs to set.
      */
-    public void setTableDefs(final VerifyTableDefinition[] verifyTableDefs)
+    public void setVerifyTableDefs(
+            final VerifyTableDefinition[] verifyTableDefs)
     {
         this.verifyTableDefs = verifyTableDefs;
     }
