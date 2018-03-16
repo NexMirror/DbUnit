@@ -631,6 +631,18 @@
           <version>${pmdPluginVersion}</version>
         </plugin>
         <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>properties-maven-plugin</artifactId>
+          <executions>
+            <execution>
+              <phase>validate</phase>
+              <goals>
+                <goal>read-project-properties</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>${projectInfoReportsPluginVersion}</version>
@@ -887,17 +899,19 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
     </profile>
     <profile>
       <id>derby</id>
-      <properties>
-        <dbunit.profile>derby</dbunit.profile>
-        <dbunit.profile.driverClass>org.apache.derby.jdbc.EmbeddedDriver</dbunit.profile.driverClass>
-        <dbunit.profile.url>jdbc:derby:target/derby_db;create=true</dbunit.profile.url>
-        <dbunit.profile.schema>APP</dbunit.profile.schema>
-        <dbunit.profile.user>APP</dbunit.profile.user>
-        <dbunit.profile.password>APP</dbunit.profile.password>
-        <dbunit.profile.unsupportedFeatures>VARBINARY,BLOB,CLOB,TRANSACTION,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
-        <dbunit.profile.ddl>derby.sql</dbunit.profile.ddl>
-        <dbunit.profile.multiLineSupport>false</dbunit.profile.multiLineSupport>
-      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <configuration>
+              <urls>
+                <url>file:///${basedir}/src/test/resources/derby-dbunit.properties</url>
+              </urls>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
       <dependencies>
         <dependency>
           <groupId>org.apache.derby</groupId>
@@ -918,17 +932,19 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
       <activation>
         <activeByDefault>true</activeByDefault>
       </activation>
-      <properties>
-        <dbunit.profile>hsqldb</dbunit.profile>
-        <dbunit.profile.driverClass>org.hsqldb.jdbcDriver</dbunit.profile.driverClass>
-        <dbunit.profile.url>jdbc:hsqldb:mem:.</dbunit.profile.url>
-        <dbunit.profile.schema>PUBLIC</dbunit.profile.schema>
-        <dbunit.profile.user>sa</dbunit.profile.user>
-        <dbunit.profile.password />
-        <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
-        <dbunit.profile.ddl>hypersonic.sql</dbunit.profile.ddl>
-        <dbunit.profile.multiLineSupport>true</dbunit.profile.multiLineSupport>
-      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <configuration>
+              <urls>
+                <url>file:///${basedir}/src/test/resources/hsqldb-dbunit.properties</url>
+              </urls>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
       <dependencies>
         <dependency>
           <groupId>com.oracle</groupId>
@@ -940,17 +956,19 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
     </profile>
     <profile>
       <id>h2</id>
-      <properties>
-        <dbunit.profile>h2</dbunit.profile>
-        <dbunit.profile.driverClass>org.h2.Driver</dbunit.profile.driverClass>
-        <dbunit.profile.url>jdbc:h2:target/h2/test</dbunit.profile.url>
-        <dbunit.profile.schema>PUBLIC</dbunit.profile.schema>
-        <dbunit.profile.user>sa</dbunit.profile.user>
-        <dbunit.profile.password />
-        <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
-        <dbunit.profile.ddl>h2.sql</dbunit.profile.ddl>
-        <dbunit.profile.multiLineSupport>true</dbunit.profile.multiLineSupport>
-      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <configuration>
+              <urls>
+                <url>file:///${basedir}/src/test/resources/h2-dbunit.properties</url>
+              </urls>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
       <dependencies>
         <dependency>
            <groupId>com.h2database</groupId>
@@ -983,17 +1001,19 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
     <profile>
       <!-- "original" OracleDataTypeFactory (NOT 10g) with Oracle 10 JDBC driver for Java 1.4 -->
       <id>oracle-ojdbc14</id>
-      <properties>
-        <dbunit.profile>oracle</dbunit.profile>
-        <dbunit.profile.driverClass>oracle.jdbc.OracleDriver</dbunit.profile.driverClass>
-        <dbunit.profile.url>jdbc:oracle:thin:@localhost:1521:XE</dbunit.profile.url>
-        <dbunit.profile.schema>DBUNIT</dbunit.profile.schema>
-        <dbunit.profile.user>dbunit</dbunit.profile.user>
-        <dbunit.profile.password>dbunit</dbunit.profile.password>
-        <dbunit.profile.unsupportedFeatures>INSERT_IDENTITY,SCROLLABLE_RESULTSET</dbunit.profile.unsupportedFeatures>
-        <dbunit.profile.ddl>oracle.sql</dbunit.profile.ddl>
-        <dbunit.profile.multiLineSupport>false</dbunit.profile.multiLineSupport>
-      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <configuration>
+              <urls>
+                <url>file:///${basedir}/src/test/resources/oracle-dbunit.properties</url>
+              </urls>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
       <dependencies>
         <dependency>
           <groupId>com.oracle</groupId>
@@ -1006,17 +1026,19 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
     <profile>
       <!-- "original" OracleDataTypeFactory (NOT 10g) with Oracle 11 JDBC driver for Java 6 -->
       <id>oracle-ojdbc6</id>
-      <properties>
-        <dbunit.profile>oracle</dbunit.profile>
-        <dbunit.profile.driverClass>oracle.jdbc.OracleDriver</dbunit.profile.driverClass>
-        <dbunit.profile.url>jdbc:oracle:thin:@localhost:1521:XE</dbunit.profile.url>
-        <dbunit.profile.schema>DBUNIT</dbunit.profile.schema>
-        <dbunit.profile.user>dbunit</dbunit.profile.user>
-        <dbunit.profile.password>dbunit</dbunit.profile.password>
-        <dbunit.profile.unsupportedFeatures>INSERT_IDENTITY,SCROLLABLE_RESULTSET</dbunit.profile.unsupportedFeatures>
-        <dbunit.profile.ddl>oracle.sql</dbunit.profile.ddl>
-        <dbunit.profile.multiLineSupport>false</dbunit.profile.multiLineSupport>
-      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <configuration>
+              <urls>
+                <url>file:///${basedir}/src/test/resources/oracle-dbunit.properties</url>
+              </urls>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
       <dependencies>
         <dependency>
           <groupId>com.oracle</groupId>
@@ -1029,17 +1051,19 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
     <profile>
       <!-- "newer" Oracle10DataTypeFactory with Oracle 10 JDBC driver for Java 1.4 -->
       <id>oracle10-ojdbc14</id>
-      <properties>
-        <dbunit.profile>oracle10</dbunit.profile>
-        <dbunit.profile.driverClass>oracle.jdbc.OracleDriver</dbunit.profile.driverClass>
-        <dbunit.profile.url>jdbc:oracle:thin:@localhost:1521:XE</dbunit.profile.url>
-        <dbunit.profile.schema>DBUNIT</dbunit.profile.schema>
-        <dbunit.profile.user>dbunit</dbunit.profile.user>
-        <dbunit.profile.password>dbunit</dbunit.profile.password>
-        <dbunit.profile.unsupportedFeatures>INSERT_IDENTITY,SCROLLABLE_RESULTSET</dbunit.profile.unsupportedFeatures>
-        <dbunit.profile.ddl>oracle.sql</dbunit.profile.ddl>
-        <dbunit.profile.multiLineSupport>false</dbunit.profile.multiLineSupport>
-      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <configuration>
+              <urls>
+                <url>file:///${basedir}/src/test/resources/oracle10-dbunit.properties</url>
+              </urls>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
       <dependencies>
         <dependency>
           <groupId>com.oracle</groupId>
@@ -1052,17 +1076,19 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
     <profile>
       <!-- "newer" Oracle10DataTypeFactory with Oracle 11 JDBC driver for Java 6 -->
       <id>oracle10-ojdbc6</id>
-      <properties>
-        <dbunit.profile>oracle10</dbunit.profile>
-        <dbunit.profile.driverClass>oracle.jdbc.OracleDriver</dbunit.profile.driverClass>
-        <dbunit.profile.url>jdbc:oracle:thin:@localhost:1521:XE</dbunit.profile.url>
-        <dbunit.profile.schema>DBUNIT</dbunit.profile.schema>
-        <dbunit.profile.user>dbunit</dbunit.profile.user>
-        <dbunit.profile.password>dbunit</dbunit.profile.password>
-        <dbunit.profile.unsupportedFeatures>INSERT_IDENTITY,SCROLLABLE_RESULTSET</dbunit.profile.unsupportedFeatures>
-        <dbunit.profile.ddl>oracle.sql</dbunit.profile.ddl>
-        <dbunit.profile.multiLineSupport>false</dbunit.profile.multiLineSupport>
-      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <configuration>
+              <urls>
+                <url>file:///${basedir}/src/test/resources/oracle10-dbunit.properties</url>
+              </urls>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
       <dependencies>
         <dependency>
           <groupId>com.oracle</groupId>
@@ -1074,17 +1100,19 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
     </profile>
     <profile>
       <id>postgresql</id>
-      <properties>
-        <dbunit.profile>postgresql</dbunit.profile>
-        <dbunit.profile.driverClass>org.postgresql.Driver</dbunit.profile.driverClass>
-        <dbunit.profile.url>jdbc:postgresql://localhost/dbunit</dbunit.profile.url>
-        <dbunit.profile.schema>public</dbunit.profile.schema>
-        <dbunit.profile.user>dbunit</dbunit.profile.user>
-        <dbunit.profile.password>dbunit</dbunit.profile.password>
-        <dbunit.profile.unsupportedFeatures>INSERT_IDENTITY,CLOB,BLOB,SCROLLABLE_RESULTSET,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
-        <dbunit.profile.ddl>postgresql.sql</dbunit.profile.ddl>
-        <dbunit.profile.multiLineSupport>false</dbunit.profile.multiLineSupport>
-      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <configuration>
+              <urls>
+                <url>file:///${basedir}/src/test/resources/postgresql-dbunit.properties</url>
+              </urls>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
       <dependencies>
         <dependency>
           <groupId>postgresql</groupId>
@@ -1101,17 +1129,19 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
     </profile>
     <profile>
       <id>mysql</id>
-      <properties>
-        <dbunit.profile>mysql</dbunit.profile>
-        <dbunit.profile.driverClass>com.mysql.jdbc.Driver</dbunit.profile.driverClass>
-        <dbunit.profile.url>jdbc:mysql://localhost:3306/dbunit</dbunit.profile.url>
-        <dbunit.profile.schema />
-        <dbunit.profile.user>dbunit</dbunit.profile.user>
-        <dbunit.profile.password>dbunit</dbunit.profile.password>
-        <dbunit.profile.unsupportedFeatures>BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
-        <dbunit.profile.ddl>mysql.sql</dbunit.profile.ddl>
-        <dbunit.profile.multiLineSupport>false</dbunit.profile.multiLineSupport>
-      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <configuration>
+              <urls>
+                <url>file:///${basedir}/src/test/resources/mysql-dbunit.properties</url>
+              </urls>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
       <dependencies>
         <dependency>
           <groupId>mysql</groupId>
@@ -1128,17 +1158,19 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
     </profile>
     <profile>
       <id>mssql41</id>
-      <properties>
-        <dbunit.profile>mssql</dbunit.profile>
-        <dbunit.profile.driverClass>com.microsoft.sqlserver.jdbc.SQLServerDriver</dbunit.profile.driverClass>
-        <dbunit.profile.url>jdbc:sqlserver://localhost\\dbunit:1433;DatabaseName=dbunit;SelectMethod=cursor</dbunit.profile.url>
-        <dbunit.profile.schema>dbo</dbunit.profile.schema>
-        <dbunit.profile.user>dbunit</dbunit.profile.user>
-        <dbunit.profile.password>dbunit</dbunit.profile.password>
-        <dbunit.profile.unsupportedFeatures>INSERT_IDENTITY,BLOB,CLOB,SCROLLABLE_RESULTSET,SDO_GEOMETRY,XML_TYPE</dbunit.profile.unsupportedFeatures>
-        <dbunit.profile.ddl>mssql.sql</dbunit.profile.ddl>
-        <dbunit.profile.multiLineSupport>false</dbunit.profile.multiLineSupport>
-      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <configuration>
+              <urls>
+                <url>file:///${basedir}/src/test/resources/mssql41-dbunit.properties</url>
+              </urls>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
       <dependencies>
         <dependency>
           <groupId>com.microsoft</groupId>
@@ -1155,17 +1187,19 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
     </profile>
     <profile>
       <id>db2</id>
-      <properties>
-        <dbunit.profile>db2</dbunit.profile>
-        <dbunit.profile.driverClass>TODO</dbunit.profile.driverClass>
-        <dbunit.profile.url>TODO</dbunit.profile.url>
-        <dbunit.profile.schema>TODO</dbunit.profile.schema>
-        <dbunit.profile.user>TODO</dbunit.profile.user>
-        <dbunit.profile.password>TODO</dbunit.profile.password>
-        <dbunit.profile.unsupportedFeatures>TODO</dbunit.profile.unsupportedFeatures>
-        <dbunit.profile.ddl>db2xml.sql</dbunit.profile.ddl>
-        <dbunit.profile.multiLineSupport>false</dbunit.profile.multiLineSupport>
-      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <configuration>
+              <urls>
+                <url>file:///${basedir}/src/test/resources/db2-dbunit.properties</url>
+              </urls>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
       <!-- JH_TODO: db2 dependencies -->
       <dependencies>
         <dependency>
@@ -1176,7 +1210,5 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
         </dependency>
       </dependencies>
     </profile>
-
   </profiles>
-
 </project>
