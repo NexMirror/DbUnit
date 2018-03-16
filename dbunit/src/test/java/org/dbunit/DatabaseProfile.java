@@ -32,7 +32,7 @@ public class DatabaseProfile
 {
 	private static final String[] EMPTY_ARRAY = new String[0];
 	
-    private static final String DATABASE_PROFILE = "dbunit.profile";
+    public static final String DATABASE_PROFILE = "dbunit.profile";
     private static final String PROFILE_DRIVER_CLASS = "dbunit.profile.driverClass";
     private static final String PROFILE_URL = "dbunit.profile.url";
     private static final String PROFILE_SCHEMA = "dbunit.profile.schema";

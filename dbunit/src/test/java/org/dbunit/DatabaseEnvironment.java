@@ -60,8 +60,9 @@ public class DatabaseEnvironment
     private IDatabaseTester _databaseTester = null;
 
     /**
-     * Optional "dbunit.properties" is loaded if present and merged with System
-     * properties and the whole set is returned.
+     * Optional "dbunit.properties" is loaded (if present and the
+     * "dbunit.profile" property is null) and merged with System properties and
+     * the whole set is returned.
      * <p>
      * If absent (which is the normal scenario), only System properties are
      * returned.
@@ -73,10 +74,15 @@ public class DatabaseEnvironment
      * "dbunit.properties" contains the missing properties which a profile would
      * set.
      * <p>
-     * Following is an example of the content of "dbunit.properties":
+     * Following is a few properties as an example of the content of
+     * "dbunit.properties":
      * <p>
-     * DATABASE_PROFILE=h2 dbunit.profile.driverClass=org.hsqldb.jdbcDriver
+     *
+     * <pre>
+     * database.profile=h2
+     * dbunit.profile.driverClass=org.hsqldb.jdbcDriver
      * dbunit.profile.url=jdbc:hsqldb:mem:.
+     * </pre>
      * <p>
      * Simply create "dbunit.properties" under "src/test/resources".
      *
@@ -89,6 +95,21 @@ public class DatabaseEnvironment
     {
         final Properties properties = System.getProperties();
 
+        final String profileName =
+                properties.getProperty(DatabaseProfile.DATABASE_PROFILE);
+
+        // only load from file if not already set
+        if (profileName == null)
+        {
+            loadDbunitPropertiesFromFile(properties);
+        }
+
+        return properties;
+    }
+
+    protected static void loadDbunitPropertiesFromFile(
+            final Properties properties) throws IOException
+    {
         final InputStream inputStream =
                 DatabaseEnvironment.class.getClassLoader()
                         .getResourceAsStream(DBUNIT_PROPERTIES_FILENAME);
@@ -99,8 +120,6 @@ public class DatabaseEnvironment
             properties.load(inputStream);
             inputStream.close();
         }
-
-        return properties;
     }
 
     public static DatabaseEnvironment getInstance() throws Exception
