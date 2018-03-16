@@ -216,13 +216,12 @@ Running Integration Tests with IDEs
   Enter the Maven profile name(s) to always run,
   including the integration test profiles such as "derby".
 
-* Using database.properties File
+* Using dbunit.properties File
 
   "dbunit.properties" is useful for environments which make it difficult if
-  not impossible to use Maven's profiles.  For instance, the IDE IntelliJ IDEA,
-  when running JUnit tests, bypasses Maven completely.  Since in this
-  circumstance Maven's profiles are not used, database configuration is not
-  properly set and tests fail.
+  not impossible to use Maven's profiles.  For instance, directly running JUnit 
+  tests within IDEs typically doesn't use Maven and therefore are not using
+  Maven's profiles (which set the the database configuration) and tests fail.
 
   <<<dbunit.properties>>> contains the missing properties which a profile
   would set.  It is an optional file and is not provided by DbUnit; one must
