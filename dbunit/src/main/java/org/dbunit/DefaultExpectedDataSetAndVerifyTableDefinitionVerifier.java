@@ -16,12 +16,12 @@ import org.slf4j.LoggerFactory;
  * VerifyTableDefinition.
  *
  * Can disable failing the test on mismatch with property
- * {@link DatabaseConfig.PROPERTY_ALLOW_VERIFYTABLEDEFINITION_EXPECTEDTABLE_COUNT_MISMATCH}
+ * {@link DatabaseConfig#PROPERTY_ALLOW_VERIFYTABLEDEFINITION_EXPECTEDTABLE_COUNT_MISMATCH}
  * , setting it to false.
  *
  * Can change the implementation by extending this class or implementing
  * {@link ExpectedDataSetAndVerifyTableDefinitionVerifier} and calling
- * {@link DefaultPrepAndExpectedTestCase.setExpectedDataSetAndVerifyTableDefinitionVerifier}
+ * {@link DefaultPrepAndExpectedTestCase#setExpectedDataSetAndVerifyTableDefinitionVerifier}
  * .
  *
  * @author jjensen

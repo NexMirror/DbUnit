@@ -176,7 +176,7 @@ public abstract class AbstractDatabaseTester extends SimpleAssert implements IDa
 
     /**
      * Executes a DatabaseOperation with a IDatabaseConnection supplied by
-     * {@link getConnection()} and the test dataset.
+     * {@link #getConnection()} and the test dataset.
      */
     private void executeOperation(DatabaseOperation operation, OperationType type) throws Exception
     {
