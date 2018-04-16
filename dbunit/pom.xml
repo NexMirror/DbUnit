@@ -56,6 +56,7 @@
     <jxrPluginVersion>2.5</jxrPluginVersion>
     <pmdPluginVersion>3.8</pmdPluginVersion>
     <projectInfoReportsPluginVersion>2.9</projectInfoReportsPluginVersion>
+    <propertiesPluginVersion>1.0.0</propertiesPluginVersion>
     <releasePluginVersion>2.5.3</releasePluginVersion>
     <resourcesPluginVersion>3.0.2</resourcesPluginVersion>
     <sitePluginVersion>3.6</sitePluginVersion>
@@ -91,10 +92,6 @@
     <wagonSshVersion>2.10</wagonSshVersion>
   </properties>
 
-  <prerequisites>
-    <maven>${mavenVersion}</maven>
-  </prerequisites>
-
   <scm>
     <connection>scm:git:http://git.code.sf.net/p/dbunit/code.git</connection>
     <developerConnection>scm:git:https://git.code.sf.net/p/dbunit/code.git</developerConnection>
@@ -103,9 +100,7 @@
   </scm>
   <issueManagement>
     <system>SourceForge2</system>
-    <!-- old: <url>http://sourceforge.net/tracker/?group_id=47439</url> -->
     <url>http://sourceforge.net/p/dbunit/bugs/</url>
-    <!-- features; how to have both? <url>http://sourceforge.net/p/dbunit/feature-requests/</url> -->
   </issueManagement>
   <ciManagement>
     <system>jenkins</system>
@@ -633,6 +628,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>properties-maven-plugin</artifactId>
+          <version>${propertiesPluginVersion}</version>
           <executions>
             <execution>
               <phase>validate</phase>
