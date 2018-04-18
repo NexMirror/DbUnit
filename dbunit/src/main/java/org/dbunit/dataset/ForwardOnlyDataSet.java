@@ -24,6 +24,8 @@ import org.dbunit.database.QueryTableIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
+
 /**
  * Decorator that allows forward only access to decorated dataset.
  *
@@ -120,5 +122,50 @@ public class ForwardOnlyDataSet extends AbstractDataSet
         {
             return new ForwardOnlyTable(_iterator.getTable());
         }
+    }
+
+    /**
+     * Not implemented since it does not make any sense to add a table to this
+     * class.  Beside, if the AbstractDataSet implementation is left to
+     * execute, eventually the function getTable() of this class will be
+     * called, and it is not implemented.
+     *
+     * @param table Ignored, not used.
+     * @throws UnsupportedOperationException Reminder about the function not being implemented.
+     */
+    public void addTable(ITable table) throws UnsupportedOperationException
+    {
+        logger.debug("addTable() - start");
+        throw new UnsupportedOperationException("Impossible to implement; does not make sense to add a table this class.");
+    }
+
+    /**
+     * Not implemented since it does not make any sense to add a table to this
+     * class.  Beside, if the AbstractDataSet implementation is left to
+     * execute, eventually the function getTable() of this class will be
+     * called, and it is not implemented.
+     *
+     * @param tables Ignored, not used.
+     * @throws UnsupportedOperationException Reminder about the function not being implemented.
+     */
+    public void addTables(Collection<ITable> tables) throws UnsupportedOperationException
+    {
+        logger.debug("addTables(Collection) - start");
+        throw new UnsupportedOperationException("Impossible to implement; does not make sense to add a table this class.");
+    }
+
+    /**
+     * Not implemented since it does not make any sense to add a table to this
+     * class.  Beside, if the AbstractDataSet implementation is left to
+     * execute, eventually the function getTable() of this class will be
+     * called, and it is not implemented.
+     *
+     * @param dataSet Ignored, not used.
+     * @throws UnsupportedOperationException Reminder about the function not being implemented.
+     */
+    public void addTables(IDataSet dataSet) throws UnsupportedOperationException
+    {
+        logger.debug("addTables(IDataSet) - start");
+        throw new UnsupportedOperationException("Impossible to implement; does not make sense to add a table this class.");
     }
 }

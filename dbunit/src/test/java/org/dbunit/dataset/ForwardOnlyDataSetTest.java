@@ -20,6 +20,11 @@
  */
 package org.dbunit.dataset;
 
+import java.util.Collection;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /**
  * @author Manuel Laflamme
  * @author Last changed by: $Author$
@@ -43,7 +48,7 @@ public class ForwardOnlyDataSetTest extends DefaultDataSetTest
         throw new UnsupportedOperationException();
     }
 
-    protected IDataSet createMultipleCaseDuplicateDataSet() throws Exception 
+    protected IDataSet createMultipleCaseDuplicateDataSet() throws Exception
     {
         throw new UnsupportedOperationException();
     }
@@ -132,15 +137,40 @@ public class ForwardOnlyDataSetTest extends DefaultDataSetTest
         // Cannot test! Unsupported feature.
     }
 
-    public void testCreateDuplicateDataSet() throws Exception 
+    public void testCreateDuplicateDataSet() throws Exception
     {
         // No op. This dataSet is only a wrapper for another dataSet which is why duplicates cannot occur.
     }
 
-    public void testCreateMultipleCaseDuplicateDataSet() throws Exception 
+    public void testCreateMultipleCaseDuplicateDataSet() throws Exception
     {
         // No op. This dataSet is only a wrapper for another dataSet which is why duplicates cannot occur.
     }
 
-    
+    public void testAddTable() throws Exception {
+        try {
+            createDataSet().addTable((ITable) null);
+            fail("A \"org.dbunit.dataset.DataSetException: Not implemented.\" is expected.");
+        } catch (UnsupportedOperationException exception) {
+            assertThat(exception.getMessage(), equalTo("Impossible to implement; does not make sense to add a table this class."));
+        }
+    }
+
+    public void testAddTablesWithCollection() throws Exception {
+        try {
+            createDataSet().addTables((Collection<ITable>) null);
+            fail("A \"org.dbunit.dataset.DataSetException: Not implemented.\" is expected.");
+        } catch (UnsupportedOperationException exception) {
+            assertThat(exception.getMessage(), equalTo("Impossible to implement; does not make sense to add a table this class."));
+        }
+    }
+
+    public void testAddTablesWithDataset() throws Exception {
+        try {
+            createDataSet().addTables((IDataSet) null);
+            fail("A \"org.dbunit.dataset.DataSetException: Not implemented.\" is expected.");
+        } catch (UnsupportedOperationException exception) {
+            assertThat(exception.getMessage(), equalTo("Impossible to implement; does not make sense to add a table this class."));
+        }
+    }
 }

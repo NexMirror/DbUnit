@@ -136,6 +136,108 @@ public abstract class AbstractDataSetTest extends AbstractTest
         }
     }
 
+    public void testAddTable() throws Exception
+    {
+        // At the momemt of writing this code, DBUnit was meant to compile for Java 1.5.
+        // 'Arrays' class being available only 1.6+, we cannot use it to make a bigger
+        // copy of the expected table names.  We therefore perform the copy ourselves.
+        final int expectedSet1Length = getExpectedNames().length;
+        String[] expected = new String[expectedSet1Length + 1];
+        String[] expectedSet1 = getExpectedNames();
+
+        for (int i = 0; i < expectedSet1.length; i++) {
+            expected[i] = expectedSet1[i];
+        }
+
+        expected[expectedSet1Length] = "Added table";
+
+        IDataSet dataSet = createDataSet();
+        dataSet.addTable(new DefaultTable("Added table"));
+
+        for (int i = 0; i < expected.length; i++)
+        {
+            ITable table = dataSet.getTable(expected[i]);
+
+            String expectedTableName;
+            if (dataSet.getClass() == LowerCaseDataSet.class)
+                expectedTableName = expected[i].toLowerCase();
+            else
+                expectedTableName = expected[i];
+
+            assertEqualsTableName("name " + i, expectedTableName, table.getTableMetaData().getTableName());
+        }
+    }
+
+    public void testAddTablesWithCollection() throws Exception
+    {
+        // At the momemt of writing this code, DBUnit was meant to compile for Java 1.5.
+        // 'Arrays' class being available only 1.6+, we cannot use it to make a bigger
+        // copy of the expected table names.  We therefore perform the copy ourselves.
+        final int expectedSet1Length = getExpectedNames().length;
+        String[] expected = new String[expectedSet1Length + 3];
+        String[] expectedSet1 = getExpectedNames();
+
+        for (int i = 0; i < expectedSet1.length; i++) {
+            expected[i] = expectedSet1[i];
+        }
+
+        ArrayList extraTables = new ArrayList<ITable>();
+
+        for (int i = 0; i < 3; i++) {
+            String id = "Added_table_nb_" + (i+1);
+            extraTables.add(new DefaultTable(id));
+            expected[expectedSet1Length + i] = id;
+        }
+
+        IDataSet dataSet = createDataSet();
+        dataSet.addTables(extraTables);
+
+        for (int i = 0; i < expected.length; i++)
+        {
+            ITable table = dataSet.getTable(expected[i]);
+
+            String expectedTableName;
+            if (dataSet.getClass() == LowerCaseDataSet.class)
+                expectedTableName = expected[i].toLowerCase();
+            else
+                expectedTableName = expected[i];
+
+            assertEqualsTableName("name " + i, expectedTableName, table.getTableMetaData().getTableName());
+        }
+    }
+
+    public void testAddTablesWithDataset() throws Exception
+    {
+        // At the momemt of writing this code, DBUnit was meant to compile for Java 1.5.
+        // 'Arrays' class being available only 1.6+, we cannot use it to make a bigger
+        // copy of the expected table names.  We therefore perform the copy ourselves.
+        final int expectedSet1Length = getExpectedNames().length;
+        String[] expected = new String[expectedSet1Length + 3];
+        String[] expectedSet1 = getExpectedNames();
+
+        for (int i = 0; i < expectedSet1.length; i++) {
+            expected[i] = expectedSet1[i];
+        }
+
+        ArrayList extraTables = new ArrayList<ITable>();
+
+        for (int i = 0; i < 3; i++) {
+            String id = "Table #" + (i+1);
+            extraTables.add(new DefaultTable(id));
+            expected[expectedSet1Length + i] = id;
+        }
+
+        DefaultDataSet defaultDataSet = new DefaultDataSet();
+        defaultDataSet.addTables(extraTables);
+        defaultDataSet.addTables(createDataSet());
+
+        for (int i = 0; i < expected.length; i++)
+        {
+            ITable table = defaultDataSet.getTable(expected[i]);
+            assertEqualsTableName("name " + i, expected[i], table.getTableMetaData().getTableName());
+        }
+    }
+
     public void testGetUnknownTable() throws Exception
     {
         IDataSet dataSet = createDataSet();
@@ -297,7 +399,7 @@ public abstract class AbstractDataSetTest extends AbstractTest
         assertEquals("table count", expected.length, i);
     }
 
-    protected ITable[] createDuplicateTables(boolean multipleCase) throws AmbiguousTableNameException 
+    protected ITable[] createDuplicateTables(boolean multipleCase) throws AmbiguousTableNameException
     {
         ITable table1 = new DefaultTable("DUPLICATE_TABLE");
         ITable table2 = new DefaultTable("EMPTY_TABLE");

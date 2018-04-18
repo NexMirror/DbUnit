@@ -24,6 +24,9 @@ package org.dbunit.dataset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 /**
  * This abstract class provides the basic implementation of the IDataSet
  * interface. Subclass are only required to implement the {@link #createIterator}
@@ -180,6 +183,42 @@ public abstract class AbstractDataSet implements IDataSet
         initialize();
 
         return (ITable[]) this._orderedTableNameMap.orderedValues().toArray(new ITable[0]);
+    }
+
+    public void addTable(ITable table) throws DataSetException {
+        logger.debug("addTable() - start");
+
+        initialize();
+
+        _orderedTableNameMap.add(table.getTableMetaData().getTableName(), table);
+    }
+
+    public void addTables(Collection<ITable> tables) throws DataSetException
+    {
+        logger.debug("addTables(Collection) - start");
+
+        initialize();
+
+        Iterator<ITable> iterator = tables.iterator();
+        while (iterator.hasNext())
+        {
+            ITable table = iterator.next();
+            _orderedTableNameMap.add(table.getTableMetaData().getTableName(), table);
+        }
+    }
+
+    public void addTables(IDataSet dataSet) throws DataSetException
+    {
+        logger.debug("addTables(IDataSet) - start");
+
+        ITableIterator iterator = dataSet.iterator();
+        initialize();
+
+        while (iterator.next())
+        {
+            ITable table = iterator.getTable();
+            _orderedTableNameMap.add(table.getTableMetaData().getTableName(), table);
+        }
     }
 
     public ITableIterator iterator() throws DataSetException

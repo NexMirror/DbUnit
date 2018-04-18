@@ -23,11 +23,14 @@ package org.dbunit.dataset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 
 /**
- * Decorator that returns the {@link ITable}s of the decorated dataset 
+ * Decorator that returns the {@link ITable}s of the decorated dataset
  * as {@link SortedTable}s.
- * 
+ *
  * @author Manuel Laflamme
  * @version $Revision$
  * @since Feb 19, 2003
@@ -78,6 +81,23 @@ public class SortedDataSet extends AbstractDataSet
     {
         logger.debug("getTable(tableName={}) - start", tableName);
         return new SortedTable(_dataSet.getTable(tableName));
+    }
+
+    public void addTable(ITable table) throws DataSetException {
+        logger.debug("addTable() - start");
+        _dataSet.addTable(table);
+    }
+
+    public void addTables(Collection<ITable> tables) throws DataSetException
+    {
+        logger.debug("addTables(Collection) - start");
+        _dataSet.addTables(tables);
+    }
+
+    public void addTables(IDataSet dataSet) throws DataSetException
+    {
+        logger.debug("addTables(IDataSet) - start");
+        _dataSet.addTables(dataSet);
     }
 
     ////////////////////////////////////////////////////////////////////////////

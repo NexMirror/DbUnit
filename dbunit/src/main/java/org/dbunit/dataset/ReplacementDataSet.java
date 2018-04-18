@@ -23,6 +23,7 @@ package org.dbunit.dataset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,13 +79,13 @@ public class ReplacementDataSet extends AbstractDataSet
     /**
      * Setting this property to true indicates that when no replacement
      * is found for a delimited substring the replacement will fail fast.
-     * 
+     *
      * @param strictReplacement true if replacement should be strict
      */
     public void setStrictReplacement(boolean strictReplacement) {
         this._strictReplacement = strictReplacement;
     }
-    
+
     /**
      * Add a new Object replacement mapping.
      *
@@ -136,7 +137,7 @@ public class ReplacementDataSet extends AbstractDataSet
     private ReplacementTable createReplacementTable(ITable table)
     {
         logger.debug("createReplacementTable(table={}) - start", table);
-        
+
         ReplacementTable replacementTable = new ReplacementTable(
                 table, _objectMap, _substringMap, _startDelim, _endDelim);
         replacementTable.setStrictReplacement(_strictReplacement);
@@ -159,6 +160,7 @@ public class ReplacementDataSet extends AbstractDataSet
     ////////////////////////////////////////////////////////////////////////////
     // IDataSet interface
 
+    @Override
     public String[] getTableNames() throws DataSetException
     {
         logger.debug("getTableNames() - start");
@@ -166,6 +168,7 @@ public class ReplacementDataSet extends AbstractDataSet
         return _dataSet.getTableNames();
     }
 
+    @Override
     public ITableMetaData getTableMetaData(String tableName)
             throws DataSetException
     {
@@ -174,11 +177,35 @@ public class ReplacementDataSet extends AbstractDataSet
         return _dataSet.getTableMetaData(tableName);
     }
 
+    @Override
     public ITable getTable(String tableName) throws DataSetException
     {
         logger.debug("getTable(tableName={}) - start", tableName);
 
         return createReplacementTable(_dataSet.getTable(tableName));
+    }
+
+    @Override
+    public void addTable(ITable table) throws DataSetException {
+        logger.debug("addTable() - start");
+        super.addTable(table);
+        _dataSet.addTable(table);
+    }
+
+    @Override
+    public void addTables(Collection<ITable> tables) throws DataSetException
+    {
+        logger.debug("addTables(Collection) - start");
+        super.addTables(tables);
+        _dataSet.addTables(tables);
+    }
+
+    @Override
+    public void addTables(IDataSet dataSet) throws DataSetException
+    {
+        logger.debug("addTables(IDataSet) - start");
+        super.addTables(dataSet);
+        _dataSet.addTables(dataSet);
     }
 
     ////////////////////////////////////////////////////////////////////////////

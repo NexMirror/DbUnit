@@ -22,17 +22,19 @@
 package org.dbunit.database;
 
 import org.dbunit.DatabaseEnvironment;
-import org.dbunit.dataset.AbstractDataSetTest;
-import org.dbunit.dataset.Column;
-import org.dbunit.dataset.DataSetException;
-import org.dbunit.dataset.DefaultTableMetaData;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.ITableMetaData;
-import org.dbunit.dataset.NoSuchTableException;
+import org.dbunit.dataset.*;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.dataset.filter.ITableFilterSimple;
+import org.dbunit.dataset.stream.StreamingDataSetTest;
 import org.dbunit.util.QualifiedTableName;
+
+import java.util.Collection;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.fail;
 
 
 /**
@@ -89,12 +91,12 @@ public class DatabaseDataSetIT extends AbstractDataSetTest
     {
         throw new UnsupportedOperationException();
     }
-    
-    protected IDataSet createMultipleCaseDuplicateDataSet() throws Exception 
+
+    protected IDataSet createMultipleCaseDuplicateDataSet() throws Exception
     {
         throw new UnsupportedOperationException();
     }
-    
+
 
     ////////////////////////////////////////////////////////////////////////////
     // Test methods
@@ -130,7 +132,7 @@ public class DatabaseDataSetIT extends AbstractDataSetTest
         String sql = DatabaseDataSet.getSelectStatement(schemaName, metaData, "'?'");
         assertEquals("select statement", expected, sql);
     }
-    
+
     public void testGetSelectStatementWithEscapedNamesAndOrderBy() throws Exception
     {
         String schemaName = "schema";
@@ -141,7 +143,7 @@ public class DatabaseDataSetIT extends AbstractDataSetTest
             new Column("c3", DataType.UNKNOWN),
         };
         String expected = "select 'c1', 'c2', 'c3' from 'schema'.'table' order by 'c1', 'c2'";
-        
+
         String[] primaryKeys = { "c1", "c2" };
 
         ITableMetaData metaData = new DefaultTableMetaData(tableName, columns, primaryKeys);
@@ -230,14 +232,14 @@ public class DatabaseDataSetIT extends AbstractDataSetTest
 
     public void testGetPrimaryKeysWithColumnFilters() throws Exception
     {
-      
+
       // TODO (felipeal): I don't know if PK_TABLE is a standard JDBC name or if
       // it's HSQLDB specific. Anyway, now that HSQLDB's schema is set on property,
       // we cannot add it as prefix here....
       String tableName = "PK_TABLE";
 //        String tableName = DataSetUtils.getQualifiedName(
 //                _connection.getSchema(), "PK_TABLE");
-       
+
         String[] expected = {"PK0", "PK2"};
 
         DefaultColumnFilter filter = new DefaultColumnFilter();
@@ -265,12 +267,12 @@ public class DatabaseDataSetIT extends AbstractDataSetTest
 //        metaData.
 //    }
 
-    public void testCreateDuplicateDataSet() throws Exception 
+    public void testCreateDuplicateDataSet() throws Exception
     {
         // Cannot test! Unsupported feature.
     }
 
-    public void testCreateMultipleCaseDuplicateDataSet() throws Exception 
+    public void testCreateMultipleCaseDuplicateDataSet() throws Exception
     {
         // Cannot test! Unsupported feature.
     }
@@ -297,6 +299,35 @@ public class DatabaseDataSetIT extends AbstractDataSetTest
         }
     }
 
+    public void testAddTable() throws Exception
+    {
+        try {
+            createDataSet().addTable((ITable) null);
+            fail("A \"org.dbunit.dataset.DataSetException: Not implemented.\" is expected.");
+        } catch (DataSetException exception) {
+            assertThat(exception.getMessage(), equalTo("Not implemented."));
+        }
+    }
+
+    public void testAddTablesWithCollection() throws Exception
+    {
+          try {
+            createDataSet().addTables((Collection<ITable>) null);
+            fail("A \"org.dbunit.dataset.DataSetException: Not implemented.\" is expected.");
+          } catch (DataSetException exception) {
+            assertThat(exception.getMessage(), equalTo("Not implemented."));
+          }
+    }
+
+    public void testAddTablesWithDataset() throws Exception
+    {
+        try {
+            createDataSet().addTables((IDataSet) null);
+            fail("A \"org.dbunit.dataset.DataSetException: Not implemented.\" is expected.");
+        } catch (DataSetException exception) {
+            assertThat(exception.getMessage(), equalTo("Not implemented."));
+        }
+    }
 }
 
 

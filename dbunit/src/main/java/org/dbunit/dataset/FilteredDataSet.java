@@ -28,6 +28,8 @@ import org.dbunit.database.AmbiguousTableNameException;
 import org.dbunit.dataset.filter.ITableFilter;
 import org.dbunit.dataset.filter.SequenceTableFilter;
 
+import java.util.Collection;
+
 /**
  * Decorates a dataset and exposes only some tables from it. Can be used with
  * different filtering strategies.
@@ -42,7 +44,6 @@ import org.dbunit.dataset.filter.SequenceTableFilter;
  */
 public class FilteredDataSet extends AbstractDataSet
 {
-
     /**
      * Logger for this class
      */
@@ -57,7 +58,7 @@ public class FilteredDataSet extends AbstractDataSet
      * filtering strategy.
      * @throws AmbiguousTableNameException If the given tableNames array contains ambiguous names
      */
-    public FilteredDataSet(String[] tableNames, IDataSet dataSet) 
+    public FilteredDataSet(String[] tableNames, IDataSet dataSet)
     throws AmbiguousTableNameException
     {
         _filter = new SequenceTableFilter(tableNames, dataSet.isCaseSensitiveTableNames());
@@ -85,7 +86,7 @@ public class FilteredDataSet extends AbstractDataSet
     {
     	if(logger.isDebugEnabled())
     		logger.debug("createIterator(reversed={}) - start", String.valueOf(reversed));
-    	
+
         return _filter.iterator(_dataSet, reversed);
     }
 
@@ -118,6 +119,32 @@ public class FilteredDataSet extends AbstractDataSet
         }
 
         return _dataSet.getTable(tableName);
+    }
+
+    @Override
+    public void addTable(ITable table) throws DataSetException {
+        logger.debug("addTable() - start");
+        super.addTable(table);
+        _dataSet.addTable(table);
+        _filter.addTable(table);
+    }
+
+    @Override
+    public void addTables(Collection<ITable> tables) throws DataSetException
+    {
+        logger.debug("addTables(Collection) - start");
+        super.addTables(tables);
+        _dataSet.addTables(tables);
+        _filter.addTables(tables);
+    }
+
+    @Override
+    public void addTables(IDataSet dataSet) throws DataSetException
+    {
+        logger.debug("addTables(IDataSet) - start");
+        super.addTables(dataSet);
+        _dataSet.addTables(dataSet);
+        _filter.addTables(dataSet);
     }
 }
 

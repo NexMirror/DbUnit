@@ -25,6 +25,8 @@ import org.dbunit.database.AmbiguousTableNameException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
+
 /**
  * Allows access to a decorated dataset in a case insensitive way. Dataset
  * implementations provided by the framework are case sensitive. This class
@@ -50,7 +52,7 @@ public class CaseInsensitiveDataSet extends AbstractDataSet
     public CaseInsensitiveDataSet(IDataSet dataSet) throws AmbiguousTableNameException, DataSetException
     {
         _dataSet = dataSet;
-        
+
         // Check for duplicates using the OrderedTableNameMap as helper
         orderedTableMap = new OrderedTableNameMap(false);
         ITableIterator tableIterator = _dataSet.iterator();
@@ -82,7 +84,7 @@ public class CaseInsensitiveDataSet extends AbstractDataSet
     {
         if(logger.isDebugEnabled())
             logger.debug("createIterator(reversed={}) - start", String.valueOf(reversed));
-        
+
         return new CaseInsensitiveIterator(reversed ?
                 _dataSet.reverseIterator() : _dataSet.iterator());
     }
@@ -138,5 +140,47 @@ public class CaseInsensitiveDataSet extends AbstractDataSet
         {
             return new CaseInsensitiveTable(_iterator.getTable());
         }
+    }
+
+    /**
+     * Not implemented because the AbstractDataSet implementation is not
+     * compatible with this class and there is no point in wasting time
+     * writing compatible code for a deprecated class.
+     *
+     * @param table Ignored, not used.
+     * @throws UnsupportedOperationException Reminder about the function not being implemented.
+     */
+    public void addTable(ITable table) throws UnsupportedOperationException
+    {
+      logger.debug("addTable() - start");
+      throw new UnsupportedOperationException("Not implemented.  Never will since this class is deprecated.");
+    }
+
+    /**
+     * Not implemented because the AbstractDataSet implementation is not
+     * compatible with this class and there is no point in wasting time
+     * writing compatible code for a deprecated class.
+     *
+     * @param tables Ignored, not used.
+     * @throws UnsupportedOperationException Reminder about the function not being implemented.
+     */
+    public void addTables(Collection<ITable> tables) throws UnsupportedOperationException
+    {
+      logger.debug("addTables(Collection) - start");
+      throw new UnsupportedOperationException("Not implemented.  Never will since this class is deprecated.");
+    }
+
+    /**
+     * Not implemented because the AbstractDataSet implementation is not
+     * compatible with this class and there is no point in wasting time
+     * writing compatible code for a deprecated class.
+     *
+     * @param dataSet Ignored, not used.
+     * @throws UnsupportedOperationException Reminder about the function not being implemented.
+     */
+    public void addTables(IDataSet dataSet) throws UnsupportedOperationException
+    {
+      logger.debug("addTables(IDataSet) - start");
+      throw new UnsupportedOperationException("Not implemented.  Never will since this class is deprecated.");
     }
 }

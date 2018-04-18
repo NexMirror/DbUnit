@@ -21,10 +21,13 @@
 
 package org.dbunit.dataset;
 
-import java.io.FileReader;
-
 import org.dbunit.dataset.xml.XmlDataSet;
 import org.dbunit.testutil.TestUtils;
+
+import java.util.Collection;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author Manuel Laflamme
@@ -50,7 +53,7 @@ public class CaseInsensitiveDataSetTest extends AbstractDataSetTest
         throw new UnsupportedOperationException();
     }
 
-    protected IDataSet createMultipleCaseDuplicateDataSet() throws Exception 
+    protected IDataSet createMultipleCaseDuplicateDataSet() throws Exception
     {
         throw new UnsupportedOperationException();
     }
@@ -60,17 +63,43 @@ public class CaseInsensitiveDataSetTest extends AbstractDataSetTest
     {
         assertEqualsIgnoreCase(message, expected, actual);
     }
-    
-    public void testCreateDuplicateDataSet() throws Exception 
+
+    public void testCreateDuplicateDataSet() throws Exception
     {
         // No op. This dataSet is only a wrapper for another dataSet which is why duplicates cannot occur.
     }
 
-    public void testCreateMultipleCaseDuplicateDataSet() throws Exception 
+    public void testCreateMultipleCaseDuplicateDataSet() throws Exception
     {
         // No op. This dataSet is only a wrapper for another dataSet which is why duplicates cannot occur.
     }
 
+    public void testAddTable() throws Exception {
+        try {
+            createDataSet().addTable((ITable) null);
+            fail("A \"org.dbunit.dataset.DataSetException: Not implemented.\" is expected.");
+        } catch (UnsupportedOperationException exception) {
+           assertThat(exception.getMessage(), equalTo("Not implemented.  Never will since this class is deprecated."));
+        }
+    }
+
+    public void testAddTablesWithCollection() throws Exception {
+        try {
+            createDataSet().addTables((Collection<ITable>) null);
+            fail("A \"org.dbunit.dataset.DataSetException: Not implemented.\" is expected.");
+        } catch (UnsupportedOperationException exception) {
+           assertThat(exception.getMessage(), equalTo("Not implemented.  Never will since this class is deprecated."));
+        }
+    }
+
+    public void testAddTablesWithDataset() throws Exception {
+        try {
+            createDataSet().addTables((IDataSet) null);
+            fail("A \"org.dbunit.dataset.DataSetException: Not implemented.\" is expected.");
+        } catch (UnsupportedOperationException exception) {
+           assertThat(exception.getMessage(), equalTo("Not implemented.  Never will since this class is deprecated."));
+        }
+    }
 }
 
 

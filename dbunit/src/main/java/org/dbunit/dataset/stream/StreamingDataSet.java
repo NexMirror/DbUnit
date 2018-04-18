@@ -20,13 +20,11 @@
  */
 package org.dbunit.dataset.stream;
 
-import org.dbunit.dataset.AbstractDataSet;
-import org.dbunit.dataset.DataSetException;
-import org.dbunit.dataset.ITable;
-import org.dbunit.dataset.ITableIterator;
-import org.dbunit.dataset.ITableMetaData;
+import org.dbunit.dataset.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Collection;
 
 /**
  * Dataset that consumes producer asynchronously.
@@ -110,4 +108,48 @@ public class StreamingDataSet extends AbstractDataSet
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Not implemented since it does not make any sense to add a table to a
+     * stream.  Beside, if the AbstractDataSet implementation is left to
+     * execute, eventually the function getTable() of this class will be
+     * called, and it is not implemented.
+     *
+     * @param table Ignored, not used.
+     * @throws UnsupportedOperationException Reminder about the function not being implemented.
+     */
+    public void addTable(ITable table) throws UnsupportedOperationException
+    {
+        logger.debug("addTable() - start");
+        throw new UnsupportedOperationException("Impossible to implement; does not make sense to add a table to a stream.");
+    }
+
+    /**
+     * Not implemented since it does not make any sense to add a table to a
+     * stream.  Beside, if the AbstractDataSet implementation is left to
+     * execute, eventually the function getTable() of this class will be
+     * called, and it is not implemented.
+     *
+     * @param tables Ignored, not used.
+     * @throws UnsupportedOperationException Reminder about the function not being implemented.
+     */
+    public void addTables(Collection<ITable> tables) throws UnsupportedOperationException
+    {
+        logger.debug("addTables(Collection) - start");
+        throw new UnsupportedOperationException("Impossible to implement; does not make sense to add a table to a stream.");
+    }
+
+    /**
+     * Not implemented since it does not make any sense to add a table to a
+     * stream.  Beside, if the AbstractDataSet implementation is left to
+     * execute, eventually the function getTable() of this class will be
+     * called, and it is not implemented.
+     *
+     * @param dataSet Ignored, not used.
+     * @throws UnsupportedOperationException Reminder about the function not being implemented.
+     */
+    public void addTables(IDataSet dataSet) throws UnsupportedOperationException
+    {
+        logger.debug("addTables(IDataSet) - start");
+        throw new UnsupportedOperationException("Impossible to implement; does not make sense to add a table to a stream.");
+    }
 }

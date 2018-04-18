@@ -24,6 +24,7 @@ package org.dbunit.dataset;
 import org.dbunit.database.AmbiguousTableNameException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Collection;
 
 /**
  * Combines multiple datasets into a single logical dataset.
@@ -40,7 +41,7 @@ public class CompositeDataSet extends AbstractDataSet
      */
     private static final Logger logger = LoggerFactory.getLogger(CompositeDataSet.class);
 
-    private final ITable[] _tables;
+    private final Collection<ITable> _tables;
 
     /**
      * Creates a composite dataset that combines specified datasets.
@@ -65,7 +66,7 @@ public class CompositeDataSet extends AbstractDataSet
     {
         this(dataSets, combine, false);
     }
-    
+
     /**
      * Creates a composite dataset that combines specified datasets.
      *
@@ -82,7 +83,7 @@ public class CompositeDataSet extends AbstractDataSet
             throws DataSetException
     {
         super(caseSensitiveTableNames);
-        
+
         // Check for duplicates using the OrderedTableNameMap as helper
         OrderedTableNameMap orderedTableMap = super.createTableNameMap();
         for (int i = 0; i < dataSets.length; i++)
@@ -95,7 +96,7 @@ public class CompositeDataSet extends AbstractDataSet
             }
         }
 
-        _tables = (ITable[]) orderedTableMap.orderedValues().toArray(new ITable[0]);
+        _tables = orderedTableMap.orderedValues();
     }
 
     /**
@@ -134,7 +135,7 @@ public class CompositeDataSet extends AbstractDataSet
      *      if <code>true</code>, tables having the same name are merged into
      *      one table.
      * @deprecated This constructor is useless when the combine parameter is
-     * <code>false</code>. Use overload that doesn't have the combine argument. 
+     * <code>false</code>. Use overload that doesn't have the combine argument.
      */
     public CompositeDataSet(IDataSet dataSet, boolean combine)
             throws DataSetException
@@ -161,7 +162,7 @@ public class CompositeDataSet extends AbstractDataSet
     {
         this(tables, false);
     }
-    
+
     /**
      * Creates a composite dataset that combines tables having identical name.
      * Tables having the same name are merged into one table.
@@ -173,24 +174,24 @@ public class CompositeDataSet extends AbstractDataSet
     public CompositeDataSet(ITable[] tables, boolean caseSensitiveTableNames) throws DataSetException
     {
         super(caseSensitiveTableNames);
-        
+
         OrderedTableNameMap orderedTableMap = super.createTableNameMap();
         for (int i = 0; i < tables.length; i++)
         {
             addTable(tables[i], orderedTableMap, true);
         }
 
-        _tables = (ITable[]) orderedTableMap.orderedValues().toArray(new ITable[0]);
+        _tables = orderedTableMap.orderedValues();
     }
 
-    
+
     /**
      * @param newTable
      * @param tableMap
      * @param combine
      * @throws AmbiguousTableNameException Can only occur when the combine flag is set to <code>false</code>.
      */
-    private void addTable(ITable newTable, OrderedTableNameMap tableMap, boolean combine) 
+    private void addTable(ITable newTable, OrderedTableNameMap tableMap, boolean combine)
     throws AmbiguousTableNameException
     {
     	if (logger.isDebugEnabled())
@@ -200,7 +201,7 @@ public class CompositeDataSet extends AbstractDataSet
     	}
 
         String tableName = newTable.getTableMetaData().getTableName();
-        
+
         // No merge required, simply add new table at then end of the list
         if (!combine)
         {
@@ -221,6 +222,33 @@ public class CompositeDataSet extends AbstractDataSet
         }
     }
 
+    @Override
+    public void addTable(ITable table) throws DataSetException {
+        logger.debug("addTable() - start");
+        super.addTable(table);
+        _tables.add(table);
+    }
+
+    @Override
+    public void addTables(Collection<ITable> tables) throws DataSetException
+    {
+        logger.debug("addTables(Collection) - start");
+        super.addTables(tables);
+        _tables.addAll(tables);
+    }
+
+    @Override
+    public void addTables(IDataSet dataSet) throws DataSetException
+    {
+        logger.debug("addTables(IDataSet) - start");
+        ITableIterator iterator = dataSet.iterator();
+        super.addTables(dataSet);
+        while(iterator.next())
+        {
+            _tables.add(iterator.getTable());
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     // AbstractDataSet class
 
@@ -229,7 +257,7 @@ public class CompositeDataSet extends AbstractDataSet
     {
         if(logger.isDebugEnabled())
             logger.debug("createIterator(reversed={}) - start", String.valueOf(reversed));
-        
-        return new DefaultTableIterator(_tables, reversed);
+
+        return new DefaultTableIterator(_tables.toArray(new ITable[0]), reversed);
     }
 }

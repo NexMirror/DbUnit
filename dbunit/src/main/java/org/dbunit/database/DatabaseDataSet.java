@@ -25,6 +25,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
 import org.dbunit.DatabaseUnitRuntimeException;
@@ -46,7 +47,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Provides access to a database instance as a {@link IDataSet}.
- * 
+ *
  * @author Manuel Laflamme
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -176,13 +177,13 @@ public class DatabaseDataSet extends AbstractDataSet
 
         DatabaseConfig config = _connection.getConfig();
         boolean qualifiedTableNamesActive = Boolean.TRUE == config.getProperty(DatabaseConfig.FEATURE_QUALIFIED_TABLE_NAMES);
-        
+
         if(schema == null || !qualifiedTableNamesActive)
     {
       // If FEATURE_QUALIFIED_TABLE_NAMES is inactive or no schema did have been provided
       schema = getDefaultSchema();
     }
-        
+
         if (_tableMap != null && _schemaSet.contains(schema))
         {
             return;
@@ -294,7 +295,7 @@ public class DatabaseDataSet extends AbstractDataSet
         logger.debug("getTableMetaData(tableName={}) - start", tableName);
 
         QualifiedTableName qualifiedTableName = new QualifiedTableName(tableName, getDefaultSchema());
-        
+
         initialize(qualifiedTableName.getSchema());
 
         // Verify if table exist in the database
@@ -325,7 +326,7 @@ public class DatabaseDataSet extends AbstractDataSet
         logger.debug("getTable(tableName={}) - start", tableName);
 
         QualifiedTableName qualifiedTableName = new QualifiedTableName(tableName, getDefaultSchema());
-        
+
         initialize(qualifiedTableName.getSchema());
 
         try
@@ -406,5 +407,37 @@ public class DatabaseDataSet extends AbstractDataSet
 
             return true;
         }
+    }
+
+    public void addTable(ITable table) throws DataSetException {
+        logger.debug("addTable() - start");
+
+      // Because DatabaseDataSet internal structure is so messed up, it
+      // cannot be easily fixed.  The internal structure is not using
+      // the standard _orderedTableNameMap inherited from AbstractDataSet
+      // to store the tables but its own _tableMap field.
+      throw new DataSetException("Not implemented.");
+    }
+
+    public void addTables(Collection<ITable> tables) throws DataSetException
+    {
+        logger.debug("addTables(Collection) - start");
+
+      // Because DatabaseDataSet internal structure is so messed up, it
+      // cannot be easily fixed.  The internal structure is not using
+      // the standard _orderedTableNameMap inherited from AbstractDataSet
+      // to store the tables but its own _tableMap field.
+      throw new DataSetException("Not implemented.");
+    }
+
+    public void addTables(IDataSet dataSet) throws DataSetException
+    {
+        logger.debug("addTables(IDataSet) - start");
+
+        // Because DatabaseDataSet internal structure is so messed up, it
+        // cannot be easily fixed.  The internal structure is not using
+        // the standard _orderedTableNameMap inherited from AbstractDataSet
+        // to store the tables but its own _tableMap field.
+        throw new DataSetException("Not implemented.");
     }
 }
