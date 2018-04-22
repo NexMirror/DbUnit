@@ -1,11 +1,12 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<document>
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
   <properties>
     <title>Data Types</title>
   </properties>
   <body>
-    <section>
-      <h3>Data types</h3>
+    <section name="Data Types">
       <p>
         Most of the data types are self explanatory and are adapted to the database in use.
         Refer to the database documentation for its data types specifics.
@@ -36,11 +37,9 @@
         <li>Timestamp</li>
         <li>UuidAwareBytes</li>
       </ol>
-      <a name="blob">
-        <h4>
-          <a href="apidocs/org/dbunit/dataset/datatype/BlobDataType.html">Blob</a>
-        </h4>
-      </a>
+
+      <subsection name="Blob" id="blob">
+        <a href="apidocs/org/dbunit/dataset/datatype/BlobDataType.html">Blob JavaDoc</a>
       <p>Blobs contain binary data. DbUnit, however, processes data with XML or CSV files containing textual data sets, not binary.
         To push binary data into a database blob from dbUnit data set files, use the following syntax in a data set field:
       </p>
@@ -65,7 +64,7 @@
             <source><![CDATA[
 <!DOCTYPE dataset SYSTEM "my-dataset.dtd">
 <dataset>
-    <TABLE_WITHBLOB COL0="[TEXT]This is my text, saved in UTF-8 (default) encoding.  Java: bon café!"
+    <TABLE_WITHBLOB COL0="[TEXT]This is my text, saved in UTF-8 (default) encoding.  Java: bon cafÃ©!"
                     COL1="row 0 col 1"
                     COL2="row 0 col 2"/>
 </dataset>]]></source>
@@ -75,7 +74,7 @@
             <source><![CDATA[
 <!DOCTYPE dataset SYSTEM "my-dataset.dtd">
 <dataset>
-    <TABLE_WITHBLOB COL0="[TEXT ISO-8859-1]This is my text, saved in ISO-8859-1 encoding.  Java: bon café!"
+    <TABLE_WITHBLOB COL0="[TEXT ISO-8859-1]This is my text, saved in ISO-8859-1 encoding.  Java: bon cafÃ©!"
                     COL1="row 0 col 1"
                     COL2="row 0 col 2"/>
 </dataset>]]></source>
@@ -133,6 +132,7 @@
           </td>
         </tr>
       </table>
+      </subsection>
     </section>
   </body>
 </document>

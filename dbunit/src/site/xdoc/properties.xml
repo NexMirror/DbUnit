@@ -1,6 +1,12 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<document><properties><title>Configurable Features and Properties</title></properties><body><section>
-      <h3>Configurable features and properties</h3>
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+  <properties>
+    <title>Configurable Features and Properties</title>
+  </properties>
+  <body>
+    <section name="Configurable Features and Properties">
       <p>DbUnit does not use System properties anymore since version 2.0. DbUnit 
         use a configuration object, <code>DatabaseConfig</code>, to query 
         and set feature flags and property values for a <code>IDatabaseConnection</code>. 
@@ -24,10 +30,10 @@
 ]]></source></p>
 
       <br /><br />
+    </section>
 
-    <h3>Feature Flags</h3>
-      <a name="batchstatement"></a>
-      <h4>Batched statements</h4>
+    <section name="Feature Flags">
+      <subsection name="Batched Statements" id="batchstatement">
       <table border="1">
         <tr> 
           <td>Feature ID</td>
@@ -42,9 +48,9 @@
           <td>Enable or disable usage of JDBC batched statement by DbUnit. </td>
         </tr>
       </table>
+      </subsection>
 
-      <a name="casesensitivetablenames"></a>
-      <h4>Case sensitive table names</h4>
+      <subsection name="Case Sensitive Table Names" id="casesensitivetablenames">
       <table border="1">
         <tr> 
           <td>Feature ID</td>
@@ -60,9 +66,9 @@
             table names in a case sensitive way.</td>
         </tr>
       </table>
+      </subsection>
 
-      <a name="qualifiedtablenames"></a>
-      <h4>Qualified table names</h4>
+      <subsection name="Qualified Table Names" id="qualifiedtablenames">
       <table border="1">
         <tr> 
           <td>Feature ID</td>
@@ -82,9 +88,9 @@
           <td>This feature was not compatible with the <a href="#escapepattern">escape pattern</a> property until the 2.2.1 release. Since then the two properties can be mixed without problem: each element will be properly escaped.</td>
         </tr>
       </table>
+      </subsection>
 
-      <a name="typewarning"></a>
-      <h4>DataType warning</h4>
+      <subsection name="DataType Warning" id="typewarning">
       <table border="1">
         <tr> 
           <td>Feature ID</td>
@@ -98,10 +104,10 @@
           <td>Description</td>
           <td>Enable or disable the warning message displayed when DbUnit encounter an unsupported data type.</td>
         </tr>
-     </table>
-      
-      <a name="skiporaclereyclebintables"></a>
-      <h4>Skip Oracle 10g Recyclebin tables</h4>
+      </table>
+      </subsection>
+
+      <subsection name="Skip Oracle 10g Recyclebin Tables" id="skiporaclereyclebintables">
       <table border="1">
         <tr> 
           <td>Feature ID</td>
@@ -118,10 +124,10 @@
           since these table are case sensitive. Enable this feature for Oracle 10g databases until the
           bug in the oracle driver is fixed, which incorrectly reports this system tables to DbUnit.</td>
         </tr>
-      </table> 
+      </table>
+      </subsection>
 
-      <a name="allowemptyfields"></a>
-      <h4>Allow Empty Fields</h4>
+      <subsection name="Allow Empty Fields" id="allowemptyfields">
       <table border="1">
         <tr>
           <td>Feature ID</td>
@@ -136,11 +142,11 @@
           <td>Allow to call INSERT/UPDATE with empty strings ('').</td>
         </tr>
       </table>
+      </subsection>
+    </section>
 
-      <br /><br />
-
-      <h3>Properties</h3>
-      <h4><a name="escapepattern">Escape pattern</a></h4>
+    <section name="Properties">
+      <subsection name="Escape Patterns" id="escapepattern">
       <table border="1">
         <tr> 
           <td>Property ID</td>
@@ -170,8 +176,9 @@
           </td>
         </tr>
       </table>
-      
-      <h4><a name="tabletype">Table Type</a></h4>
+      </subsection>
+
+      <subsection name="Table Type" id="tabletype">
       <table border="1">
         <tr> 
           <td>Property ID</td>
@@ -192,10 +199,9 @@
           <td>String[]{"TABLE"}</td>
         </tr>
       </table>
-      
-      
-      <a name="typefactory"></a>
-      <h4>DataType factory</h4>
+      </subsection>
+
+      <subsection name="DataType Factory" id="typefactory">
       <table border="1">
         <tr> 
           <td>Property ID</td>
@@ -231,9 +237,9 @@
           </td>
         </tr>
       </table>
-      
-      <a name="statementfactory"></a>
-      <h4>Statement factory</h4>
+      </subsection>
+
+      <subsection name="Statement Factory" id="statementfactory">
       <table border="1">
         <tr> 
           <td>Property ID</td>
@@ -251,8 +257,9 @@
           </td>
         </tr>
       </table>
-      <a name="resultsettablefactory"></a>
-      <h4>ResultSetTable factory</h4>
+      </subsection>
+
+      <subsection name="ResultSetTable Factory" id="resultsettablefactory">
       <table border="1">
         <tr> 
           <td>Property ID</td>
@@ -270,9 +277,9 @@
           </td>
         </tr>
       </table>
+      </subsection>
 
-      <a name="primarykeysfilter"></a>
-      <h4>Primary keys filter</h4>
+      <subsection name="Primary Keys Filter" id="primarykeysfilter">
       <table border="1">
         <tr> 
           <td>Property ID</td>
@@ -290,9 +297,9 @@
           </td>
         </tr>
       </table>
+      </subsection>
 
-      <a name="identitycolumnfilter"></a>
-      <h4>MS SQL Server IDENTITY column filter</h4>
+      <subsection name="MS SQL Server IDENTITY Column Filter" id="identitycolumnfilter">
       <table border="1">
         <tr> 
           <td>Property ID</td>
@@ -310,9 +317,9 @@
           </td>
         </tr>
       </table>
-      
-      <a name="batchsize"></a>
-      <h4>Batch Size</h4>
+      </subsection>
+
+      <subsection name="Batch Size" id="batchsize">
       <table border="1">
         <tr> 
           <td>Property ID</td>
@@ -327,9 +334,9 @@
           <td>Integer object giving the size of batch updates.</td>
         </tr>
       </table>
+      </subsection>
 
-      <a name="fetchsize"></a>
-      <h4>Fetch Size</h4>
+      <subsection name="Fetch Size" id="fetchsize">
       <table border="1">
         <tr> 
           <td>Property ID</td>
@@ -344,9 +351,9 @@
           <td>Integer object giving the statement fetch size for loading data into a result set table.</td>
         </tr>
       </table>
+      </subsection>
 
-      <a name="metadatahandler"></a>
-      <h4>Metadata Handler</h4>
+      <subsection name="Metadata Handler" id="metadatahandler">
       <table border="1">
         <tr> 
           <td>Property ID</td>
@@ -377,5 +384,7 @@
           </td>
         </tr>
       </table>
-
-</section></body></document>
+      </subsection>
+    </section>
+  </body>
+</document>

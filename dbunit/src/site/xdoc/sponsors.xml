@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document>
-
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
   <properties>
     <title>Credits</title>
     <author>rlogiacco</author>
@@ -8,7 +9,6 @@
   </properties>
 
   <body>
-
     <section name="Sponsors">
 	  <p>As with many open source projects, <b>DbUnit</b> has to thank not only the developer and the user communities but some supporting companies too, as they provide us licenses, bandwidth, space, and all sorts of things that usually you have to pay for.</p>
       <p>The following organizations currently support dbUnit.</p>
@@ -24,5 +24,4 @@
     </section>
 
   </body>
-
 </document>

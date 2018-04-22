@@ -1,12 +1,14 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<document>
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
   <properties>
     <title>Ant Integration</title>
   </properties>
   <body>
-    <section>
-    <h3>Ant Integration</h3>
-    <h4>Installation</h4>The steps required to add the DbUnit task
+    <section name="Ant Integration">
+    <subsection name="Installation">
+    The steps required to add the DbUnit task
     to your system are: 
     <p>1. Add the DbUnit jar to Ant's classpath. You may
     alternatively use the 'classpath' attribute of
@@ -17,10 +19,13 @@
       <![CDATA[<taskdef name="dbunit" classname="org.dbunit.ant.DbUnitTask"/>]]>
 </source></p>
     <p>3. Use the task in the rest of the buildfile.</p>
-    <h3>Usage</h3>
+    </subsection>
+    </section>
+
+    <section name="Usage">
     <p>Executes either a single transaction, or a group of
     transactions, under the DbUnit database testing framework.</p>
-    <h4>Parameters</h4>
+    <subsection name="Parameters">
     <table border="1">
       <tr>
         <th>Attribute</th>
@@ -141,7 +146,9 @@
         <td>No</td>
       </tr>
     </table>
-    <h4>Parameters specified as nested elements</h4>
+    </subsection>
+
+    <subsection name="Parameters specified as nested elements">
     <table cellspadding="0" border="1">
       <tr>
         <td>classpath</td>
@@ -510,8 +517,11 @@
         </td>
       </tr>
     </table>
-    <h3>Examples</h3>
-    <h4>Update operation with specified JDBC driver jar</h4>
+    </subsection>
+    </section>
+
+    <section name="Examples">
+    <subsection name="Update operation with specified JDBC driver jar">
     <source>
       <![CDATA[
 <dbunit driver="com.vendor.jdbc.Driver"
@@ -535,7 +545,8 @@
     <operation type="UPDATE" src="updateFile.xml"/>
 </dbunit>]]>
     </source>
-    <h4>Database data export to XML</h4>
+    </subsection>
+    <subsection name="Database data export to XML">
     <source>
       <![CDATA[
 <dbunit driver="com.vendor.jdbc.Driver"
@@ -546,7 +557,8 @@
 </dbunit>
 ]]>
     </source>
-    <h4>Database structure export to DTD</h4>
+    </subsection>
+    <subsection name="Database structure export to DTD">
     <source>
       <![CDATA[
 <dbunit driver="com.vendor.jdbc.Driver"
@@ -557,9 +569,8 @@
 </dbunit>
 ]]>
     </source>
-    <h4>
-      <a name="partialexport">Partial database data export</a>
-    </h4>
+    </subsection>
+    <subsection name="Partial database data export" id="partialexport">
     <p>Export two tables: FOO, resulting from specified query and
     BAR entire content</p>
     <source>
@@ -574,9 +585,8 @@
     </export>
 </dbunit>]]>
     </source>
-    <h4>
-      <a name="databasecompare">Database data comparison</a>
-    </h4>
+    </subsection>
+    <subsection name="Database data comparison" id="databasecompare">
     <source>
       <![CDATA[
 <dbunit driver="com.vendor.jdbc.Driver"
@@ -586,9 +596,8 @@
     <compare src="expectedData.xml"/>
 </dbunit>]]>
     </source>
-    <h4>
-      <a name="partialcompare">Partial database data comparison</a>
-    </h4>
+    </subsection>
+    <subsection name="Partial database data comparison" id="partialcompare">
     <source>
       <![CDATA[
 <dbunit driver="com.vendor.jdbc.Driver"
@@ -601,9 +610,8 @@
     </compare>
 </dbunit>]]>
     </source>
-    <h4>
-      <a name="queryset-example">Partial CSV export using queryset reference.</a>
-    </h4>
+    </subsection>
+    <subsection name="Partial CSV export using queryset reference." id="queryset-example">
     <p>Export employees with specified userNames, as well as all
     managers.</p>
     <source>
@@ -641,10 +649,8 @@
   </export>
 </dbunit>]]>
     </source>
-
-    <h4>
-      <a name="dbconfigexample">DatabaseConfig example with nested configuration</a>
-    </h4>
+    </subsection>
+    <subsection name="DatabaseConfig example with nested configuration" id="dbconfigexample">
     <source>
       <![CDATA[
 <dbunit driver="com.vendor.jdbc.Driver"
@@ -661,7 +667,7 @@
     ...
 </dbunit>]]>
     </source>
-
-</section>
-</body>
+    </subsection>
+    </section>
+  </body>
 </document>

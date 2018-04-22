@@ -1,10 +1,15 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<document><properties><title>Core Components</title></properties><body><section>
-	 
-      <h3>Core Components</h3>
-      <p>This document attemps to give you an overview of the core classes that make up DbUnit. 
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+  <properties>
+    <title>Core Components</title>
+  </properties>
+  <body>
+    <section name="Core Components">
+      <p>This document attempts to give you an overview of the core classes that make up DbUnit. 
       Following are the core interfaces or abstract classes:
-      
+
       <table border="1">
         <tr> 
           <th>Class</th>
@@ -24,8 +29,8 @@
         </tr>
        </table>
       </p>
-
-      <h3><a name="databaseconnection">IDatabaseConnection</a></h3>
+    </section>
+    <section name="IDatabaseConnection" id="databaseconnection">
       <p>The <a href="apidocs/org/dbunit/database/IDatabaseConnection.html">IDatabaseConnection</a> interface represents  
         a DbUnit connection to a database. 
         
@@ -44,8 +49,8 @@
         </tr>
        </table>
       </p>
-      
-      <h3><a name="dataset">IDataSet</a></h3>
+    </section>
+    <section name="IDataSet" id="dataset">
       <p>The <a href="apidocs/org/dbunit/dataset/IDataSet.html">IDataSet</a> interface represents is a collection 
         of tables. This is the primary abstraction used by DbUnit to manipulate tabular data. 
 </p>
@@ -221,7 +226,6 @@ Following sample shows how to load a flat XML dataset with the StreamingDataSet:
 </td>
         </tr>
 </table>
-
           </td>
         </tr>
         <tr> 
@@ -248,7 +252,7 @@ Interestingly this provides a new way to specify null values in flat XML dataset
 Loading the flat XML dataset:
 <source><![CDATA[
 ReplacementDataSet dataSet = new ReplacementDataSet(
-        new FlatXmlDataSet(…)); 
+        new FlatXmlDataSet(Â…)); 
 dataSet.addReplacementObject("[NULL]", null);]]></source>
           <br/>
   You can choose to use a fail-fast replacement to ensure that all placeholders are actually set 
@@ -260,11 +264,12 @@ dataSet.addReplacementObject("[NULL]", null);]]></source>
         </tr>
       </table>
       </p>
-      <h3><a name="databaseoperation">DatabaseOperation</a></h3>
+    </section>
+    <section name="DatabaseOperation" id="databaseoperation">
       <p><a href="apidocs/org/dbunit/operation/DatabaseOperation.html">DatabaseOperation</a> is an abstract class that represents an operation performed on the database before and after each test. </p>
-      <p>The two most usefull operations are <a href="#refresh">REFRESH</a> and 
+      <p>The two most useful operations are <a href="#refresh">REFRESH</a> and 
         <a href="#cleanInsert">CLEAN_INSERT</a>. They 
-        are the ones you will deal usualy with. They represent two 
+        are the ones you will deal usually with. They represent two 
         testing strategies with different benefits and tradeoffs. </p>
 
       <table border="1">
@@ -297,9 +302,7 @@ dataSet.addReplacementObject("[NULL]", null);]]></source>
         </tr>
         <tr> 
           <td><a name="truncate" href="apidocs/org/dbunit/operation/TruncateTableOperation.html">DatabaseOperation.TRUNCATE_TABLE</a></td>
-          <td>Truncate tables present in the specified dataset. If the dataset does not contains a particular table, but that table exists in the database, the database table is not affected. Table are truncated in reverse sequence. 
-
-</td>
+          <td>Truncate tables present in the specified dataset. If the dataset does not contains a particular table, but that table exists in the database, the database table is not affected. Table are truncated in reverse sequence.</td>
         </tr>
         <tr> 
           <td><a name="refresh" href="apidocs/org/dbunit/operation/RefreshOperation.html">DatabaseOperation.REFRESH</a></td>
@@ -339,5 +342,6 @@ dataSet.addReplacementObject("[NULL]", null);]]></source>
         or InsertIdentityOperation.REFRESH instead of those defined in DatabaseOperation.</td>
         </tr>
       </table>
-
-      </section></body></document>
+    </section>
+  </body>
+</document>
