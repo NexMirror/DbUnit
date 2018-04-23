@@ -35,7 +35,7 @@ public interface PrepAndExpectedTestCase
     /**
      * Configure the test. Call this method before performing the test steps.
      *
-     * @param verifyTables
+     * @param verifyTableDefinitions
      *            Table definitions to verify after test execution.
      * @param prepDataFiles
      *            The prep data files (as classpath resources) to load and
@@ -45,7 +45,7 @@ public interface PrepAndExpectedTestCase
      *            expected data and verify actual data matches at test end.
      * @throws Exception
      */
-    void configureTest(VerifyTableDefinition[] verifyTables,
+    void configureTest(VerifyTableDefinition[] verifyTableDefinitions,
             String[] prepDataFiles, String[] expectedDataFiles)
             throws Exception;
 

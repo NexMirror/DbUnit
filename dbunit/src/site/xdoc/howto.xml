@@ -72,7 +72,7 @@
          <tr><td valign="top"><a class="code">JndiBasedDBTestCase</a></td>
              <td>uses a javax.sql.DataSource located through JNDI (with the aid of a JndiDatabaseTester).</td></tr>
          <tr><td valign="top"><a class="code">DefaultPrepAndExpectedTestCase</a></td>
-             <td>uses a configurable IDatabaseTester (allowing any connection type) with clear separation of prep and expected datasets.</td></tr>
+             <td>uses a configurable IDatabaseTester (allowing any connection type) providing a turn-key test setup and verification process in one, with clear separation of prep and expected datasets.</td></tr>
       </table>
       <p>
       Refer to <a href="/testcases.html">dbUnit Test Cases</a> page for more details.
@@ -142,7 +142,7 @@ public class SampleTest extends DBTestCase
 }</source>
       </p>
       </subsection>
-      <subsection name="Step 5: Implement your testXXX() methods">
+      <subsection name="Step 5: Implement your testXxx() methods">
       <p>Implement your test methods as you normally would with JUnit. Your database
       is now initialized before and cleaned-up after each test methods according
       to what you did in previous steps.</p>
@@ -243,13 +243,16 @@ public class SampleTest extends TestCase
       directly instantiated or dependency injected in test classes.
       <p>
       For example, using PrepAndExpectedTestCase:
-      (also see <a href="apidocs/org/dbunit/DefaultPrepAndExpectedTestCase.html">DefaultPrepAndExpectedTestCase</a> JavaDoc).
+      (also see
+      <a href="testcases/PrepAndExpectedTestCase.html">TestCases -> PrepAndExpectedTestCase</a>
+      and
+      <a href="apidocs/org/dbunit/DefaultPrepAndExpectedTestCase.html">DefaultPrepAndExpectedTestCase</a> JavaDoc).
       </p>
 <source>
 public class SampleTest
 {
     private PrepAndExpectedTestCase tc; // injected or instantiated, already configured
-    
+
     @Test
     public void testExample() throws Exception
     {
@@ -257,12 +260,19 @@ public class SampleTest
         final String[] expectedDataFiles = {}; // define expected files
         final VerifyTableDefinition[] tables = {}; // define tables to verify
         final PrepAndExpectedTestCaseSteps testSteps = () -> {
-            // execute test steps
-    
-            return null; // or an object for use outside the Steps
+            // execute test steps that exercise production code
+            // e.g. call repository, call REST service
+
+            // assert responses or other values
+
+            // after this method exits, dbUnit will:
+            //  * verify configured tables
+            //  * cleanup tables as configured
+
+            return null; // or an object for use/assert outside the Steps
         };
-    
-        tc.runTest(tables, prepDataFiles, expectedDataFiles, testSteps);
+
+        Object result = tc.runTest(tables, prepDataFiles, expectedDataFiles, testSteps);
     }
 }
 </source>
@@ -270,17 +280,21 @@ public class SampleTest
       </section>
       <section name="Database data verification" id="assertdata">
       <p>Dbunit provides support for verifying whether two tables or datasets
-      contain identical data. The following two methods can be used to verify if 
+      contain identical data. The Assertion class has many methods for verifying if 
       your database contains the expected data during 
-      test cases execution.
+      test cases execution.  Here are some of them:
       <source>public class Assertion
 {
     public static void assertEquals(ITable expected, ITable actual)
     public static void assertEquals(IDataSet expected, IDataSet actual)
+    public static void assertWithValueComparer(IDataSet expectedDataSet, IDataSet actualDataSet,
+        ValueComparer defaultValueComparer, Map&lt;String, Map&lt;String, ValueComparer&gt;&gt; tableColumnValueComparers)
+    public static void assertWithValueComparer(ITable expectedTable, ITable actualTable,
+        ValueComparer defaultValueComparer, Map&lt;String, ValueComparer&gt; columnValueComparers)
 }</source></p>
       <subsection name="Sample">
-      <p>The following sample, show how to compare a database table snapshot
-        against a flat XML table.
+      <p>The following sample shows how to compare a database table snapshot
+        against a flat XML table using equality comparison.
       <source>public class SampleTest extends DBTestCase
 {
     public SampleTest(String name)
@@ -333,7 +347,7 @@ Sometimes this is desirable to ignore some columns to perform the comparison; pa
 One way to do this is to omit to declare unwanted columns in your expected table. You can then filter the actual database table to only expose the expected table columns. 
 <br/>
 The following code snippet shows you how to filter the actual table. To works, the actual table MUST contain at least ALL the columns from the expected table. Extra columns can exist in the actual table but not in the expected one.
-<source>        
+<source>
     ITable filteredTable = DefaultColumnFilter.includedColumnsTable(actual, 
             expected.getTableMetaData().getColumns());
     Assertion.assertEquals(expected, filteredTable); 
@@ -373,7 +387,7 @@ A major limitation of this technique is that you cannot use a DTD with your expe
       </i>
       </p>
       </subsection>
-      
+
       <subsection name="Assert and collect the differences" id="assert-collect-diff">
       <p>By default, dbunit immediately fails when the first data difference was found.
       Starting with dbunit 2.4 it is possible to register a custom 

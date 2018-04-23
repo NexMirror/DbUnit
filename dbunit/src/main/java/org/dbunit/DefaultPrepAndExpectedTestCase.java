@@ -23,7 +23,9 @@ package org.dbunit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
+import org.dbunit.assertion.comparer.value.ValueComparer;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.Column;
@@ -128,6 +130,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     /**
      * {@inheritDoc}
      */
+    @Override
     public void configureTest(
             final VerifyTableDefinition[] verifyTableDefinitions,
             final String[] prepDataFiles, final String[] expectedDataFiles)
@@ -143,6 +146,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     /**
      * {@inheritDoc}
      */
+    @Override
     public void preTest() throws Exception
     {
         setupData();
@@ -151,6 +155,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     /**
      * {@inheritDoc}
      */
+    @Override
     public void preTest(final VerifyTableDefinition[] tables,
             final String[] prepDataFiles, final String[] expectedDataFiles)
             throws Exception
@@ -162,6 +167,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object runTest(final VerifyTableDefinition[] verifyTables,
             final String[] prepDataFiles, final String[] expectedDataFiles,
             final PrepAndExpectedTestCaseSteps testSteps) throws Exception
@@ -191,6 +197,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     /**
      * {@inheritDoc}
      */
+    @Override
     public void postTest() throws Exception
     {
         postTest(true);
@@ -199,6 +206,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     /**
      * {@inheritDoc}
      */
+    @Override
     public void postTest(final boolean verifyData) throws Exception
     {
         try
@@ -220,6 +228,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     /**
      * {@inheritDoc}
      */
+    @Override
     public void cleanupData() throws Exception
     {
         try
@@ -297,6 +306,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     /**
      * {@inheritDoc} Uses the connection from the provided databaseTester.
      */
+    @Override
     public void verifyData() throws Exception
     {
         if (databaseTester == null)
@@ -349,12 +359,17 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
                 verifyTableDefinition.getColumnExclusionFilters();
         final String[] includeColumns =
                 verifyTableDefinition.getColumnInclusionFilters();
+        final Map<String, ValueComparer> columnValueComparers =
+                verifyTableDefinition.getColumnValueComparers();
+        final ValueComparer defaultValueComparer =
+                verifyTableDefinition.getDefaultValueComparer();
 
         final ITable expectedTable = loadTableDataFromDataSet(tableName);
         final ITable actualTable =
                 loadTableDataFromDatabase(tableName, connection);
 
-        verifyData(expectedTable, actualTable, excludeColumns, includeColumns);
+        verifyData(expectedTable, actualTable, excludeColumns, includeColumns,
+                defaultValueComparer, columnValueComparers);
     }
 
     public ITable loadTableDataFromDataSet(final String tableName)
@@ -416,10 +431,23 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
      *            The column names to only include in comparison. See
      *            {@link org.dbunit.dataset.filter.DefaultColumnFilter#includeColumn(String)}
      *            .
+     * @param defaultValueComparer
+     *            {@link ValueComparer} to use with column value comparisons
+     *            when the column name for the table is not in the
+     *            columnValueComparers {@link Map}. Can be <code>null</code> and
+     *            will default.
+     * @param columnValueComparers
+     *            {@link Map} of {@link ValueComparer}s to use for specific
+     *            columns. Key is column name, value is the
+     *            {@link ValueComparer}. Can be <code>null</code> and will
+     *            default to defaultValueComparer for all columns in all tables.
      * @throws DatabaseUnitException
      */
-    public void verifyData(final ITable expectedTable, final ITable actualTable,
-            final String[] excludeColumns, final String[] includeColumns)
+    protected void verifyData(final ITable expectedTable,
+            final ITable actualTable, final String[] excludeColumns,
+            final String[] includeColumns,
+            final ValueComparer defaultValueComparer,
+            final Map<String, ValueComparer> columnValueComparers)
             throws DatabaseUnitException
     {
         final String methodName = "verifyData";
@@ -450,16 +478,21 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
 
         log.debug("{}: Comparing expected table to actual table", methodName);
         compareData(expectedSortedTable, actualSortedTable,
-                additionalColumnInfo);
+                additionalColumnInfo, defaultValueComparer,
+                columnValueComparers);
     }
 
     /** Compare the tables, enables easy overriding. */
-    public void compareData(final SortedTable expectedSortedTable,
+    protected void compareData(final SortedTable expectedSortedTable,
             final SortedTable actualSortedTable,
-            final Column[] additionalColumnInfo) throws DatabaseUnitException
+            final Column[] additionalColumnInfo,
+            final ValueComparer defaultValueComparer,
+            final Map<String, ValueComparer> columnValueComparers)
+            throws DatabaseUnitException
     {
-        Assertion.assertEquals(expectedSortedTable, actualSortedTable,
-                additionalColumnInfo);
+        Assertion.assertWithValueComparer(expectedSortedTable,
+                actualSortedTable, additionalColumnInfo, defaultValueComparer,
+                columnValueComparers);
     }
 
     /**
@@ -580,6 +613,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     /**
      * {@inheritDoc}
      */
+    @Override
     public IDataSet getPrepDataset()
     {
         return prepDataSet;
@@ -588,6 +622,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     /**
      * {@inheritDoc}
      */
+    @Override
     public IDataSet getExpectedDataset()
     {
         return expectedDataSet;
