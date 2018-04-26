@@ -14,6 +14,7 @@
 
   <body>
     <release version="2.6.0-SNAPSHOT" date="TBD" description="PostgreSQL OID, POI 3.17, Java 8 tests, database integration tests, changes links, devguide.apt created, dbunit.properties, expected and definition tables verifier">
+      <action dev="jeffjensen" type="fix" issue="396">Fix JavaDoc gen</action>
       <action dev="jeffjensen" type="update" issue="207">DefaultPrepAndExpectedTestCase: VerifyTableDefinitions and expected tables can silently mismatch, add ExpectedDataSetAndVerifyTableDefinitionVerifier</action>
       <action dev="jeffjensen" type="add" issue="215" system="sffeatures" due-to="deragon">DatabaseEnvironment loads dbunit.properties.  See "Integration Tests" page for docs.</action>
       <action dev="jeffjensen" type="add" issue="214" system="sffeatures" due-to="deragon">Convert devguide.xml to devguide.apt.</action>

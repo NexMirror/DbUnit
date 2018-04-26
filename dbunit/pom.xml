@@ -59,7 +59,7 @@
     <propertiesPluginVersion>1.0.0</propertiesPluginVersion>
     <releasePluginVersion>2.5.3</releasePluginVersion>
     <resourcesPluginVersion>3.0.2</resourcesPluginVersion>
-    <sitePluginVersion>3.6</sitePluginVersion>
+    <sitePluginVersion>3.7</sitePluginVersion>
     <surefirePluginVersion>2.20.1</surefirePluginVersion>
 
     <!-- Framework versions -->
@@ -824,7 +824,6 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
         <version>${javadocPluginVersion}</version>
         <configuration>
           <quiet>true</quiet>
-          <stylesheet>maven</stylesheet>
           <tags>
             <tag>
               <name>TODO</name>
