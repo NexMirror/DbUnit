@@ -117,6 +117,8 @@ public abstract class AbstractDatabaseIT extends DatabaseTestCase
 
         DatabaseOperation.DELETE_ALL.execute(_connection, _connection.createDataSet());
 
+        _connection.close();
+
         _connection = null;
     }
 
