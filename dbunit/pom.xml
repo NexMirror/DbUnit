@@ -47,7 +47,7 @@
     <compilerPluginVersion>3.7.0</compilerPluginVersion>
     <deployPluginVersion>2.8.2</deployPluginVersion>
     <enforcerPluginVersion>1.4.1</enforcerPluginVersion>
-    <failsafePluginVersion>2.20.1</failsafePluginVersion>
+    <failsafePluginVersion>2.21.0</failsafePluginVersion>
     <gpgPluginVersion>1.6</gpgPluginVersion>
     <installPluginVersion>2.5.2</installPluginVersion>
     <jarPluginVersion>3.0.2</jarPluginVersion>
@@ -60,7 +60,7 @@
     <releasePluginVersion>2.5.3</releasePluginVersion>
     <resourcesPluginVersion>3.0.2</resourcesPluginVersion>
     <sitePluginVersion>3.7</sitePluginVersion>
-    <surefirePluginVersion>2.20.1</surefirePluginVersion>
+    <surefirePluginVersion>2.21.0</surefirePluginVersion>
 
     <!-- Framework versions -->
     <antTestUtilVersion>1.7.0</antTestUtilVersion>
