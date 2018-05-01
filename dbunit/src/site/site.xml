@@ -63,7 +63,7 @@
       <item name="Download"           href="/download.html"/>
     </menu>
 
-    <menu name="Overview">
+    <menu name="Using DbUnit">
       <item name="About DbUnit"      href="/index.html"/>
       <item name="Database Testing"  href="/intro.html"/>
       <item name="Getting Started"   href="/howto.html"/>
@@ -83,7 +83,7 @@
       <item name="Sponsors"          href="/sponsors.html"/>
     </menu>
 
-    <menu name="Developer">
+    <menu name="Developing DbUnit">
       <item name="Building DbUnit"   href="/building.html"/>
       <item name="Developers Guide"  href="/devguide.html"/>
       <item name="Integration Tests" href="/integrationtests.html"/>
