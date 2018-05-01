@@ -2,10 +2,13 @@
 Running DbUnit Integration Tests
   ---
 John Hurst
+Jeff Jensen
   ---
 2009-10-13
 
 Overview
+
+* Background
 
   DbUnit includes a comprehensive test suite.
 
@@ -15,7 +18,15 @@ Overview
   Some of the tests are <<integration tests>>, and can test DbUnit functionality against a particular database.
   The integration tests are executed in the Maven integration-test phase.
 
+* Running
+
   Maven profiles control which database environment is in use for a particular test run.
+  The profiles are named for the database (see specific database sections below).
+  List all profiles using this command:
+
+---
+mvn help:all-profiles
+---
 
   The default profile runs the tests using an HSQLDB in-memory database, which does not require a database server.
 
@@ -25,20 +36,15 @@ Overview
   use this command:
 
 ---
-mvn clean verify -Poracle10-ojdbc14
+mvn verify -Poracle10-ojdbc14
 ---
 
-  List all profiles using this command:
-
----
-mvn help:all-profiles
----
 
   <<Note:>> The integration tests are run using the {{{http://mojo.codehaus.org/failsafe-maven-plugin/}Maven failsafe-plugin}}.
 
 Database Properties
 
-  Each database is configured by properties and dependencies.
+  Each database environment is configured by properties and dependencies.
   The properties relate to standard JDBC connection parameters,
   and the dependencies cover the database-specific JDBC driver.
 
@@ -81,43 +87,165 @@ Database Properties
 </settings>
 ---
 
+Setup Databases
+
+* Background
+
+ The database integration tests require a running database server with a few 
+ expected configuration items, such as credentials and schema.
+ If needed, find the needed values defined in database-named .properties files
+ located in the src/test/resources directory.
+ 
+ A few databases, such as Apache Derby, have an in-memory runtime option
+ enabling the tests to automatically start and stop the database.
+ Running the database integration tests with those databases requires no
+ additional setup.
+
+* With Docker Images
+
+ For typical dbUnit development with databases requiring setup, use the 
+ {{{https://hub.docker.com/r/dbunit/}dbUnit database Docker images}} for easy,
+ pre-configured setup.  The dbUnit CI server uses these database Docker images
+ for the tests.
+
+ The next sections describe using Docker for the databases where needed.
+ Using Docker is not required - having the databases for the tests is required -
+ and using Docker is the easiest solution we have found for the database setups.
+
+* Install Docker
+
+ To use the dbUnit Docker database images, install Docker
+ and follow the running tests instructions.
+
+** Windows
+
+ Install Docker for Windows from
+ {{https://www.docker.com/docker-windows}}
+ or using {{{https://chocolatey.org/packages?q=docker}Chocolatey}}.
+
+** OS X
+
+*** Using Homebrew
+
+---
+brew cask install docker
+---
+
+*** Not Using Homebrew
+
+ Install Docker for Mac from
+ {{https://docs.docker.com/docker-for-mac/install/}}
+
+** Linux
+
+ Based on distro:
+
+ * {{https://docs.docker.com/install/linux/docker-ce/ubuntu/}}
+
+ * {{https://docs.docker.com/install/linux/docker-ce/debian/}}
+
+ * {{https://docs.docker.com/install/linux/docker-ce/centos/}}
+
+ * {{https://docs.docker.com/install/linux/docker-ce/fedora/}}
+
 Running Integration Tests with Maven
+
+* Clean Build
+
+ It's important to occasionally run a clean build to ensure no problems are
+ hidden by existing compiled classes or resource files.
+
+ Can simply occasionally run the Maven clean goal:
+
+---
+mvn clean
+---
+
+* Optionally Skip Unit Tests When Running Integration Tests
+
+ To skip running the unit tests with the integration tests,
+ specify the "it-config" profile in addition to the database-named profile.
+ While we typically run all tests, it's useful to save the unit tests
+ run time when focusing on one or more integration tests.
+
+ For example, this runs the unit tests and the integration tests with Apache Derby:
+
+---
+mvn -Pderby verify
+---
+
+ and this skips the unit tests and runs the integration tests with Apache Derby:
+
+---
+mvn -Pit-config,derby verify
+---
 
 * Running Apache Derby Integration Tests
 
-  Nothing special is required.
+ Apache Derby has an in-memory running option and does not require special database setup.
 
-  Run the full test suite, including integration tests, with this command:
+** Run Tests
 
 ---
-mvn clean verify -Poracle-default,derby
+mvn -e -Pderby verify
 ---
 
-  <<Note:>> Currently the oracle-default profile is required, along with the derby profile, to ensure all JARs required on the compile-time classpath in Maven.
+* Running DB2 Integration Tests
+
+ TODO
 
 * Running H2 Integration Tests
 
-  Nothing special is required.
+ H2 has an in-memory running option and does not require special database setup.
 
-  Run the full test suite, including integration tests, with this command:
+** Run Tests
 
 ---
-mvn clean verify -Poracle-default,h2
+mvn -e -Ph2 verify
 ---
-
-  <<Note:>> Currently the oracle-default profile is required, along with the h2 profile, to ensure all JARs required on the compile-time classpath in Maven.
 
 * Running HSQLDB Integration Tests
 
-  Nothing special is required.
+ HSQLDB has an in-memory running option and does not require special database setup.
 
-  Run the full test suite, including integration tests, with this command:
+** Run Tests
 
 ---
-mvn clean verify
+mvn -e -Phsqldb verify
 ---
 
 * Running MySQL Integration Tests
+
+** With Docker
+
+*** Docker Start
+
+---
+docker run --rm --name mysql -p 3306:3306 dbunit/dbunit-it-mysql:1.0.0 /entrypoint.sh mysqld
+---
+
+*** DB is Ready When Console Shows
+
+---
+[Entrypoint] MySQL init process done. Ready for start up.
+
+[Entrypoint] Starting MySQL 5.7.21-1.1.4
+---
+
+*** Run Tests
+
+---
+mvn -e -Pmysql verify
+---
+
+*** Docker Stop
+
+---
+press ctrl+c
+docker stop mysql
+---
+
+** Without Docker
 
   [[1]] Install MySQL database.  This can be on your local machine, or you can use any MySQL database you have access to.
 
@@ -143,12 +271,43 @@ EOF
   Run the full test suite, including integration tests, with this command:
 
 ---
-mvn clean verify -Poracle-default,mysql
+mvn -Pmysql verify
 ---
 
-  <<Note:>> Currently the oracle-default profile is required, along with the mysql profile, to ensure all JARs required on the compile-time classpath in Maven.
-
 * Running Oracle Integration Tests
+
+** With Docker
+
+*** Oracle 11g
+
+**** Docker Start
+
+---
+docker run --rm --name oracle11g -t -p 1521:1521 dbunit/dbunit-it-oracle11g:1.0.1
+---
+
+**** DB is Ready When Console Shows
+
+---
+User altered.
+
+SQL> Disconnected from Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+---
+
+**** Run Tests
+
+---
+mvn -e -Poracle-ojdbc6 verify
+---
+
+**** Docker Stop
+
+---
+press ctrl+c
+docker stop oracle11g
+---
+
+** Without Docker
 
   [[1]] Install Oracle database.  This can be on your local machine, or you can use any Oracle database you have access to.
 
@@ -164,13 +323,47 @@ mvn clean verify -Poracle-default,mysql
   Run the full test suite, including integration tests, with one of these commands:
 
 ---
-mvn clean verify -Poracle-ojdbc14
-mvn clean verify -Poracle-ojdbc6
-mvn clean verify -Poracle10-ojdbc14
-mvn clean verify -Poracle10-ojdbc6
+mvn -Poracle-ojdbc14 verify
+mvn -Poracle-ojdbc6 verify
+mvn -Poracle10-ojdbc14 verify
+mvn -Poracle10-ojdbc6 verify
 ---
 
 * Running PostgreSQL Integration Tests
+
+** With Docker
+
+*** Docker Start
+
+---
+docker run --rm --name postgres -p 5432:5432 dbunit/dbunit-it-postgres:1.0.0 /docker-entrypoint.sh postgres
+---
+
+*** DB is Ready When Console Shows
+
+---
+PostgreSQL init process complete; ready for start up.
+
+LOG:  database system was shut down at (some date/time)
+LOG:  MultiXact member wraparound protections are now enabled
+LOG:  database system is ready to accept connections
+LOG:  autovacuum launcher started
+---
+
+*** Run Tests
+
+---
+mvn -e -Ppostgresql verify
+---
+
+*** Docker Stop
+
+---
+press ctrl+c
+docker stop postgres
+---
+
+** Without Docker
 
   [[1]] Install PostgreSQL database.  This can be on your local machine, or you can use any PostgreSQL database you have access to.
 
@@ -195,12 +388,42 @@ EOF
   Run the full test suite, including integration tests, with this command:
 
 ---
-mvn clean verify -Poracle-default,postgresql
+mvn -Ppostgresql verify
 ---
 
-  <<Note:>> Currently the oracle-default profile is required, along with the postgresql profile, to ensure all JARs required on the compile-time classpath in Maven.
+* Running SQLServer Integration Tests
 
-* TODO: Other databases, notably mssql, db2.
+** With Docker
+
+*** Docker Start
+
+---
+docker run --rm --name sqlserver -t -p 1433:1433 dbunit/dbunit-it-sqlserver:1.0.1
+---
+
+*** DB is Ready When Console Shows
+
+---
+(5 rows affected)
+Changed database context to 'dbunit'.
+---
+
+*** Run Tests
+
+---
+mvn -e -Pmssql41 verify
+---
+
+*** Docker Stop
+
+---
+press ctrl+c
+docker stop sqlserver
+---
+
+** Without Docker
+
+ TODO
 
 Running Integration Tests with IDEs
 
@@ -210,7 +433,7 @@ Running Integration Tests with IDEs
   Access it from the project's context menu:
 
 ---
-  (project context menu) -> Properties -> Maven -> Active Maven Profiles
+(project context menu) -> Properties -> Maven -> Active Maven Profiles
 ---
 
   Enter the Maven profile name(s) to always run,
@@ -220,7 +443,7 @@ Running Integration Tests with IDEs
 
   "dbunit.properties" is useful for environments which make it difficult if
   not impossible to use Maven's profiles.  For instance, directly running JUnit 
-  tests within IDEs typically doesn't use Maven and therefore are not using
+  tests within IDEs typically don't use Maven and therefore are not using
   Maven's profiles (which set the the database configuration) and tests fail.
 
   <<<dbunit.properties>>> contains the missing properties which a profile
@@ -231,15 +454,15 @@ Running Integration Tests with IDEs
   for activating the profile <<<h2>>>:
 
 ---
-    dbunit.profile=h2
-    dbunit.profile.driverClass=org.h2.Driver
-    dbunit.profile.url=jdbc:h2:target/h2/test
-    dbunit.profile.schema=PUBLIC
-    dbunit.profile.user=sa
-    dbunit.profile.password=
-    dbunit.profile.ddl=h2.sql
-    dbunit.profile.unsupportedFeatures=BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY,XML_TYPE
-    dbunit.profile.multiLineSupport=true
+dbunit.profile=h2
+dbunit.profile.driverClass=org.h2.Driver
+dbunit.profile.url=jdbc:h2:target/h2/test
+dbunit.profile.schema=PUBLIC
+dbunit.profile.user=sa
+dbunit.profile.password=
+dbunit.profile.ddl=h2.sql
+dbunit.profile.unsupportedFeatures=BLOB,CLOB,SCROLLABLE_RESULTSET,INSERT_IDENTITY,TRUNCATE_TABLE,SDO_GEOMETRY,XML_TYPE
+dbunit.profile.multiLineSupport=true
 ---
 
   The directory
