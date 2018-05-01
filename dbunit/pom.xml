@@ -59,7 +59,7 @@
     <propertiesPluginVersion>1.0.0</propertiesPluginVersion>
     <releasePluginVersion>2.5.3</releasePluginVersion>
     <resourcesPluginVersion>3.0.2</resourcesPluginVersion>
-    <sitePluginVersion>3.7</sitePluginVersion>
+    <sitePluginVersion>3.7.1</sitePluginVersion>
     <surefirePluginVersion>2.21.0</surefirePluginVersion>
 
     <!-- Framework versions -->
