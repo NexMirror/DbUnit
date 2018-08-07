@@ -20,16 +20,10 @@
  */
 package org.dbunit.dataset.filter;
 
-import org.dbunit.database.AmbiguousTableNameException;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.ITable;
-import org.dbunit.dataset.ITableIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.dbunit.dataset.DataSetException;
-
-import java.util.Collection;
 
 
 /**
@@ -99,44 +93,5 @@ public class ExcludeTableFilter extends AbstractTableFilter implements ITableFil
         logger.debug("isValidName(tableName=" + tableName + ") - start");
 
         return !_patternMatcher.accept(tableName);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * This is similar to {@link #excludeTable}, but
-     *
-     * @param table {@inheritDoc}
-     * @throws AmbiguousTableNameException
-     */
-    public void addTable(ITable table) throws AmbiguousTableNameException {
-        logger.debug("addTable() - start");
-        excludeTable(table.getTableMetaData().getTableName());
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @param tables {@inheritDoc}
-     * @throws AmbiguousTableNameException
-     */
-    public void addTables(Collection<ITable> tables) throws AmbiguousTableNameException {
-        logger.debug("addTables(Collection) - start");
-        for(ITable table: tables) {
-            addTable(table);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @param dataSet {@inheritDoc}
-     * @throws AmbiguousTableNameException
-     */
-    public void addTables(IDataSet dataSet) throws DataSetException {
-        logger.debug("addTables(IDataSet) - start");
-        ITableIterator iterator = dataSet.iterator();
-        while(iterator.next())
-            addTable(iterator.getTable());
     }
 }

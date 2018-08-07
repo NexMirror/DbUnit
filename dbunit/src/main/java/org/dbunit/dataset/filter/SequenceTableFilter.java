@@ -21,14 +21,12 @@
 package org.dbunit.dataset.filter;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.dbunit.database.AmbiguousTableNameException;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.DataSetUtils;
 import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.ITableIterator;
 import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.dataset.NoSuchTableException;
@@ -62,7 +60,7 @@ public class SequenceTableFilter implements ITableFilter
      * Creates a new SequenceTableFilter with specified table names sequence.
      * @throws AmbiguousTableNameException If the given array contains ambiguous names
      */
-    public SequenceTableFilter(String[] tableNames)
+    public SequenceTableFilter(String[] tableNames) 
     throws AmbiguousTableNameException
     {
         this(tableNames, false);
@@ -75,7 +73,7 @@ public class SequenceTableFilter implements ITableFilter
      * @throws AmbiguousTableNameException If the given array contains ambiguous names
      * @since 2.4.2
      */
-    public SequenceTableFilter(String[] tableNames, boolean caseSensitiveTableNames)
+    public SequenceTableFilter(String[] tableNames, boolean caseSensitiveTableNames) 
     throws AmbiguousTableNameException
     {
         // Gather all tables in the OrderedTableNameMap which also makes the duplicate check
@@ -133,33 +131,7 @@ public class SequenceTableFilter implements ITableFilter
         return new SequenceTableIterator(reversed ?
                 DataSetUtils.reverseStringArray(tableNames) : tableNames, dataSet);
     }
-
-    public void addTable(ITable table) throws AmbiguousTableNameException
-    {
-        logger.debug("addTable() - start");
-        _tableNameMap.add(table.getTableMetaData().getTableName(), table);
-    }
-
-    public void addTables(Collection<ITable> tables)
-            throws AmbiguousTableNameException
-    {
-        logger.debug("addTables(Collection) - start");
-        for (ITable table : tables)
-        {
-            addTable(table);
-        }
-    }
-
-    public void addTables(IDataSet dataSet) throws DataSetException
-    {
-        logger.debug("addTables(IDataSet) - start");
-        ITableIterator iterator = dataSet.iterator();
-        while (iterator.next())
-        {
-            addTable(iterator.getTable());
-        }
-    }
-
+    
     public String toString()
     {
         StringBuffer sb = new StringBuffer();

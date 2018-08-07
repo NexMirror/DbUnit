@@ -24,7 +24,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -77,7 +76,7 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
     private final Map fkReverseEdgesPerTable = new HashMap();
 
     // name of the tables, in reverse order of dependency
-    private final List<String> tableNames = new ArrayList<String>();
+    private final List tableNames = new ArrayList();
 
     /**
      * Default constructor, it takes as input a map with desired rows in a final
@@ -90,8 +89,8 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
      * also be allowed by the filter
      */
     public PrimaryKeyFilter(IDatabaseConnection connection, PkTableMap allowedPKs, boolean reverseDependency) {
-        this.connection = connection;
-        this.allowedPKsPerTable = new PkTableMap();
+        this.connection = connection;    
+        this.allowedPKsPerTable = new PkTableMap();    
         this.allowedPKsInput = allowedPKs;
         this.reverseScan = reverseDependency;
 
@@ -100,10 +99,7 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
     }
 
     public void nodeAdded(Object node) {
-        // TODO:  nodeAdded should take a String, but because it is an inherited method,
-        //        we must keep the signature untouched.  One day, it must be fixed throughout
-        //        the class hierarchy.
-        this.tableNames.add( (String) node );
+        this.tableNames.add( node );
         if ( this.logger.isDebugEnabled() ) {
             this.logger.debug("nodeAdded: " + node );
         }
@@ -174,7 +170,7 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
             }
 
             for( int i=this.tableNames.size()-1; i>=0; i-- ) {
-                String tableName = this.tableNames.get(i);
+                String tableName = (String) this.tableNames.get(i);
                 // TODO: support multi-column PKs
                 String pkColumn = dataSet.getTable(tableName).getTableMetaData().getPrimaryKeys()[0].getColumnName();
                 Set tmpSet = this.pksToScanPerTable.get( tableName );
@@ -188,13 +184,13 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
                     allowPKs( tableName, pksToScan );
                     removePKsToScan( tableName, pksToScan );
                 } // if
-            } // for
+            } // for 
             removeScannedTables();
         } // while
         if ( this.logger.isDebugEnabled() ) {
             this.logger.debug( "Finished searchIds()" );
         }
-    }
+    } 
 
     private void removeScannedTables() {
         logger.debug("removeScannedTables() - start");
@@ -213,11 +209,11 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
                 Object id = iterator.next();
                 if( forcedAllowedPKs.contains(id) ) {
                     allowedPKsPerTable.add(table, id);
-                }
-                else
+                } 
+                else 
                 {
                     if ( this.logger.isDebugEnabled() ) {
-                        this.logger.debug( "Discarding id " + id + " of table " + table +
+                        this.logger.debug( "Discarding id " + id + " of table " + table + 
                         " as it was not included in the input!" );
                     }
                 }
@@ -248,7 +244,7 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
             }
         }
         // NOTE: make sure the query below is compatible standard SQL
-        String sql = "SELECT " + colsBuffer + " FROM " + table +
+        String sql = "SELECT " + colsBuffer + " FROM " + table + 
         " WHERE " + pkColumn + " = ? ";
         if ( this.logger.isDebugEnabled() ) {
             this.logger.debug( "SQL: " + sql );
@@ -279,9 +275,9 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
                                 this.logger.debug("New ID: " + newTable + "->" + fk);
                             }
                             addPKToScan( newTable, fk );
-                        }
+                        } 
                         else {
-                            this.logger.warn( "Found null FK for relationship  " +
+                            this.logger.warn( "Found null FK for relationship  " + 
                                     table + "=>" + newTable );
                         }
                     }
@@ -300,7 +296,7 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
         logger.debug("scanReversePKs(table={}, pksToScan={}) - start", table, pksToScan);
 
         if ( ! this.reverseScan ) {
-            return;
+            return; 
         }
         Set fkReverseEdges = (Set) this.fkReverseEdgesPerTable.get( table );
         if ( fkReverseEdges == null || fkReverseEdges.isEmpty() ) {
@@ -340,7 +336,7 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
                     Object fk = rs.getObject(1);
                     addPKToScan( fkTable, fk );
                 }
-            }
+            } 
         } finally {
             SQLHelper.close( rs, pstmt );
         }
@@ -376,12 +372,12 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
 
         Set pksToScan = this.pksToScanPerTable.get(table);
         if ( pksToScan != null ) {
-            if ( pksToScan == ids ) {
+            if ( pksToScan == ids ) {   
                 throw new RuntimeException( "INTERNAL ERROR on removeIdsToScan() for table " + table );
             } else {
                 pksToScan.removeAll( ids );
             }
-        }
+        }    
     }
 
     private void addPKToScan(String table, Object pk) {
@@ -428,7 +424,7 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
         public boolean next() throws DataSetException {
             if ( logger.isDebugEnabled() ) {
                 logger.debug("Iterator.next()" );
-            }
+            }      
             while (_iterator.next()) {
                 if (accept(_iterator.getTableMetaData().getTableName())) {
                     return true;
@@ -440,7 +436,7 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
         public ITableMetaData getTableMetaData() throws DataSetException {
             if ( logger.isDebugEnabled() ) {
                 logger.debug("Iterator.getTableMetaData()" );
-            }
+            }      
             return _iterator.getTableMetaData();
         }
 
@@ -460,7 +456,7 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
 
     /**
      * Map that associates a table with a set of primary key objects.
-     *
+     * 
      * @author gommma (gommma AT users.sourceforge.net)
      * @author Last changed by: $Author$
      * @version $Revision$ $Date$
@@ -481,7 +477,7 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
          * @param allowedPKs
          */
         public PkTableMap(PkTableMap allowedPKs) {
-            this.pksPerTable = new ListOrderedMap();
+            this.pksPerTable = new ListOrderedMap(); 
             Iterator iterator = allowedPKs.pksPerTable.entrySet().iterator();
             while ( iterator.hasNext() ) {
                 Map.Entry entry = (Map.Entry) iterator.next();
@@ -541,7 +537,7 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
             return (String[]) this.pksPerTable.keySet().toArray(new String[0]);
         }
 
-        public void retainOnly(List<String> tableNames) {
+        public void retainOnly(List tableNames) {
 
             List tablesToRemove = new ArrayList();
             for(Iterator iterator = this.pksPerTable.entrySet().iterator(); iterator.hasNext(); ) {
@@ -566,31 +562,13 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
                 this.remove( (String)iterator.next() );
             }
         }
-
+        
+        
         public String toString() {
             StringBuffer sb = new StringBuffer();
             sb.append("pKsPerTable=").append(pksPerTable);
             return sb.toString();
         }
 
-    }
-
-    public void addTable(ITable table) throws AmbiguousTableNameException {
-        logger.debug("addTable() - start");
-        nodeAdded(table.getTableMetaData().getTableName());
-    }
-
-    public void addTables(Collection<ITable> tables) throws AmbiguousTableNameException {
-        logger.debug("addTables(Collection) - start");
-        for(ITable table: tables) {
-            addTable(table);
-        }
-    }
-
-    public void addTables(IDataSet dataSet) throws DataSetException {
-        logger.debug("addTables(IDataSet) - start");
-        ITableIterator iterator = dataSet.iterator();
-        while(iterator.next())
-            addTable(iterator.getTable());
     }
 }
