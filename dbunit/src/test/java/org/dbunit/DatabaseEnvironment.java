@@ -154,6 +154,9 @@ public class DatabaseEnvironment
             } else if (profileName.equals("mssql"))
             {
                 INSTANCE = new MsSqlEnvironment(profile);
+            } else if (profileName.equals("db2"))
+            {
+                INSTANCE = new Db2Environment(profile);
             } else
             {
                 INSTANCE = new DatabaseEnvironment(profile);
