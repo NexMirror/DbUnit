@@ -136,22 +136,6 @@
        - Note: email of first developer is used by the announcements-email plugin
       -->
     <developer>
-      <name>Matthias Gommeringer</name>
-      <id>gommma</id>
-      <email>gommma@users.sourceforge.net</email>
-      <roles>
-        <role>Java Developer (very active)</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>John Hurst</name>
-      <id>jbhurst</id>
-      <email>jbhurst@users.sourceforge.net</email>
-      <roles>
-        <role>Java Developer (very active)</role>
-      </roles>
-    </developer>
-    <developer>
       <name>Jeff Jensen</name>
       <id>jeffjensen</id>
       <email>jeffjensen@users.sourceforge.net</email>
@@ -160,12 +144,36 @@
       </roles>
     </developer>
     <developer>
+      <name>Andrew Landsverk</name>
+      <id>quantas</id>
+      <email>quantas@users.sourceforge.net</email>
+      <roles>
+        <role>Java Developer (active)</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Matthias Gommeringer</name>
+      <id>gommma</id>
+      <email>gommma@users.sourceforge.net</email>
+      <roles>
+        <role>Java Developer (inactive)</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>John Hurst</name>
+      <id>jbhurst</id>
+      <email>jbhurst@users.sourceforge.net</email>
+      <roles>
+        <role>Java Developer (inactive)</role>
+      </roles>
+    </developer>
+    <developer>
       <name>Roberto Lo Giacco</name>
       <id>rlogiacco</id>
       <email>rlogiacco@users.sourceforge.net</email>
       <organization>SmartLab</organization>
       <roles>
-        <role>Java Developer (active)</role>
+        <role>Java Developer (inactive)</role>
       </roles>
     </developer>
     <developer>
