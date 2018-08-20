@@ -9,11 +9,15 @@ import org.dbunit.dataset.IDataSet;
  * expectedDataSet configurations agree, e.g. have the same number of tables
  * defined.
  *
- * @author jjensen
+ * @author Jeff Jensen
  */
 public interface ExpectedDataSetAndVerifyTableDefinitionVerifier
 {
-    public void verify(VerifyTableDefinition[] verifyTableDefinitions,
+    /**
+     * Verify {@link VerifyTableDefinition}s and expectedDataSet configurations
+     * agree.
+     */
+    void verify(VerifyTableDefinition[] verifyTableDefinitions,
             IDataSet expectedDataSet, DatabaseConfig config)
             throws DataSetException;
 }

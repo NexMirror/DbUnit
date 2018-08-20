@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  * {@link DefaultPrepAndExpectedTestCase#setExpectedDataSetAndVerifyTableDefinitionVerifier}
  * .
  *
- * @author jjensen
+ * @author Jeff Jensen
  */
 public class DefaultExpectedDataSetAndVerifyTableDefinitionVerifier
         implements ExpectedDataSetAndVerifyTableDefinitionVerifier
