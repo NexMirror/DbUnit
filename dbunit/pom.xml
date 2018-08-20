@@ -536,6 +536,7 @@
           <artifactId>maven-failsafe-plugin</artifactId>
           <version>${failsafePluginVersion}</version>
           <configuration>
+            <redirectTestOutputToFile>true</redirectTestOutputToFile>
             <encoding>UTF-8</encoding>
             <systemProperties>
               <property>
@@ -678,6 +679,7 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${surefirePluginVersion}</version>
           <configuration>
+            <redirectTestOutputToFile>true</redirectTestOutputToFile>
             <excludes>
               <exclude>**/Abstract*.java</exclude>
             </excludes>
