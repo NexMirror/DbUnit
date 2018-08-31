@@ -20,8 +20,15 @@
  */
 package org.dbunit.dataset.filter;
 
+import org.dbunit.database.AmbiguousTableNameException;
+import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ITable;
+import org.dbunit.dataset.ITableIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Collection;
 
 
 /**
@@ -91,5 +98,24 @@ public class IncludeTableFilter extends AbstractTableFilter implements ITableFil
         logger.debug("isValidName(tableName={}) - start", tableName);
 
         return _patternMatcher.accept(tableName);
+    }
+
+    public void addTable(ITable table) throws AmbiguousTableNameException {
+        logger.debug("addTable() - start");
+        includeTable(table.getTableMetaData().getTableName());
+    }
+
+    public void addTables(Collection<ITable> tables) throws AmbiguousTableNameException {
+        logger.debug("addTables(Collection) - start");
+        for(ITable table: tables) {
+            addTable(table);
+        }
+    }
+
+    public void addTables(IDataSet dataSet) throws DataSetException {
+        logger.debug("addTables(IDataSet) - start");
+        ITableIterator iterator = dataSet.iterator();
+        while(iterator.next())
+            addTable(iterator.getTable());
     }
 }

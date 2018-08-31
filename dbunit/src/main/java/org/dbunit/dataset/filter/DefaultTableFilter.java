@@ -20,10 +20,15 @@
  */
 package org.dbunit.dataset.filter;
 
+import org.dbunit.database.AmbiguousTableNameException;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ITable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.dbunit.dataset.DataSetException;
+
+import java.util.Collection;
 
 /**
  * This filter exposes only tables matching include patterns and not matching
@@ -83,5 +88,44 @@ public class DefaultTableFilter extends AbstractTableFilter implements ITableFil
             return _excludeFilter.accept(tableName);
         }
         return false;
+    }
+
+    /**
+     * Not supported.  Throws AmbiguousTableNameException when called.  It just
+     * does not make sense to add a table since this class holds both
+     * IncludeTableFilter and ExcludeTableFilter sets.  So to which set would the
+     * table be stored into?  The only way out is to throw an exception.
+     * @param table
+     * @throws AmbiguousTableNameException
+     */
+    public void addTable(ITable table) throws UnsupportedOperationException {
+        logger.debug("addTable() - start");
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Not supported.  Throws AmbiguousTableNameException when called.  It just
+     * does not make sense to add tables since this class holds both
+     * IncludeTableFilter and ExcludeTableFilter sets.  So to which set would the
+     * tables be stored into?  The only way out is to throw an exception.
+     * @param tables
+     * @throws AmbiguousTableNameException
+     */
+    public void addTables(Collection<ITable> tables) throws UnsupportedOperationException {
+        logger.debug("addTables(Collection) - start");
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Not supported.  Throws AmbiguousTableNameException when called.  It just
+     * does not make sense to add tables from a dataset since this class holds both
+     * IncludeTableFilter and ExcludeTableFilter sets.  So to which set would the
+     * tables be stored into?  The only way out is to throw an exception.
+     * @param dataSet
+     * @throws AmbiguousTableNameException
+     */
+    public void addTables(IDataSet dataSet) throws UnsupportedOperationException {
+        logger.debug("addTables(IDataSet) - start");
+        throw new UnsupportedOperationException();
     }
 }

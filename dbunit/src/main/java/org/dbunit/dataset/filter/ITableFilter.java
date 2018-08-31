@@ -20,9 +20,13 @@
  */
 package org.dbunit.dataset.filter;
 
+import org.dbunit.database.AmbiguousTableNameException;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.ITableIterator;
+
+import java.util.Collection;
 
 /**
  * Represents a strategy used by {@link org.dbunit.dataset.FilteredDataSet} to
@@ -34,7 +38,6 @@ import org.dbunit.dataset.ITableIterator;
  */
 public interface ITableFilter extends ITableFilterSimple
 {
-
     /**
      * Returns the table names allowed by this filter from the specified dataset.
      *
@@ -49,4 +52,28 @@ public interface ITableFilter extends ITableFilterSimple
      */
     public ITableIterator iterator(IDataSet dataSet, boolean reversed)
             throws DataSetException;
+
+    /**
+     * Add a {@link org.dbunit.dataset.ITable} to the filter.
+     *
+     * @param table {@link ITable} to add to the filter.
+     * @throws AmbiguousTableNameException
+     */
+    public void addTable(ITable table) throws AmbiguousTableNameException;
+
+    /**
+     * Add all {@link ITable} stored in a {@link java.util.Collection} to the filter.
+     *
+     * @param tables Collection of @link(org.dbunit.dataset.ITable) to add to the filter.
+     * @throws AmbiguousTableNameException
+     */
+    public void addTables(Collection<ITable> tables) throws AmbiguousTableNameException;
+
+    /**
+     * Add all {@link org.dbunit.dataset.ITable} stored in a {@link org.dbunit.dataset.IDataSet} to the filter.
+     *
+     * @param dataSet {@link org.dbunit.dataset.IDataSet} from which all tables will be added to the filter.
+     * @throws AmbiguousTableNameException
+     */
+    public void addTables(IDataSet dataSet) throws DataSetException;
 }

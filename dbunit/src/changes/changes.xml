@@ -19,6 +19,7 @@
       <action dev="jeffjensen" type="update" issue="207" system="sffeatures">DefaultPrepAndExpectedTestCase: VerifyTableDefinitions and expected tables can silently mismatch, add ExpectedDataSetAndVerifyTableDefinitionVerifier</action>
       <action dev="jeffjensen" type="add" issue="215" system="sffeatures" due-to="deragon">DatabaseEnvironment loads dbunit.properties.  See "Integration Tests" page for docs.</action>
       <action dev="jeffjensen" type="add" issue="214" system="sffeatures" due-to="deragon">Convert devguide.xml to devguide.apt.</action>
+      <action dev="quantas" type="add" issue="212" system="sffeatures" due-to="deragon">ITableFilter.addTable[s]() functions implemented.</action>
       <action dev="quantas" type="fix" issue="406" system="sfbugs" due-to="deragon">Fixed documentation regarding the blob tags.</action>
       <action dev="jeffjensen" type="fix" issue="352" system="sfbugs">Fix changes report tracker links (Bugs, Features) to support both.</action>
       <action dev="quantas" type="fix" system="sfbugs">
