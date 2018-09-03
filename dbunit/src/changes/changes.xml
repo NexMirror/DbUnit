@@ -15,8 +15,10 @@
   <body>
     <release version="2.6.0-SNAPSHOT" date="TBD" description="PostgreSQL OID, POI 3.17, Java 8 tests, database integration tests, changes links, devguide.apt created, dbunit.properties, expected and definition tables verifier, JavaDoc gen, JDK 8">
       <action dev="jeffjensen" type="update" issue="219" system="sffeatures" due-to="jeffjensen">Update compileSource to 1.8.</action>
+      <action dev="quantas" type="add" issue="220" system="sffeatures">Add Dockerfiles for running ITs: MySQL, Oracle 11, Postgres and SQL Server</action>
       <action dev="jeffjensen" type="fix" issue="396" system="sfbugs">Fix JavaDoc gen</action>
       <action dev="jeffjensen" type="update" issue="207" system="sffeatures">DefaultPrepAndExpectedTestCase: VerifyTableDefinitions and expected tables can silently mismatch, add ExpectedDataSetAndVerifyTableDefinitionVerifier</action>
+      <action dev="jeffjensen" type="add" issue="219" system="sffeatures">Change build to use Java 8 compiler and target 1.8: update compileSource to 1.8.</action>
       <action dev="jeffjensen" type="add" issue="215" system="sffeatures" due-to="deragon">DatabaseEnvironment loads dbunit.properties.  See "Integration Tests" page for docs.</action>
       <action dev="jeffjensen" type="add" issue="214" system="sffeatures" due-to="deragon">Convert devguide.xml to devguide.apt.</action>
       <action dev="quantas" type="fix" issue="406" system="sfbugs" due-to="deragon">Fixed documentation regarding the blob tags.</action>
