@@ -27,6 +27,10 @@
           <td><a href="#databaseoperation">DatabaseOperation</a></td>
           <td>Abstract class representing an operation performed on the database before and after each test.</td>
         </tr>
+        <tr>
+          <td><a href="#verifytabledefinition">VerifyTableDefinition</a></td>
+          <td>Interface representing how to verify a table meets expectations.</td>
+        </tr>
        </table>
       </p>
     </section>
@@ -342,6 +346,19 @@ dataSet.addReplacementObject("[NULL]", null);]]></source>
         or InsertIdentityOperation.REFRESH instead of those defined in DatabaseOperation.</td>
         </tr>
       </table>
+    </section>
+    <section name="VerifyTableDefinition" id="verifytabledefinition">
+      <p>
+      <a name="VerifyTableDefinition" href="/apidocs/org/dbunit/VerifyTableDefinition.html">VerifyTableDefinition</a>
+      defines a database table to verify (assert on data), specifying include and exclude column filters and optional
+      <a name="ValueComparer" href="/apidocs/org/dbunit/assertion/comparer/value/ValueComparer.html">ValueComparer</a>s.
+      </p>
+      <p>
+      <a name="PrepAndExpectedTestCase" href="/apidocs/org/dbunit/PrepAndExpectedTestCase.html">PrepAndExpectedTestCase</a>
+      directly supports using 
+      <a name="VerifyTableDefinition" href="/apidocs/org/dbunit/VerifyTableDefinition.html">VerifyTableDefinition</a>s
+      in the test definition and execution.
+      </p>
     </section>
   </body>
 </document>
