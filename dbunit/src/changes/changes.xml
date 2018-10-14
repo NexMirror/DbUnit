@@ -13,7 +13,8 @@
   </properties>
 
   <body>
-    <release version="2.6.0-SNAPSHOT" date="TBD" description="ValueComparers, PostgreSQL OID, POI 3.17, Java 8 tests, database integration tests, changes links, devguide.apt created, dbunit.properties, expected and definition tables verifier, JavaDoc gen, JDK 8">
+    <release version="2.6.0" date="Oct 13, 2018" description="ValueComparers, PostgreSQL OID, POI 3.17, Java 8 tests, database integration tests, changes links, devguide.apt created, dbunit.properties, expected and definition tables verifier, JavaDoc gen, JDK 8">
+      <action dev="jeffjensen" type="add" issue="208" system="sffeatures">DefaultPrepAndExpectedTestCase, VerifyTableDefinition: support ValueComparer.</action>
       <action dev="jeffjensen" type="add" issue="208" system="sffeatures">ValueComparer: DbUnitAssert: add assert method that strategizes the compare algorithm on a per column basis.</action>
       <action dev="quantas" type="add" issue="220" system="sffeatures">Add Dockerfiles for running ITs: MySQL, Oracle 11, Postgres and SQL Server</action>
       <action dev="jeffjensen" type="fix" issue="396" system="sfbugs">Fix JavaDoc gen</action>
@@ -24,9 +25,8 @@
       <action dev="quantas" type="fix" issue="406" system="sfbugs" due-to="deragon">Fixed documentation regarding the blob tags.</action>
       <action dev="jeffjensen" type="fix" issue="352" system="sfbugs">Fix changes report tracker links (Bugs, Features) to support both.</action>
       <action dev="quantas" type="fix" system="sfbugs">
-        Fix all database integration tests to work again.
+        Fix all (except one Oracle test) database integration tests to work again.
         <fixes issue="407" />
-        <fixes issue="408" />
         <fixes issue="409" />
         <fixes issue="410" />
         <fixes issue="411" />

@@ -30,6 +30,7 @@
 
     <section name="News">
       <table border="1">
+<!--
         <tr>
           <td>2017-09-06</td>
           <td> 
@@ -39,6 +40,17 @@
             the <a href="https://sourceforge.net/p/dbunit/feature-requests/milestone/2.6.0/">feature list</a>,
             and the <a href="https://sourceforge.net/p/dbunit/bugs/fixed_release/2.6.0/">bug list</a>
             for the snapshot contents (and any subsequent updates).
+          </td>
+        </tr>
+-->
+        <tr>
+          <td>2018-10-14</td>
+          <td> 
+            Release 2.6.0 available.
+            Refer to the <a href="changes-report.html#a2.6.0">changes report</a>,
+            the <a href="https://sourceforge.net/p/dbunit/feature-requests/milestone/2.6.0/">feature list</a>,
+            and the <a href="https://sourceforge.net/p/dbunit/bugs/fixed_release/2.6.0/">bug list</a>
+            for the release contents.
           </td>
         </tr>
         <tr>
