@@ -498,15 +498,37 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     /**
      * Don't add excluded columns to additionalColumnInfo as they are not found
      * and generate a not found message in the fail message.
+     *
+     * @param expectedTable
+     *            Not null.
+     * @param excludeColumns
+     *            Nullable.
      */
     protected Column[] makeAdditionalColumnInfo(final ITable expectedTable,
             final String[] excludeColumns) throws DataSetException
     {
-        final List<Column> keepColumnsList = new ArrayList<Column>();
-        final List<String> excludeColumnsList = Arrays.asList(excludeColumns);
-
         final Column[] allColumns =
                 expectedTable.getTableMetaData().getColumns();
+
+        return excludeColumns == null ? allColumns
+                : makeAdditionalColumnInfo(excludeColumns, allColumns);
+    }
+
+    /**
+     * Don't add excluded columns to additionalColumnInfo as they are not found
+     * and generate a not found message in the fail message.
+     *
+     * @param expectedTable
+     *            Not null.
+     * @param excludeColumns
+     *            Not null.
+     */
+    protected Column[] makeAdditionalColumnInfo(final String[] excludeColumns,
+            final Column[] allColumns)
+    {
+        final List<Column> keepColumnsList = new ArrayList<>();
+        final List<String> excludeColumnsList = Arrays.asList(excludeColumns);
+
         for (final Column column : allColumns)
         {
             final String columnName = column.getColumnName();
