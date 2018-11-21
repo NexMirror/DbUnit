@@ -846,6 +846,7 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
             see https://sourceforge.net/p/dbunit/code.git/merge-requests/25/
             FIXME remove -Xdoclint:none after JavaDoc cleanup.
           -->
+          <additionalparam>-Xdoclint:none</additionalparam>
           <doclint>none</doclint>
         </configuration>
       </plugin>
