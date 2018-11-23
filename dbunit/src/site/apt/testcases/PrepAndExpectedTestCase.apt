@@ -109,6 +109,7 @@ Configuration Example Using Spring
 
 +--
 @Configuration
+@Validated
 public class DbUnitConfiguration
 {
     /**
@@ -228,6 +229,16 @@ public class DbUnitDataReplacement
     private void populateReplacementSubstrings()
     {
     }
+
+    public Map<String, Object> getReplacementObjects()
+    {
+        return replacementObjects;
+    }
+
+    public Map<String, Object> getReplacementSubstrings()
+    {
+        return replacementSubstrings;
+    }
 }
 +--
 +--
@@ -316,7 +327,7 @@ public abstract class ColumnNames
  possibly organized by table.
 
 +--
-public abstract class ValueComparers
+public abstract class AppValueComparers
 {
     public static final Map<String, ValueComparer> COLUMN1_GREATER =
         new ColumnValueComparerMapBuilder()
@@ -425,7 +436,8 @@ public abstract class VerifyTableDefinitions
 +--
 public abstract class VerifyTableDefinitionFactory
 {
-    public static VerifyTableDefinition tableName_update(Long... ids) {
+    public static VerifyTableDefinition tableName_update(Long... ids)
+    {
         return make(TableName.TABLE_NAME, ValueComparerMapFactory.makeTableName_updated(ids));
     }
 }
@@ -433,7 +445,8 @@ public abstract class VerifyTableDefinitionFactory
 +--
 public abstract class ValueComparerMapFactory
 {
-    public static Map<String, ValueComparer> makeTableName_updated(Long[] ids) {
+    public static Map<String, ValueComparer> makeTableName_updated(Long[] ids)
+    {
         Set<Long> values = new HashSet<>(Arrays.asList(ids));
         ValueComparer inValuesValueComparer = ValueComparers.isActualGreaterThanExpected;
         ValueComparer notInValuesValueComparer = ValueComparers.isActualEqualToExpected;
@@ -486,7 +499,7 @@ public class DefaultEqualityComparisonExampleTest
 
         testCase.runTest(verifyTables, prepDataFiles, expectedDataFiles, () -> {
             // execute test steps that exercise production code
-            // e.g. call repository, call REST service
+            // e.g. call repository/DAO, call REST service
 
             // assert responses or other values
 
@@ -542,7 +555,7 @@ public class ValueComparerComparisonExampleTest
 
         testCase.runTest(verifyTables, prepDataFiles, expectedDataFiles, () -> {
             // execute test steps that exercise production code
-            // e.g. call repository, call REST service
+            // e.g. call repository/DAO, call REST service
 
             // assert responses or other values
 
@@ -590,7 +603,7 @@ public void testExample() throws Exception
     final String[] expectedDataFiles = {}; // define expected files
     final PrepAndExpectedTestCaseSteps testSteps = () -> {
         // execute test steps that exercise production code
-        // e.g. call repository, call REST service
+        // e.g. call repository/DAO, call REST service
 
         // assert responses or other values
 
@@ -626,7 +639,7 @@ public void testExample() throws Exception
         testCase.preTest(verifyTables, prepDataFiles, expectedDataFiles);
 
         // execute test steps that exercise production code
-        // e.g. call repository, call REST service
+        // e.g. call repository/DAO, call REST service
 
         // assert responses or other values
     } catch (Exception e)
