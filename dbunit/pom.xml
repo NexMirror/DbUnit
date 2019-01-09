@@ -85,7 +85,7 @@
     <mysqlDriverVersion>5.1.6</mysqlDriverVersion>
     <oracle10DriverVersion>10.2.0.4.0</oracle10DriverVersion>
     <oracle11DriverVersion>11.1.0.7.0</oracle11DriverVersion>
-    <postgresqlDriverVersion>8.4-701.jdbc3</postgresqlDriverVersion>
+    <postgresqlDriverVersion>42.2.5</postgresqlDriverVersion>
     <sqlServer41DriverVersion>4.1.0</sqlServer41DriverVersion>
 
     <!-- Other versions -->
@@ -364,7 +364,7 @@
       <version>${poiVersion}</version>
     </dependency>
     <dependency>
-      <groupId>postgresql</groupId>
+      <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <version>${postgresqlDriverVersion}</version>
     </dependency>
@@ -1122,7 +1122,7 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
       </build>
       <dependencies>
         <dependency>
-          <groupId>postgresql</groupId>
+          <groupId>org.postgresql</groupId>
           <artifactId>postgresql</artifactId>
           <version>${postgresqlDriverVersion}</version>
         </dependency>
