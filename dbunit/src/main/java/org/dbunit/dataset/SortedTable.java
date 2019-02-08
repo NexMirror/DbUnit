@@ -42,10 +42,6 @@ import org.slf4j.LoggerFactory;
  */
 public class SortedTable extends AbstractTable
 {
-
-    /**
-     * Logger for this class
-     */
     private static final Logger logger =
             LoggerFactory.getLogger(SortedTable.class);
 
@@ -59,7 +55,9 @@ public class SortedTable extends AbstractTable
     private Comparator rowComparator;
 
     /**
-     * Sort the decorated table by specified columns order.
+     * Sort the decorated table by specified columns order. Resulting table uses
+     * column definitions from the specified table's metadata, not the specified
+     * columns.
      *
      * @param table
      *            decorated table
@@ -70,13 +68,44 @@ public class SortedTable extends AbstractTable
     public SortedTable(final ITable table, final Column[] columns)
             throws DataSetException
     {
+        this(table, columns, false);
+    }
+
+    /**
+     * Sort the decorated table by specified columns order. Resulting table uses
+     * column definitions from the specified columns, not the ones from the
+     * specified table's metadata.
+     *
+     * @param table
+     *            decorated table
+     * @param columns
+     *            columns to be used for sorting
+     * @param useSpecifiedColumns
+     *            true to use the column definitions specified by the columns
+     *            parameter, false to use the column definitions from the
+     *            specified table's metadata.
+     * @throws DataSetException
+     */
+    public SortedTable(final ITable table, final Column[] columns,
+            final boolean useSpecifiedColumns) throws DataSetException
+    {
         _table = table;
-        _columns = validateAndResolveColumns(columns);
+
+        final Column[] validatedColumns = validateAndResolveColumns(columns);
+        if (useSpecifiedColumns)
+        {
+            _columns = columns;
+        } else
+        {
+            _columns = validatedColumns;
+        }
+
         initialize();
     }
 
     /**
-     * Sort the decorated table by specified columns order.
+     * Sort the decorated table by specified columns order. Resulting table uses
+     * column definitions from the specified table's metadata.
      *
      * @param table
      *            decorated table
