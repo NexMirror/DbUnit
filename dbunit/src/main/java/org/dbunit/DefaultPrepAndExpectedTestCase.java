@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.dbunit.assertion.comparer.value.ValueComparer;
 import org.dbunit.database.DatabaseConfig;
@@ -34,7 +36,9 @@ import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.DefaultDataSet;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
+import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.dataset.SortedTable;
+import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.operation.DatabaseOperation;
 import org.dbunit.util.TableFormatter;
@@ -462,15 +466,27 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
         final ITable actualFilteredTable =
                 applyColumnFilters(actualTable, excludeColumns, includeColumns);
 
+        final ITableMetaData actualFilteredTableMetaData =
+                actualFilteredTable.getTableMetaData();
+        final ITableMetaData expectedFilteredTableMetaData =
+                expectedFilteredTable.getTableMetaData();
+
+        final Column[] actualFilteredTableColumns =
+                actualFilteredTableMetaData.getColumns();
+        final Column[] expectedFilteredTableColumns = makeExpectedTableColumns(
+                actualFilteredTableColumns, expectedFilteredTableMetaData);
+
         log.debug("{}: Sorting expected table", methodName);
-        final SortedTable expectedSortedTable =
-                new SortedTable(expectedFilteredTable);
+        final SortedTable expectedSortedTable = new SortedTable(
+                expectedFilteredTable, expectedFilteredTableColumns, true);
+        expectedSortedTable.setUseComparable(true);
         log.debug("{}: Sorted expected table={}", methodName,
                 expectedSortedTable);
 
         log.debug("{}: Sorting actual table", methodName);
         final SortedTable actualSortedTable = new SortedTable(
-                actualFilteredTable, expectedFilteredTable.getTableMetaData());
+                actualFilteredTable, actualFilteredTableColumns);
+        actualSortedTable.setUseComparable(true);
         log.debug("{}: Sorted actual table={}", methodName, actualSortedTable);
 
         log.debug("{}: Creating additionalColumnInfo", methodName);
@@ -485,6 +501,61 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
         compareData(expectedSortedTable, actualSortedTable,
                 additionalColumnInfo, defaultValueComparer,
                 columnValueComparers);
+    }
+
+    /**
+     * If expected column definitions exist and are {@link DataType.UNKNOWN},
+     * make them from actual table column definitions.
+     *
+     * @throws DataSetException
+     */
+    private Column[] makeExpectedTableColumns(final Column[] actualColumns,
+            final ITableMetaData expectedTableMetaData) throws DataSetException
+    {
+        final Column[] expectedTableColumns;
+
+        final Column[] expectedColumns = expectedTableMetaData.getColumns();
+        if (expectedColumns.length > 0)
+        {
+            final DataType dataType = expectedColumns[0].getDataType();
+            if (DataType.UNKNOWN.equals(dataType))
+            {
+                // all column definitions probably unknown, use actual's
+                expectedTableColumns = makeExpectedTableColumns(actualColumns,
+                        expectedColumns);
+            } else
+            {
+                // all expected column definitions probably known, use them
+                expectedTableColumns = expectedColumns;
+            }
+        } else
+        {
+            // no column definitions exist, so don't falsely add any
+            expectedTableColumns = expectedColumns;
+        }
+
+        return expectedTableColumns;
+    }
+
+    /**
+     * Make expected Column[] from actual table column definitions so expected
+     * data comparisons use data types from database (and expected data columns
+     * handled same as actual data in comparisons). Don't include columns from
+     * actual that are not in expected.
+     */
+    private Column[] makeExpectedTableColumns(final Column[] actualColumns,
+            final Column[] expectedColumns)
+    {
+        final Set<String> expectedColumnNames =
+                Arrays.stream(expectedColumns).map(Column::getColumnName)
+                        .map(String::toLowerCase).collect(Collectors.toSet());
+
+        final List<Column> expectedColumnsList = Arrays.stream(actualColumns)
+                .filter(col -> expectedColumnNames
+                        .contains(col.getColumnName().toLowerCase()))
+                .collect(Collectors.toList());
+        return expectedColumnsList
+                .toArray(new Column[expectedColumnsList.size()]);
     }
 
     private void logSortedTables(final SortedTable expectedSortedTable,
