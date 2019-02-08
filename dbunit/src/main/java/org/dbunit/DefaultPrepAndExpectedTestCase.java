@@ -37,6 +37,7 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.SortedTable;
 import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.operation.DatabaseOperation;
+import org.dbunit.util.TableFormatter;
 import org.dbunit.util.fileloader.DataFileLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,6 +76,8 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
 
     private ExpectedDataSetAndVerifyTableDefinitionVerifier expectedDataSetAndVerifyTableDefinitionVerifier =
             new DefaultExpectedDataSetAndVerifyTableDefinitionVerifier();
+
+    final TableFormatter tableFormatter = new TableFormatter();
 
     /** Create new instance. */
     public DefaultPrepAndExpectedTestCase()
@@ -476,10 +479,41 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
         log.debug("{}: additionalColumnInfo={}", methodName,
                 additionalColumnInfo);
 
+        logSortedTables(expectedSortedTable, actualSortedTable);
+
         log.debug("{}: Comparing expected table to actual table", methodName);
         compareData(expectedSortedTable, actualSortedTable,
                 additionalColumnInfo, defaultValueComparer,
                 columnValueComparers);
+    }
+
+    private void logSortedTables(final SortedTable expectedSortedTable,
+            final SortedTable actualSortedTable)
+    {
+        if (log.isTraceEnabled())
+        {
+            logSortedTable("expectedSortedTable", expectedSortedTable);
+            logSortedTable("actualSortedTable", actualSortedTable);
+        }
+    }
+
+    private void logSortedTable(final String tableTypeName,
+            final SortedTable table)
+    {
+        final String methodName = "logSortedTable:";
+        final Column[] sortColumns = table.getSortColumns();
+        log.trace("{} {} sortColumns={}", methodName, tableTypeName,
+                sortColumns);
+        try
+        {
+            final String tableContents = tableFormatter.format(table);
+            log.trace("{} {} tableContents={}", methodName, tableTypeName,
+                    tableContents);
+        } catch (final DataSetException e)
+        {
+            log.error("{} Error trying to log table={}", methodName,
+                    tableTypeName, e);
+        }
     }
 
     /** Compare the tables, enables easy overriding. */
