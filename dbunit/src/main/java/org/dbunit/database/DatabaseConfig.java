@@ -73,6 +73,8 @@ public class DatabaseConfig
 	        "http://www.dbunit.org/properties/metadataHandler";
 	public static final String PROPERTY_ALLOW_VERIFYTABLEDEFINITION_EXPECTEDTABLE_COUNT_MISMATCH =
 	        "http://www.dbunit.org/properties/allowVerifytabledefinitionExpectedtableCountMismatch";
+    public static final String PROPERTY_IDENTITY_COLUMN_FILTER =
+            "http://www.dbunit.org/properties/mssql/identityColumnFilter";
 
     public static final String FEATURE_CASE_SENSITIVE_TABLE_NAMES =
         "http://www.dbunit.org/features/caseSensitiveTableNames";
@@ -101,6 +103,7 @@ public class DatabaseConfig
         new ConfigProperty(PROPERTY_BATCH_SIZE, Integer.class, false),
         new ConfigProperty(PROPERTY_FETCH_SIZE, Integer.class, false),
         new ConfigProperty(PROPERTY_METADATA_HANDLER, IMetadataHandler.class, false),
+        new ConfigProperty(PROPERTY_IDENTITY_COLUMN_FILTER, IColumnFilter.class, true),
         new ConfigProperty(FEATURE_CASE_SENSITIVE_TABLE_NAMES, Boolean.class, false),
         new ConfigProperty(FEATURE_QUALIFIED_TABLE_NAMES, Boolean.class, false),
         new ConfigProperty(FEATURE_BATCHED_STATEMENTS, Boolean.class, false),

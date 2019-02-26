@@ -69,9 +69,6 @@ public class InsertIdentityOperation extends AbstractOperation
      */
     private static final Logger logger = LoggerFactory.getLogger(InsertIdentityOperation.class);
 
-    public static final String PROPERTY_IDENTITY_COLUMN_FILTER =
-            "http://www.dbunit.org/properties/mssql/identityColumnFilter";
-
     public static final DatabaseOperation INSERT =
             new InsertIdentityOperation(DatabaseOperation.INSERT);
 
@@ -140,7 +137,7 @@ public class InsertIdentityOperation extends AbstractOperation
 
         DatabaseConfig config = connection.getConfig();
         IColumnFilter identityFilter = (IColumnFilter)config.getProperty(
-                PROPERTY_IDENTITY_COLUMN_FILTER);
+                DatabaseConfig.PROPERTY_IDENTITY_COLUMN_FILTER);
         if (identityFilter == null)
         {
             identityFilter = DEFAULT_IDENTITY_FILTER;

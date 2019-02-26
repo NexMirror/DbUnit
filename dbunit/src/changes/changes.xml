@@ -13,7 +13,8 @@
   </properties>
 
   <body>
-    <release version="2.6.1-SNAPSHOT" date="TBD" description="DefaultPrepAndExpectedTestCase.makeAdditionalColumnInfo NPE, PostgreSQL driver update, DefaultPrepAndExpectedTestCase.verifyData() sorting, Relative date/time syntax, Travis CI">
+    <release version="2.6.1-SNAPSHOT" date="TBD" description="DefaultPrepAndExpectedTestCase.makeAdditionalColumnInfo NPE, PostgreSQL driver update, DefaultPrepAndExpectedTestCase.verifyData() sorting, Relative date/time syntax, Travis CI, Fix MSSQL identity column filter">
+      <action dev="jeffjensen" type="fix" issue="315" system="sfbugs" due-to="lufecir">IllegalArgumentException when setting PROPERTY_IDENTITY_COLUMN_FILTER</action>
       <action dev="quantas" type="add" issue="227" system="sffeatures">Setup public CI</action>
       <action dev="jeffjensen" type="add" issue="224" system="sffeatures" due-to="kforkiss">Add new syntax to set relative date, time and timstamp in dataset</action>
       <action dev="jeffjensen" type="fix" issue="423" system="sfbugs">DefaultPrepAndExpectedTestCase.verifyData() sorts table columns by Strings</action>
