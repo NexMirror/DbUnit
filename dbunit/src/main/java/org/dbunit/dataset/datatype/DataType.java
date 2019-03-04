@@ -25,7 +25,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
 
+import org.dbunit.util.RelativeDateTimeParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,6 +91,8 @@ public abstract class DataType
     public static final DataType DOUBLE = new DoubleDataType(
             "DOUBLE", Types.DOUBLE);
 
+    // To calculate consistent relative date and time.
+    public static final RelativeDateTimeParser RELATIVE_DATE_TIME_PARSER = new RelativeDateTimeParser(); 
     public static final DataType DATE = new DateDataType();
     public static final DataType TIME = new TimeDataType();
     public static final DataType TIMESTAMP = new TimestampDataType();
@@ -254,6 +260,20 @@ public abstract class DataType
         }
 
         return UNKNOWN;
+    }
+
+    /**
+     * Performs a quick check to test if the specified string uses extended
+     * syntax.
+     * 
+     * @param input
+     *            a string to check.
+     * @return {@code true} if the input uses extended syntax; {@code false}
+     *         otherwise.
+     */
+    protected static boolean isExtendedSyntax(String input)
+    {
+        return !input.isEmpty() && input.charAt(0) == '[';
     }
 }
 

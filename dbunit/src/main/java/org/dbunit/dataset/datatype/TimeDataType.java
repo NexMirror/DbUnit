@@ -26,6 +26,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Types;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 
 import org.dbunit.dataset.ITable;
 import org.slf4j.Logger;
@@ -83,9 +85,25 @@ public class TimeDataType extends AbstractDataType
 
         if (value instanceof String)
         {
+            final String stringValue = (String)value;
+
+            if (isExtendedSyntax(stringValue))
+            {
+                // Relative date.
+                try
+                {
+                    LocalDateTime datetime =
+                            RELATIVE_DATE_TIME_PARSER.parse(stringValue);
+                    return java.sql.Time.valueOf(datetime.toLocalTime());
+                } catch (IllegalArgumentException | DateTimeParseException e)
+                {
+                    throw new TypeCastException(value, this, e);
+                }
+            }
+
             try
             {
-                return java.sql.Time.valueOf((String)value);
+                return java.sql.Time.valueOf(stringValue);
             }
             catch (IllegalArgumentException e)
             {

@@ -25,6 +25,10 @@ import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
@@ -210,6 +214,53 @@ public class TimestampDataTypeTest extends AbstractDataTypeTest
             } catch (TypeCastException e)
             {
             }
+        }
+    }
+
+    public void testTypeCastRelative() throws Exception
+    {
+        // @formatter:off
+        Object[] values = {
+                "[NOW]",
+                "[now+1h]",
+                "[NOW +4d 11:22:33]",
+                "[Now-2y 19:00]",
+        };
+
+        Clock clock = DataType.RELATIVE_DATE_TIME_PARSER.getClock();
+
+        LocalDateTime now = LocalDateTime.now(clock);
+        Timestamp[] expected = {
+                Timestamp.valueOf(now),
+                Timestamp.valueOf(now.plus(1, ChronoUnit.HOURS)),
+                Timestamp.valueOf(LocalDateTime.of(now.toLocalDate(),
+                        LocalTime.of(11, 22, 33)).plus(4, ChronoUnit.DAYS)),
+                Timestamp.valueOf(LocalDateTime.of(now.toLocalDate(),
+                        LocalTime.of(19, 0)).plus(-2, ChronoUnit.YEARS)),
+        };
+        // @formatter:on
+
+        assertEquals("actual vs expected count", values.length,
+                expected.length);
+
+        // Create a new instance to test relative date/time.
+        TimestampDataType thisType = new TimestampDataType();
+        for (int i = 0; i < values.length; i++)
+        {
+            assertEquals("typecast " + i, expected[i].getTime(),
+                    ((Timestamp) thisType.typeCast(values[i])).getTime());
+        }
+    }
+
+    public void testTypeCastRelative_InvalidTimeFormat() throws Exception
+    {
+        try
+        {
+            THIS_TYPE.typeCast("[NOW 1:23]");
+            fail("DateTimeParseException must be thrown when time format is invalid.");
+        } catch (TypeCastException e)
+        {
+            assertTrue(e.getMessage().contains("[NOW 1:23]"));
         }
     }
 

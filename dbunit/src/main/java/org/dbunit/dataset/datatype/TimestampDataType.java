@@ -27,6 +27,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -89,6 +92,21 @@ public class TimestampDataType extends AbstractDataType
         if (value instanceof String)
         {
             String stringValue = value.toString();
+
+            if (isExtendedSyntax(stringValue))
+            {
+                // Relative date.
+                try
+                {
+                    LocalDateTime datetime =
+                            RELATIVE_DATE_TIME_PARSER.parse(stringValue);
+                    return java.sql.Timestamp.valueOf(datetime);
+                } catch (IllegalArgumentException | DateTimeParseException e)
+                {
+                    throw new TypeCastException(value, this, e);
+                }
+            }
+
             String zoneValue = null;
 
             Matcher tzMatcher = TIMEZONE_REGEX.matcher(stringValue);

@@ -30,6 +30,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 
 /**
  * @author Manuel Laflamme
@@ -80,7 +82,21 @@ public class DateDataType extends AbstractDataType
 
         if (value instanceof String)
         {
-            String stringValue = (String)value;
+            final String stringValue = (String)value;
+
+            if (isExtendedSyntax(stringValue))
+            {
+                // Relative date.
+                try
+                {
+                    LocalDateTime datetime =
+                            RELATIVE_DATE_TIME_PARSER.parse(stringValue);
+                    return java.sql.Date.valueOf(datetime.toLocalDate());
+                } catch (IllegalArgumentException | DateTimeParseException e)
+                {
+                    throw new TypeCastException(value, this, e);
+                }
+            }
 
             // Probably a Timestamp, try it just in case!
             if (stringValue.length() > 10)

@@ -24,7 +24,9 @@
         <li>Boolean</li>
         <li>Bytes</li>
         <li>Clob</li>
-        <li>Date</li>
+        <li>
+          <a href="#relativedatetime">Date</a>
+        </li>
         <li>Double</li>
         <li>Float</li>
         <li>Integer</li>
@@ -33,8 +35,12 @@
         <li>NumberTolerant</li>
         <li>String</li>
         <li>StringIgnoreCase</li>
-        <li>Time</li>
-        <li>Timestamp</li>
+        <li>
+          <a href="#relativedatetime">Time</a>
+        </li>
+        <li>
+          <a href="#relativedatetime">Timestamp</a>
+        </li>
         <li>UuidAwareBytes</li>
       </ol>
 
@@ -132,6 +138,33 @@
           </td>
         </tr>
       </table>
+      </subsection>
+      <subsection name="Relative date, time and timestamp" id="relativedatetime">
+      <p>
+        It is possible to push date, time and timestamp that are relative to the current date/time by using the following syntax in a data set field (since 2.6.1):
+      </p>
+      <source>... field_name="[now{diff...}{time}]"</source>
+      <p>
+        <code>diff</code> consists of two parts 1) a number with a leading plus or minus sign and 2) a character represents temporal unit. See the list below for the supported units. There can be multiple <code>diff</code>s and they can be specified in any order.<br />
+        <code>time</code> is a string that can be parsed by <code>LocalTime#parse()</code>. If specified, it is used instead of the current time.<br />
+        Both <code>diff</code> and <code>time</code> are optional.<br />
+        Whitespaces are allowed before and after each <code>diff</code>.
+      </p>
+      <ul>
+        <li>y : years</li>
+        <li>M : months</li>
+        <li>d : days</li>
+        <li>h : hours</li>
+        <li>m : minutes</li>
+        <li>s : seconds</li>
+      </ul>
+      <p>Here are some examples:</p>
+      <ul>
+        <li><code>[now]</code> : current date time</li>
+        <li><code>[now-1d]</code> : the same time yesterday</li>
+        <li><code>[now+1y+1M-2h]</code> : a year and a month from today, two hours earlier</li>
+        <li><code>[now+1d 10:00]</code> : 10 o'clock tomorrow</li>
+      </ul>
       </subsection>
     </section>
   </body>

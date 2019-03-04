@@ -241,6 +241,10 @@ public class DatabaseExportSample
         </tr>
       </table>
 </p>
+      <p>
+      There also is special syntax to set relative date, time and timestamp.
+      See <a href="datatypes.html#relativedatetime">data types documentation</a>.
+      </p>
       </answer>
     </faq>    
 

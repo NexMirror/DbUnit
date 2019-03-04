@@ -27,6 +27,9 @@ import org.dbunit.dataset.ITable;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.time.Clock;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 /**
  * @author Manuel Laflamme
@@ -115,6 +118,39 @@ public class TimeDataTypeTest extends AbstractDataTypeTest
             catch (TypeCastException e)
             {
             }
+        }
+    }
+
+    public void testTypeCastRelative() throws Exception
+    {
+        // @formatter:off
+        Object[] values = {
+                "[now]",
+                "[NOW +1h]",
+                "[Now -3m -2h]",
+                "[NOW+5s]",
+        };
+
+        Clock clock = DataType.RELATIVE_DATE_TIME_PARSER.getClock();
+
+        LocalTime now = LocalTime.now(clock);
+        Time[] expected = {
+                Time.valueOf(now),
+                Time.valueOf(now.plus(1, ChronoUnit.HOURS)),
+                Time.valueOf(now.plus(-3, ChronoUnit.MINUTES).plus(-2, ChronoUnit.HOURS)),
+                Time.valueOf(now.plus(5, ChronoUnit.SECONDS)),
+        };
+        // @formatter:on
+
+        assertEquals("actual vs expected count", values.length,
+                expected.length);
+
+        // Create a new instance to test relative date/time.
+        TimeDataType thisType = new TimeDataType();
+        for (int i = 0; i < values.length; i++)
+        {
+            assertEquals("typecast " + i, expected[i],
+                    thisType.typeCast(values[i]));
         }
     }
 

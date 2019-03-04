@@ -27,6 +27,9 @@ import org.dbunit.dataset.ITable;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.time.Clock;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 /**
  * @author Manuel Laflamme
@@ -129,6 +132,45 @@ public class DateDataTypeTest extends AbstractDataTypeTest
             }
         }
     }
+
+    public void testTypeCastRelative() throws Exception
+    {
+        // @formatter:off
+        Object[] values = {
+                "[now]",
+                "[Now+1d]",
+                "[noW+24h]",
+                "[nOw -4y-2d]",
+                "[NOW+5d-2M+3y]",
+        };
+
+        Clock clock = DataType.RELATIVE_DATE_TIME_PARSER.getClock();
+
+        LocalDate today = LocalDate.now(clock);
+        java.sql.Date[] expected = {
+                java.sql.Date.valueOf(today),
+                java.sql.Date.valueOf(today.plus(1, ChronoUnit.DAYS)),
+                java.sql.Date.valueOf(today.plus(1, ChronoUnit.DAYS)),
+                java.sql.Date.valueOf(today.plus(-2, ChronoUnit.DAYS)
+                        .plus(-4L, ChronoUnit.YEARS)),
+                java.sql.Date.valueOf(today.plus(5, ChronoUnit.DAYS)
+                        .plus(-2L, ChronoUnit.MONTHS)
+                        .plus(3L, ChronoUnit.YEARS)),
+        };
+        // @formatter:on
+
+        assertEquals("actual vs expected count", values.length,
+                expected.length);
+
+        // Create a new instance to test relative date/time.
+        DateDataType thisType = new DateDataType();
+        for (int i = 0; i < values.length; i++)
+        {
+            assertEquals("typecast " + i, expected[i],
+                    thisType.typeCast(values[i]));
+        }
+    }
+
     public void testCompareEquals() throws Exception
     {
         Object[] values1 = {
