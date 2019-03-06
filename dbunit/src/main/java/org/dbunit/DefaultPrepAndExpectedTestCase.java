@@ -458,38 +458,43 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
             throws DatabaseUnitException
     {
         final String methodName = "verifyData";
-        // Filter out the columns from the expected and actual results
-        log.debug("{}: Applying filters to expected table", methodName);
-        final ITable expectedFilteredTable = applyColumnFilters(expectedTable,
-                excludeColumns, includeColumns);
-        log.debug("{}: Applying filters to actual table", methodName);
-        final ITable actualFilteredTable =
-                applyColumnFilters(actualTable, excludeColumns, includeColumns);
 
-        final ITableMetaData actualFilteredTableMetaData =
-                actualFilteredTable.getTableMetaData();
-        final ITableMetaData expectedFilteredTableMetaData =
-                expectedFilteredTable.getTableMetaData();
+        final ITableMetaData actualTableMetaData =
+                actualTable.getTableMetaData();
+        final ITableMetaData expectedTableMetaData =
+                expectedTable.getTableMetaData();
 
-        final Column[] actualFilteredTableColumns =
-                actualFilteredTableMetaData.getColumns();
-        final Column[] expectedFilteredTableColumns = makeExpectedTableColumns(
-                actualFilteredTableColumns, expectedFilteredTableMetaData);
+        final Column[] actualTableColumns = actualTableMetaData.getColumns();
+        final Column[] expectedTableColumns = makeExpectedTableColumns(
+                actualTableColumns, expectedTableMetaData);
 
-        log.debug("{}: Sorting expected table", methodName);
-        final SortedTable expectedSortedTable = new SortedTable(
-                expectedFilteredTable, expectedFilteredTableColumns, true);
+        log.debug("{}: Sorting expected table using all columns", methodName);
+        final SortedTable expectedSortedTable =
+                new SortedTable(expectedTable, expectedTableColumns, true);
         expectedSortedTable.setUseComparable(true);
         log.debug("{}: Sorted expected table={}", methodName,
                 expectedSortedTable);
 
-        log.debug("{}: Sorting actual table", methodName);
-        final SortedTable actualSortedTable = new SortedTable(
-                actualFilteredTable, actualFilteredTableColumns);
+        log.debug("{}: Sorting actual table using all columns", methodName);
+        final SortedTable actualSortedTable =
+                new SortedTable(actualTable, actualTableColumns);
         actualSortedTable.setUseComparable(true);
         log.debug("{}: Sorted actual table={}", methodName, actualSortedTable);
 
-        log.debug("{}: Creating additionalColumnInfo", methodName);
+        // Filter out the columns from the expected and actual results
+        log.debug(
+                "{}: Applying column exclude and include filters to sorted expected table",
+                methodName);
+        final ITable expectedFilteredTable = applyColumnFilters(
+                expectedSortedTable, excludeColumns, includeColumns);
+        log.debug(
+                "{}: Applying column exclude and include filters to sorted actual table",
+                methodName);
+        final ITable actualFilteredTable = applyColumnFilters(actualSortedTable,
+                excludeColumns, includeColumns);
+
+        log.debug("{}: Creating additionalColumnInfo for expected table",
+                methodName);
         final Column[] additionalColumnInfo =
                 makeAdditionalColumnInfo(expectedTable, excludeColumns);
         log.debug("{}: additionalColumnInfo={}", methodName,
@@ -498,7 +503,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
         logSortedTables(expectedSortedTable, actualSortedTable);
 
         log.debug("{}: Comparing expected table to actual table", methodName);
-        compareData(expectedSortedTable, actualSortedTable,
+        compareData(expectedFilteredTable, actualFilteredTable,
                 additionalColumnInfo, defaultValueComparer,
                 columnValueComparers);
     }
@@ -588,15 +593,14 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     }
 
     /** Compare the tables, enables easy overriding. */
-    protected void compareData(final SortedTable expectedSortedTable,
-            final SortedTable actualSortedTable,
-            final Column[] additionalColumnInfo,
+    protected void compareData(final ITable expectedTable,
+            final ITable actualTable, final Column[] additionalColumnInfo,
             final ValueComparer defaultValueComparer,
             final Map<String, ValueComparer> columnValueComparers)
             throws DatabaseUnitException
     {
-        Assertion.assertWithValueComparer(expectedSortedTable,
-                actualSortedTable, additionalColumnInfo, defaultValueComparer,
+        Assertion.assertWithValueComparer(expectedTable, actualTable,
+                additionalColumnInfo, defaultValueComparer,
                 columnValueComparers);
     }
 
