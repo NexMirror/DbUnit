@@ -120,55 +120,58 @@ public class BytesDataType extends AbstractDataType
             // intentionally wants to transform the text into a blob.
             //
             // Example of a valid string:  "<text UTF-8>This is a valid string with the accent 'é'"
-            Matcher matcher = inputPattern.matcher(stringValue);
-            if (matcher.matches())
+            if (isExtendedSyntax(stringValue))
             {
-                String commandLine = matcher.group(1).toUpperCase();
-                stringValue = matcher.group(2);
+                Matcher matcher = inputPattern.matcher(stringValue);
+                if (matcher.matches())
+                {
+                    String commandLine = matcher.group(1).toUpperCase();
+                    stringValue = matcher.group(2);
 
-                String[] split = commandLine.split(" ");
-                String command = split[0];
+                    String[] split = commandLine.split(" ");
+                    String command = split[0];
 
-                if (command.equals("TEXT"))
-                {
-                    String encoding = "UTF-8";  // Default
+                    if (command.equals("TEXT"))
+                    {
+                        String encoding = "UTF-8";  // Default
 
-                    if (split.length > 1) {
-                        encoding = split[1];
+                        if (split.length > 1) {
+                            encoding = split[1];
+                        }
+                        logger.debug("Data explicitly states that given string is text encoded "
+                            + encoding);
+                        try {
+                            return stringValue.getBytes(encoding);
+                        } catch (UnsupportedEncodingException unsupportedEncodingException) {
+                            return "Error:  [text " + encoding + "] has an invalid encoding id.".getBytes();
+                        }
                     }
-                    logger.debug("Data explicitly states that given string is text encoded "
-                        + encoding);
-                    try {
-                        return stringValue.getBytes(encoding);
-                    } catch (UnsupportedEncodingException unsupportedEncodingException) {
-                        return "Error:  [text " + encoding + "] has an invalid encoding id.".getBytes();
+                    else if (command.equals("BASE64"))
+                    {
+                        logger.debug("Data explicitly states that given string is base46");
+                        return Base64.decode(stringValue);
                     }
-                }
-                else if (command.equals("BASE64"))
-                {
-                    logger.debug("Data explicitly states that given string is base46");
-                    return Base64.decode(stringValue);
-                }
-                else if (command.equals("FILE"))
-                {
-                    try {
-                        logger.debug("Data explicitly states that given string is a file name");
-                        return loadFile(stringValue);
-                    } catch (IOException e) {
-                        String errMsg = "Could not load file following instruction >>" + value.toString() + "<<";
-                        logger.error(errMsg);
-                        return ("Error:  " + errMsg).getBytes();
+                    else if (command.equals("FILE"))
+                    {
+                        try {
+                            logger.debug("Data explicitly states that given string is a file name");
+                            return loadFile(stringValue);
+                        } catch (IOException e) {
+                            String errMsg = "Could not load file following instruction >>" + value.toString() + "<<";
+                            logger.error(errMsg);
+                            return ("Error:  " + errMsg).getBytes();
+                        }
                     }
-                }
-                else if (command.equals("URL"))
-                {
-                    try {
-                        logger.debug("Data explicitly states that given string is a URL");
-                        return loadURL(stringValue);
-                    } catch (IOException e) {
-                        String errMsg = "Could not load URL following instruction >>" + value.toString() + "<<";
-                        logger.error(errMsg);
-                        return ("Error:  " + errMsg).getBytes();
+                    else if (command.equals("URL"))
+                    {
+                        try {
+                            logger.debug("Data explicitly states that given string is a URL");
+                            return loadURL(stringValue);
+                        } catch (IOException e) {
+                            String errMsg = "Could not load URL following instruction >>" + value.toString() + "<<";
+                            logger.error(errMsg);
+                            return ("Error:  " + errMsg).getBytes();
+                        }
                     }
                 }
             }
