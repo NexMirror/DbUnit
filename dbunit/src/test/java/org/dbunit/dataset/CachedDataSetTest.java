@@ -24,6 +24,7 @@ import java.io.FileReader;
 
 import org.dbunit.dataset.xml.FlatXmlDataSetTest;
 import org.dbunit.dataset.xml.FlatXmlProducer;
+import org.junit.Test;
 import org.xml.sax.InputSource;
 
 /**
@@ -50,4 +51,42 @@ public class CachedDataSetTest extends AbstractDataSetDecoratorTest
         super.testGetTable();
     }
 
+    /**
+     * Test constructor CacheDataSet(IDataSet dataSet).
+     *
+     * The automated test inherited from AbstractDataSetDecoratorTest do not
+     * test this constructor.
+     */
+    @Test
+    public void testCachedDataSetDataSetConstructor() throws Exception
+    {
+        final IDataSet cachedDataSetCreatedByProducer = createDataSet();
+
+        // createDateSet() returns a CacheDataSet that was created using the
+        // producer constructor. By wrapping its returned value in another
+        // CachedDataSet, we test the CacheDataSet(IDataSet dataSet)
+        // constructor which this test is designed for.
+        final CachedDataSet cachedDataSetCreatedByDataSetConstructor =
+                new CachedDataSet(cachedDataSetCreatedByProducer);
+
+        // The test consist of iterating through all the tables found in
+        // cachedDataSetCreatedByProducer and see if
+        // cachedDataSetCreatedByDataSetConstructor has them also. If they
+        // are missing, something went wrong.
+        final ITableIterator iterator =
+                cachedDataSetCreatedByProducer.iterator();
+        while (iterator.next())
+        {
+            final String tableNameFromProducer =
+                    iterator.getTable().getTableMetaData().getTableName();
+            try
+            {
+                assertNotNull(cachedDataSetCreatedByDataSetConstructor
+                        .getTable(tableNameFromProducer));
+            } catch (final Exception exception)
+            {
+                fail("Table " + tableNameFromProducer + " was not cached.");
+            }
+        }
+    }
 }

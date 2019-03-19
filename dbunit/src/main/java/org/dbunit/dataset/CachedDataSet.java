@@ -55,6 +55,14 @@ public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer
     {
         super(dataSet.isCaseSensitiveTableNames());
         initialize();
+
+        final ITableIterator iterator = dataSet.iterator();
+        while (iterator.next())
+         {
+            final ITable table = iterator.getTable();
+            _orderedTableNameMap.add(table.getTableMetaData().getTableName(),
+                    new CachedTable(table));
+        }
     }
 
     /**
