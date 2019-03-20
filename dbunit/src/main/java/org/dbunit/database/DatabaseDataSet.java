@@ -374,7 +374,7 @@ public class DatabaseDataSet extends AbstractDataSet
             if (source == null)
             {
                 return NULL_REPLACEMENT;
-            } else if (isCaseSensitive)
+            } else if (!isCaseSensitive)
             {
                 return source.toString().toUpperCase(Locale.ENGLISH);
             }

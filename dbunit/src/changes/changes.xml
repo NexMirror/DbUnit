@@ -13,7 +13,8 @@
   </properties>
 
   <body>
-    <release version="2.6.1-SNAPSHOT" date="TBD" description="DefaultPrepAndExpectedTestCase.makeAdditionalColumnInfo NPE, PostgreSQL driver update, DefaultPrepAndExpectedTestCase.verifyData() sorting, Relative date/time syntax, Travis CI, Fix MSSQL identity column filter, Fix CachedDataSet, IsActualContainingExpectedStringValueComparer, Fix FilteredDataSet case sensitivity">
+    <release version="2.6.1-SNAPSHOT" date="TBD" description="DefaultPrepAndExpectedTestCase.makeAdditionalColumnInfo NPE, PostgreSQL driver update, DefaultPrepAndExpectedTestCase.verifyData() sorting, Relative date/time syntax, Travis CI, Fix MSSQL identity column filter, Fix CachedDataSet, IsActualContainingExpectedStringValueComparer, Fix FilteredDataSet case sensitivity, Fix DatabaseDataSet schema normalisation">
+      <action dev="jeffjensen" type="fix" issue="427" system="sfbugs" due-to="lcann">DatabaseDataSet SchemaSet ignores case sensitivity setting in normalizing schema names</action>
       <action dev="jeffjensen" type="fix" issue="426" system="sfbugs" due-to="lcann">FilteredDataSet does not inherit case sensitivity of wrapped set</action>
       <action dev="jeffjensen" type="add" issue="229" system="sffeatures"></action>
       <action dev="deragon" type="fix" issue="424" system="sfbugs">CachedDataSet does not work</action>

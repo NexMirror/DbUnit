@@ -5,7 +5,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
 
 import org.dbunit.DdlExecutor;
 import org.dbunit.H2Environment;
@@ -59,6 +65,9 @@ public class DatabaseDataSet_MultiSchemaTest
 
     private IDatabaseConnection connectionTest;
 
+    private final TestMetadataHandler testMetadataHandler =
+            new TestMetadataHandler();
+
     @BeforeClass
     public static void setUpClass() throws Exception
     {
@@ -85,6 +94,8 @@ public class DatabaseDataSet_MultiSchemaTest
         {
             connectionTest.close();
         }
+
+        testMetadataHandler.clearSchemaSet();
     }
 
     /**
@@ -315,6 +326,19 @@ public class DatabaseDataSet_MultiSchemaTest
         }
     }
 
+    @Test
+    public void testSchemaCaseSensitivity() throws Exception
+    {
+        final IDataSet set = makeDataSet(DATABASE, USERNAME_ADMIN,
+                PASSWORD_NONE, SCHEMA_NONE, IS_USING_QUALIFIED_TABLE_NAMES);
+
+        set.getTableMetaData(TABLE_FOO_IN_SCHEMA_DEFAULT);
+        set.getTableMetaData(
+                TABLE_FOO_IN_SCHEMA_DEFAULT.toLowerCase(Locale.ENGLISH));
+
+        assertEquals(1, testMetadataHandler.getSchemaCount());
+    }
+
     private IDataSet makeDataSet(String databaseName, String username,
             String password, String schema, boolean useQualifiedTableNames)
             throws Exception
@@ -338,5 +362,31 @@ public class DatabaseDataSet_MultiSchemaTest
                 useQualifiedTableNames);
         config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
                 new H2DataTypeFactory());
+        config.setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER,
+                testMetadataHandler);
+    }
+
+    private static class TestMetadataHandler extends DefaultMetadataHandler
+    {
+        private final Set<String> schemaSet = new HashSet<>();
+
+        @Override
+        public ResultSet getTables(final DatabaseMetaData metaData,
+                final String schemaName, final String[] tableType)
+                throws SQLException
+        {
+            schemaSet.add(schemaName);
+            return super.getTables(metaData, schemaName, tableType);
+        }
+
+        public int getSchemaCount()
+        {
+            return schemaSet.size();
+        }
+
+        public void clearSchemaSet()
+        {
+            schemaSet.clear();
+        }
     }
 }
