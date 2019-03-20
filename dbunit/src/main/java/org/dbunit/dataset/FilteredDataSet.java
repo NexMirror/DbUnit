@@ -37,6 +37,7 @@ import org.dbunit.dataset.filter.SequenceTableFilter;
  * @see org.dbunit.dataset.filter.DefaultTableFilter
  *
  * @author Manuel Laflamme
+ * @author Last changed by: Luke Cann
  * @version $Revision$
  * @since Feb 22, 2002
  */
@@ -60,6 +61,7 @@ public class FilteredDataSet extends AbstractDataSet
     public FilteredDataSet(String[] tableNames, IDataSet dataSet) 
     throws AmbiguousTableNameException
     {
+        super(dataSet.isCaseSensitiveTableNames());
         _filter = new SequenceTableFilter(tableNames, dataSet.isCaseSensitiveTableNames());
         _dataSet = dataSet;
     }
@@ -73,6 +75,7 @@ public class FilteredDataSet extends AbstractDataSet
      */
     public FilteredDataSet(ITableFilter filter, IDataSet dataSet)
     {
+        super(dataSet.isCaseSensitiveTableNames());
         _dataSet = dataSet;
         _filter = filter;
     }

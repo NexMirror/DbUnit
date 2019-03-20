@@ -23,6 +23,7 @@ package org.dbunit.dataset;
 
 import java.io.FileReader;
 
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.dataset.xml.XmlDataSet;
 import org.dbunit.testutil.TestUtils;
 
@@ -144,9 +145,26 @@ public class FilteredDataSetTest extends AbstractDataSetTest
         }
     }
 
+    public void testCaseSensitivityInheritance() throws Exception
+    {
+        // Case sensitive check
+        FileReader fileReader = TestUtils.getFileReader("xml/dataSetTest.xml");
+        final IDataSet caseSensitive = new FlatXmlDataSetBuilder()
+                .setCaseSensitiveTableNames(true).build(fileReader);
+
+        final FilteredDataSet caseSesitiveFilter =
+                new FilteredDataSet(getExpectedNames(), caseSensitive);
+        assertEquals("case sensitive inheritance", true,
+                caseSesitiveFilter.isCaseSensitiveTableNames());
+
+        // Case insensitive check
+        fileReader = TestUtils.getFileReader("xml/dataSetTest.xml");
+        final IDataSet caseInsensitive = new FlatXmlDataSetBuilder()
+                .setCaseSensitiveTableNames(false).build(fileReader);
+
+        final FilteredDataSet caseInsesitiveFilter =
+                new FilteredDataSet(getExpectedNames(), caseInsensitive);
+        assertEquals("case insensitive inheritance", false,
+                caseInsesitiveFilter.isCaseSensitiveTableNames());
+    }
 }
-
-
-
-
-
