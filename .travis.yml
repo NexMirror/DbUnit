@@ -1,0 +1,37 @@
+language: java
+services:
+  - docker
+before_install:
+  - cp .travis.settings.xml $HOME/.m2/settings.xml
+jobs:
+  include:
+    - stage: "Integration Test"
+      name: "HSQLDB"
+      script: mvn -f dbunit/pom.xml -B -e -Pit-config,hsqldb verify
+    - name: "H2"
+      script: mvn -f dbunit/pom.xml -B -e -Pit-config,h2 verify
+    - name: "Derby"
+      script: mvn -f dbunit/pom.xml -B -e -Pit-config,derby verify
+    - name: "Postgres"
+      before_install:
+        - cp .travis.settings.xml $HOME/.m2/settings.xml
+        - sudo /etc/init.d/postgresql stop
+        - docker-compose -f dbunit-docker/docker-compose.yml up -d postgres
+      script: mvn -f dbunit/pom.xml -B -e -Pit-config,postgresql verify
+    - name: "MySQL"
+      script: mvn -f dbunit/pom.xml -B -e -Pit-config,mysql verify
+      before_install:
+        - cp .travis.settings.xml $HOME/.m2/settings.xml
+        - sudo /etc/init.d/mysql stop
+        - docker-compose -f dbunit-docker/docker-compose.yml up -d mysql
+    - name: "MS SQL"
+      script: mvn -f dbunit/pom.xml -B -e -Pit-config,mssql41 verify
+      before_install:
+        - cp .travis.settings.xml $HOME/.m2/settings.xml
+        - docker-compose -f dbunit-docker/docker-compose.yml up -d mssql
+# Oracle Commented out - there are broken unit tests at present
+#    - name: "Oracle 11"
+#      script: mvn -f dbunit/pom.xml -B -e -Pit-config,oracle-ojdbc6 verify
+#      before_install:
+#        - cp .travis.settings.xml $HOME/.m2/settings.xml
+#        - docker-compose -f dbunit-docker/docker-compose.yml up -d oracle11

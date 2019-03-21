@@ -13,8 +13,9 @@
   </properties>
 
   <body>
-    <release version="2.6.1-SNAPSHOT" date="TBD" description="DefaultPrepAndExpectedTestCase.makeAdditionalColumnInfo NPE, PostgreSQL driver update, DefaultPrepAndExpectedTestCase.verifyData() sorting, Relative date/time syntax">
-      <action dev="jeffjensen" type="add" issue="224" system="sffeatures" duo-to="kforkiss">Add new syntax to set relative date, time and timstamp in dataset</action>
+    <release version="2.6.1-SNAPSHOT" date="TBD" description="DefaultPrepAndExpectedTestCase.makeAdditionalColumnInfo NPE, PostgreSQL driver update, DefaultPrepAndExpectedTestCase.verifyData() sorting, Relative date/time syntax, Travis CI">
+      <action dev="quantas" type="add" issue="227" system="sffeatures">Setup public CI</action>
+      <action dev="jeffjensen" type="add" issue="224" system="sffeatures" due-to="kforkiss">Add new syntax to set relative date, time and timstamp in dataset</action>
       <action dev="jeffjensen" type="fix" issue="423" system="sfbugs">DefaultPrepAndExpectedTestCase.verifyData() sorts table columns by Strings</action>
       <action dev="jeffjensen" type="update" issue="221" system="sffeatures" due-to="aklemp">Update PostgreSQL driver version</action>
       <action dev="jeffjensen" type="fix" issue="417" system="sfbugs">NPE in DefaultPrepAndExpectedTestCase.makeAdditionalColumnInfo when excludeColumns is null</action>
