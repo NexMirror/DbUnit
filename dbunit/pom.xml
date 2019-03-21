@@ -84,9 +84,9 @@
     <hsqldbDriverVersion>1.8.0.1</hsqldbDriverVersion>
     <mysqlDriverVersion>5.1.6</mysqlDriverVersion>
     <oracle10DriverVersion>10.2.0.4.0</oracle10DriverVersion>
-    <oracle11DriverVersion>11.1.0.7.0</oracle11DriverVersion>
+    <oracle11DriverVersion>11.2.0.3</oracle11DriverVersion>
     <postgresqlDriverVersion>42.2.5</postgresqlDriverVersion>
-    <sqlServer41DriverVersion>4.1.0</sqlServer41DriverVersion>
+    <sqlServer41DriverVersion>7.2.1.jre8</sqlServer41DriverVersion>
 
     <!-- Other versions -->
     <wagonSshVersion>2.10</wagonSshVersion>
@@ -928,8 +928,8 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
         </dependency>
         <dependency>
           <groupId>com.oracle</groupId>
-          <artifactId>ojdbc14</artifactId>
-          <version>${oracle10DriverVersion}</version>
+          <artifactId>ojdbc6</artifactId>
+          <version>${oracle11DriverVersion}</version>
           <optional>true</optional>
         </dependency>
       </dependencies>
@@ -955,8 +955,8 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
       <dependencies>
         <dependency>
           <groupId>com.oracle</groupId>
-          <artifactId>ojdbc14</artifactId>
-          <version>${oracle10DriverVersion}</version>
+          <artifactId>ojdbc6</artifactId>
+          <version>${oracle11DriverVersion}</version>
           <optional>true</optional>
         </dependency>
       </dependencies>
@@ -984,8 +984,8 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
        </dependency>
         <dependency>
           <groupId>com.oracle</groupId>
-          <artifactId>ojdbc14</artifactId>
-          <version>${oracle10DriverVersion}</version>
+          <artifactId>ojdbc6</artifactId>
+          <version>${oracle11DriverVersion}</version>
           <optional>true</optional>
         </dependency>
       </dependencies>
@@ -999,8 +999,8 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
       <dependencies>
         <dependency>
           <groupId>com.oracle</groupId>
-          <artifactId>ojdbc14</artifactId>
-          <version>${oracle10DriverVersion}</version>
+          <artifactId>ojdbc6</artifactId>
+          <version>${oracle11DriverVersion}</version>
           <optional>true</optional>
         </dependency>
       </dependencies>
@@ -1128,8 +1128,8 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
         </dependency>
         <dependency>
           <groupId>com.oracle</groupId>
-          <artifactId>ojdbc14</artifactId>
-          <version>${oracle10DriverVersion}</version>
+          <artifactId>ojdbc6</artifactId>
+          <version>${oracle11DriverVersion}</version>
           <optional>true</optional>
         </dependency>
       </dependencies>
@@ -1157,8 +1157,8 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
         </dependency>
         <dependency>
           <groupId>com.oracle</groupId>
-          <artifactId>ojdbc14</artifactId>
-          <version>${oracle10DriverVersion}</version>
+          <artifactId>ojdbc6</artifactId>
+          <version>${oracle11DriverVersion}</version>
           <optional>true</optional>
         </dependency>
       </dependencies>
@@ -1180,14 +1180,14 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
       </build>
       <dependencies>
         <dependency>
-          <groupId>com.microsoft</groupId>
-          <artifactId>sqljdbc41</artifactId>
+          <groupId>com.microsoft.sqlserver</groupId>
+          <artifactId>mssql-jdbc</artifactId>
           <version>${sqlServer41DriverVersion}</version>
         </dependency>
         <dependency>
           <groupId>com.oracle</groupId>
-          <artifactId>ojdbc14</artifactId>
-          <version>${oracle10DriverVersion}</version>
+          <artifactId>ojdbc6</artifactId>
+          <version>${oracle11DriverVersion}</version>
           <optional>true</optional>
         </dependency>
       </dependencies>
@@ -1211,8 +1211,8 @@ org.apache.tools.ant.util.FileUtils.getFileUtils()Lorg/apache/tools/ant/util/Fil
       <dependencies>
         <dependency>
           <groupId>com.oracle</groupId>
-          <artifactId>ojdbc14</artifactId>
-          <version>${oracle10DriverVersion}</version>
+          <artifactId>ojdbc6</artifactId>
+          <version>${oracle11DriverVersion}</version>
           <optional>true</optional>
         </dependency>
       </dependencies>
