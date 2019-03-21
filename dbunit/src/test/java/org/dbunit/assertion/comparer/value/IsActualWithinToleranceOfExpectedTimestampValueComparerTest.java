@@ -213,4 +213,30 @@ public class IsActualWithinToleranceOfExpectedTimestampValueComparerTest
 
         assertThat("Should have fail phrase.", actual, not(nullValue()));
     }
+
+    @Test
+    public void testStringExpectedTimestampActual() throws DatabaseUnitException
+    {
+        final long lowToleranceValueInMillis = 500;
+        final long highToleranceValueInMillis = 1500;
+        final IsActualWithinToleranceOfExpectedTimestampValueComparer sut =
+                new IsActualWithinToleranceOfExpectedTimestampValueComparer(
+                        lowToleranceValueInMillis, highToleranceValueInMillis);
+
+        final long expectedMillis = 1000;
+        final long actualMillis = expectedMillis + highToleranceValueInMillis;
+
+        final ITable expectedTable = null;
+        final ITable actualTable = null;
+        final int rowNum = 0;
+        final String columnName = null;
+        final DataType dataType = DataType.TIMESTAMP;
+        final Object expectedValue = new Timestamp(expectedMillis).toString();
+        final Object actualValue = new Timestamp(actualMillis);
+
+        final boolean actual = sut.isExpected(expectedTable, actualTable,
+                rowNum, columnName, dataType, expectedValue, actualValue);
+
+        assertThat("Should have been equal.", actual, equalTo(true));
+    }
 }

@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.datatype.DataType;
+import org.dbunit.dataset.datatype.TypeCastException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +73,8 @@ public class IsActualWithinToleranceOfExpectedTimestampValueComparer
             isExpected = isExpectedWithNull(expectedValue, actualValue);
         } else
         {
-            isExpected = isExpectedWithoutNull(expectedValue, actualValue);
+            isExpected =
+                    isExpectedWithoutNull(expectedValue, actualValue, dataType);
         }
 
         return isExpected;
@@ -92,16 +94,37 @@ public class IsActualWithinToleranceOfExpectedTimestampValueComparer
 
     /** Neither is null so compare values with tolerance. */
     protected boolean isExpectedWithoutNull(final Object expectedValue,
-            final Object actualValue)
+            final Object actualValue, final DataType dataType)
+            throws TypeCastException
     {
         assertNotNull("expectedValue is null.", expectedValue);
         assertNotNull("actualValue is null.", actualValue);
 
-        final long actualTime = convertValueToTimeInMillis(actualValue);
-        final long expectedTime = convertValueToTimeInMillis(expectedValue);
+        final Object actualTimestamp = getCastedValue(actualValue, dataType);
+        final long actualTime = convertValueToTimeInMillis(actualTimestamp);
+
+        final Object expectedTimestamp =
+                getCastedValue(expectedValue, dataType);
+        final long expectedTime = convertValueToTimeInMillis(expectedTimestamp);
 
         final long diffTime = calcTimeDifference(actualTime, expectedTime);
         return isTolerant(diffTime);
+    }
+
+    protected Object getCastedValue(final Object value, final DataType type)
+            throws TypeCastException
+    {
+        final Object castedValue;
+
+        if (type == null || type == DataType.UNKNOWN)
+        {
+            castedValue = value;
+        } else
+        {
+            castedValue = type.typeCast(value);
+        }
+
+        return castedValue;
     }
 
     protected boolean isTolerant(final long diffTime)
