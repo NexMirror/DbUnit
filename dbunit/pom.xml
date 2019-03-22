@@ -103,8 +103,8 @@
     <url>http://sourceforge.net/p/dbunit/bugs/</url>
   </issueManagement>
   <ciManagement>
-    <system>jenkins</system>
-    <url>http://dbunit.intertech.com/jenkins/</url>
+    <system>travisci</system>
+    <url>https://travis-ci.com/dbunit/dbunit-mirror</url>
   </ciManagement>
 
   <mailingLists>
