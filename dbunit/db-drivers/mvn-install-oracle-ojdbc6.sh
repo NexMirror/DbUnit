@@ -9,6 +9,6 @@
 FILE=ojdbc6.jar
 GROUP=com.oracle
 ARTIFACT=ojdbc6
-VERSION=11.1.0.7.0
+set VERSION=11.2.0.3
 
 mvn install:install-file -Dfile=$FILE -DgroupId=$GROUP -DartifactId=$ARTIFACT -Dversion=$VERSION -Dpackaging=jar
