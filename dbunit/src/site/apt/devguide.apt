@@ -10,7 +10,7 @@ Developer's Guide
   Here you find all information needed to contribute good code. These are
   naming conventions, heading comments, javadoc and unit tests.
 
-Java file headers
+Java File Headers
 
   For new class files this header is recommended.
 
@@ -73,6 +73,62 @@ Java file headers
 ---
 
 
-Running the DbUnit Tests
+Track Changes with Tickets
 
-  Please refer to {{{/integrationtests.html}Integration Tests}} for setup and running them.
+  If one does not already exist,
+  {{{https://sourceforge.net/p/dbunit/_list/tickets}create a bug or feature ticket for the change}}.
+
+Merge Requests or Patches
+
+  Contribute changes using
+  {{{https://sourceforge.net/p/dbunit/code.git/merge-requests}merge requests}}
+  from your fork (preferred) or patches attached to tickets.
+
+Tests are Critical
+
+  Include tests proving the change fixes the issue or the new feature works.
+  They especially help with understanding and long term quality.
+
+Update Docs
+
+  Update relevant and/or create doc pages for the change and include them in the commit with the code changes.
+
+Update changes.xml
+
+  Add an entry for the change to changes.xml, newest entries at the top.
+  Include a terse summary at the end of description.
+  See existing entries for examples.
+
+  Include this file in the commit with the code changes.
+
+Commit Messages
+
+  Follow git standard good commit message practices.
+  Good references on this include:
+
+  * {{https://chris.beams.io/posts/git-commit/#seven-rules}}
+
+  * {{https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html}}
+
+  * {{https://wiki.openstack.org/wiki/GitCommitMessages}}
+
+  []
+
+  Additionally, prefix the commit topic with F (for feature) or B (for bug) and the tracker id, e.g. Fnnn or Bnnn.
+  See the commit history for examples.
+
+Keep Current with Master
+
+  Rebase on master as needed, especially when ready for review or merge to master.
+
+Run the DbUnit Tests
+
+  Verify the build is clean with your changes and tests by running the dbUnit unit and integration tests.
+  Refer to {{{/integrationtests.html}Integration Tests}} for setup and running them.
+
+Discussions and Questions
+
+  For questions, assistance, or other help,
+  please comment on the tracker item,
+  merge request,
+  or {{{/mail-lists.html}email the dev list}}.
