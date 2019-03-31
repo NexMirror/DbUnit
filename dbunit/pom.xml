@@ -60,6 +60,7 @@
     <releasePluginVersion>2.5.3</releasePluginVersion>
     <resourcesPluginVersion>3.0.2</resourcesPluginVersion>
     <sitePluginVersion>3.7.1</sitePluginVersion>
+    <sourcePluginVersion>3.0.1</sourcePluginVersion>
     <surefirePluginVersion>2.21.0</surefirePluginVersion>
 
     <!-- Framework versions -->
@@ -677,6 +678,20 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>${sourcePluginVersion}</version>
+          <executions>
+            <execution>
+              <id>attach-sources</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>jar-no-fork</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${surefirePluginVersion}</version>
           <configuration>
@@ -742,6 +757,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
