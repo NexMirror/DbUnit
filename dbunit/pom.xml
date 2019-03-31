@@ -803,24 +803,12 @@ enable this to generate coverage report HTML files during build (same as site)
             <reports>
               <report>report-only</report>
             </reports>
-            <configuration>
-              <outputName>surefire-report</outputName>
-              <reportsDirectories>
-                <reportsDirectory>target/surefire-reports</reportsDirectory>
-              </reportsDirectories>
-            </configuration>
           </reportSet>
           <reportSet>
             <id>integration-tests</id>
             <reports>
-              <report>report-only</report>
+              <report>failsafe-report-only</report>
             </reports>
-            <configuration>
-              <outputName>failsafe-report</outputName>
-              <reportsDirectories>
-                <reportsDirectory>target/failsafe-reports</reportsDirectory>
-              </reportsDirectories>
-            </configuration>
           </reportSet>
         </reportSets>
       </plugin>
