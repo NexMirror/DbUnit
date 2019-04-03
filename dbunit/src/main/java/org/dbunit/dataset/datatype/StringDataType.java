@@ -70,7 +70,8 @@ public class StringDataType extends AbstractDataType
 
         if (value instanceof java.sql.Date ||
                 value instanceof java.sql.Time ||
-                value instanceof java.sql.Timestamp)
+                value instanceof java.sql.Timestamp ||
+                value instanceof java.time.temporal.TemporalAccessor)
         {
             return value.toString();
         }

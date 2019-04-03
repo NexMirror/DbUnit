@@ -73,4 +73,12 @@ public class MsSqlDataTypeFactoryTest extends TestCase {
         DataType actual = createFactory().createDataType(sqlType, sqlTypeName);
         assertTrue(actual instanceof UniqueIdentifierType);
     }
+    
+    public void testCreateDateTimeOffsetType() throws Exception {
+        int sqlType = DateTimeOffsetType.TYPE;
+        String sqlTypeName = "datetimeoffset";
+
+        DataType actual = createFactory().createDataType(sqlType, sqlTypeName);
+        assertTrue(actual instanceof DateTimeOffsetType);
+    }
 }

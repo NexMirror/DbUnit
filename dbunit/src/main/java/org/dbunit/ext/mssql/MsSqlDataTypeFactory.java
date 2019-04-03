@@ -48,6 +48,8 @@ public class MsSqlDataTypeFactory extends DefaultDataTypeFactory
      * Database product names supported.
      */
     private static final Collection DATABASE_PRODUCTS = Arrays.asList(new String[] {"mssql", "Microsoft SQL Server"});
+    
+    private static final DateTimeOffsetType DATE_TIME_OFFSET_TYPE = new DateTimeOffsetType();
 
     public static final int NCHAR = -8;
     public static final int NVARCHAR = -9;
@@ -81,6 +83,7 @@ public class MsSqlDataTypeFactory extends DefaultDataTypeFactory
             case NVARCHAR: return DataType.VARCHAR; // nvarchar
             case NTEXT: return DataType.LONGVARCHAR; // ntext
             case NTEXT_MSSQL_2005: return DataType.LONGVARCHAR; // ntext
+            case DateTimeOffsetType.TYPE: return DATE_TIME_OFFSET_TYPE;
             default: return super.createDataType(sqlType, sqlTypeName);
         }
     }
