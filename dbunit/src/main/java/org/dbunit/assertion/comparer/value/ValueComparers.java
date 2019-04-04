@@ -80,6 +80,13 @@ public abstract class ValueComparers
             new IsActualWithinToleranceOfExpectedTimestampValueComparer(
                     ONE_MINUTE_IN_MILLIS, 0);
 
+    /**
+     * @see IsActualContainingExpectedStringValueComparer
+     * @since 2.6.1
+     */
+    public static final ValueComparer isActualContainingExpectedStringValueComparer =
+            new IsActualContainingExpectedStringValueComparer();
+
     /** @see NeverFailsValueComparer */
     public static final ValueComparer neverFails =
             new NeverFailsValueComparer();

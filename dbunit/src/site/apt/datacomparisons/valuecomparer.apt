@@ -25,6 +25,8 @@ ValueComparer Comparison
 
   * less-than
 
+  * contains
+
   * complex multi-column-based
 
   * dynamically choosing the ValueComparer based on criteria
