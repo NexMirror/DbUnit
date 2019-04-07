@@ -95,35 +95,52 @@ Update Docs
 
 Update changes.xml
 
-  Add an entry for the change to changes.xml, newest entries at the top.
-  Include a terse summary at the end of description.
-  See existing entries for examples.
+  changes.xml is how users easily see a release's change highlights.
 
-  Include this file in the commit with the code changes.
+  * Add an entry for the change to changes.xml in the forthcoming release's section.
+  Place new entries <<after>> the existing ones.
 
-Commit Messages
+  * Include a terse summary at the end of description attribute.
 
-  Follow git standard good commit message practices.
-  Good references on this include:
-
-  * {{https://chris.beams.io/posts/git-commit/#seven-rules}}
-
-  * {{https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html}}
-
-  * {{https://wiki.openstack.org/wiki/GitCommitMessages}}
+  * See existing entries for examples.
 
   []
 
-  Additionally, prefix the commit topic with F (for feature) or B (for bug) and the tracker id, e.g. Fnnn or Bnnn.
+  Include this file in the commit with the code changes.
+
+Format Code
+
+  * Follow the existing files' conventions as best possible.
+
+  * If using Eclipse, please import the formatter preference file <<<java-codestyle-formatter.xml>>> located in repository root directory.
+
+  * When a file has more than a small formatting correction with your changes,
+  commit the formatting corrections in a separate commit with message "Reformat only".
+  Mixing formatting corrections with logic changes creates difficult code reviews and historical change reviews.
+
+Commit Messages
+
+  * Follow git standard good commit message practices.
+  Good references on this include:
+
+    * {{https://chris.beams.io/posts/git-commit/#seven-rules}}
+
+    * {{https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html}}
+
+    * {{https://wiki.openstack.org/wiki/GitCommitMessages}}
+
+  * Prefix the commit topic with F (for feature) or B (for bug) and the tracker id, e.g. Fnnn or Bnnn.
   See the commit history for examples.
 
 Keep Current with Master
 
-  Rebase on master as needed, especially when ready for review or merge to master.
+  Rebase on master to keep your branch updated.
+  Always check if needing a rebase just before creating the merge request or asking for review.
 
 Run the DbUnit Tests
 
-  Verify the build is clean with your changes and tests by running the dbUnit unit and integration tests.
+  Verify the build is clean with your changes and tests by running the dbUnit unit and integration tests
+  against all the supported databases.
   Refer to {{{/integrationtests.html}Integration Tests}} for setup and running them.
 
 Discussions and Questions
