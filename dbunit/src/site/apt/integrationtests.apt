@@ -3,6 +3,7 @@ Running DbUnit Integration Tests
   ---
 John Hurst
 Jeff Jensen
+Andrew Landsverk
   ---
 2009-10-13
 
@@ -221,15 +222,13 @@ mvn -e -Phsqldb verify
 *** Docker Start
 
 ---
-docker run --rm --name mysql -p 3306:3306 dbunit/dbunit-it-mysql:1.0.0 /entrypoint.sh mysqld
+docker-compose -f dbunit-docker/docker-compose.yml up -d mysql
 ---
 
 *** DB is Ready When Console Shows
 
 ---
-[Entrypoint] MySQL init process done. Ready for start up.
-
-[Entrypoint] Starting MySQL 5.7.21-1.1.4
+Creating dbunitdocker_mysql_1 [v]
 ---
 
 *** Run Tests
@@ -241,8 +240,7 @@ mvn -e -Pmysql verify
 *** Docker Stop
 
 ---
-press ctrl+c
-docker stop mysql
+docker-compose -f dbunit-docker/docker-compose.yml down
 ---
 
 ** Without Docker
@@ -336,18 +334,13 @@ mvn -Poracle10-ojdbc6 verify
 *** Docker Start
 
 ---
-docker run --rm --name postgres -p 5432:5432 dbunit/dbunit-it-postgres:1.0.0 /docker-entrypoint.sh postgres
+docker-compose -f dbunit-docker/docker-compose.yml up -d postgres
 ---
 
 *** DB is Ready When Console Shows
 
 ---
-PostgreSQL init process complete; ready for start up.
-
-LOG:  database system was shut down at (some date/time)
-LOG:  MultiXact member wraparound protections are now enabled
-LOG:  database system is ready to accept connections
-LOG:  autovacuum launcher started
+Creating dbunitdocker_postgres_1 [v]
 ---
 
 *** Run Tests
@@ -359,8 +352,7 @@ mvn -e -Ppostgresql verify
 *** Docker Stop
 
 ---
-press ctrl+c
-docker stop postgres
+docker-compose -f dbunit-docker/docker-compose.yml down
 ---
 
 ** Without Docker
@@ -398,14 +390,13 @@ mvn -Ppostgresql verify
 *** Docker Start
 
 ---
-docker run --rm --name sqlserver -t -p 1433:1433 dbunit/dbunit-it-sqlserver:1.0.1
+docker-compose -f dbunit-docker/docker-compose.yml up -d mssql
 ---
 
 *** DB is Ready When Console Shows
 
 ---
-(5 rows affected)
-Changed database context to 'dbunit'.
+Creating dbunitdocker_mssql_1 [v]
 ---
 
 *** Run Tests
@@ -417,8 +408,7 @@ mvn -e -Pmssql41 verify
 *** Docker Stop
 
 ---
-press ctrl+c
-docker stop sqlserver
+docker-compose -f dbunit-docker/docker-compose.yml down
 ---
 
 ** Without Docker
