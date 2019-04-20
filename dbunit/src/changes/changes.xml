@@ -13,7 +13,7 @@
   </properties>
 
   <body>
-    <release version="2.6.1-SNAPSHOT" date="TBD" description="DefaultPrepAndExpectedTestCase.makeAdditionalColumnInfo NPE, PostgreSQL driver update, DefaultPrepAndExpectedTestCase.verifyData() sorting, Relative date/time syntax, Travis CI, Fix MSSQL identity column filter, Fix CachedDataSet, IsActualContainingExpectedStringValueComparer, Fix FilteredDataSet case sensitivity, Fix DatabaseDataSet schema normalisation, Fix IsActualWithinToleranceOfExpectedTimestampValueComparer value casting, MSSQL datetimeoffset">
+    <release version="2.6.1-SNAPSHOT" date="TBD" description="DefaultPrepAndExpectedTestCase.makeAdditionalColumnInfo NPE, PostgreSQL driver update, DefaultPrepAndExpectedTestCase.verifyData() sorting, Relative date/time syntax, Travis CI, Fix MSSQL identity column filter, Fix CachedDataSet, IsActualContainingExpectedStringValueComparer, Fix FilteredDataSet case sensitivity, Fix DatabaseDataSet schema normalisation, Fix IsActualWithinToleranceOfExpectedTimestampValueComparer value casting, MSSQL datetimeoffset, Fix nulls from different casing in columns">
       <action dev="jeffjensen" type="fix" issue="417" system="sfbugs">NPE in DefaultPrepAndExpectedTestCase.makeAdditionalColumnInfo when excludeColumns is null</action>
       <action dev="jeffjensen" type="update" issue="221" system="sffeatures" due-to="aklemp">Update PostgreSQL driver version</action>
       <action dev="jeffjensen" type="fix" issue="423" system="sfbugs">DefaultPrepAndExpectedTestCase.verifyData() sorts table columns by Strings</action>
@@ -28,6 +28,7 @@
       <action dev="jeffjensen" type="add" issue="228" system="sffeatures" due-to="rcd">Add support for MSSQL's datetimeoffset data type</action>
       <action dev="jeffjensen" type="add" issue="243" system="sffeatures">DefaultPrepAndExpectedTestCase.runTest(): catch Throwable instead of Exception</action>
       <action dev="quantas" type="add" issue="246" system="sffeatures">Update Oracle Dependency to ojdbc8 from Maven Central</action>
+      <action dev="lorentzforces" type="fix" issue="431" system="sfbugs">Fix null values being inserted when a column is referenced with different casing</action>
     </release>
     <release version="2.6.0" date="Oct 13, 2018" description="ValueComparers, PostgreSQL OID, POI 3.17, Java 8 tests, database integration tests, changes links, devguide.apt created, dbunit.properties, expected and definition tables verifier, JavaDoc gen, JDK 8">
       <action dev="jeffjensen" type="add" issue="208" system="sffeatures">DefaultPrepAndExpectedTestCase, VerifyTableDefinition: support ValueComparer.</action>

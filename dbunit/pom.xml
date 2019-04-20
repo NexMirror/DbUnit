@@ -282,6 +282,13 @@
         <role>SQLServer uniqueidentifier column type</role>
       </roles>
     </contributor>
+    <contributor>
+      <name>Lorentz Aberg</name>
+      <email>lorentzforces@users.sourceforge.net</email>
+      <roles>
+        <role>Java developer</role>
+      </roles>
+    </contributor>
   </contributors>
 
 

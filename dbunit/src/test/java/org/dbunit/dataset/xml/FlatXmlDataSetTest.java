@@ -33,6 +33,7 @@ import org.dbunit.dataset.Column;
 import org.dbunit.dataset.DataSetUtils;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
+import org.dbunit.dataset.ITableIterator;
 import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.testutil.TestUtils;
 
@@ -270,7 +271,38 @@ public class FlatXmlDataSetTest extends AbstractDataSetTest
         assertEquals(1, tables[1].getRowCount());
     }
 
-    
+    public void testCreateDataSetWithVaryingColumnCasingAndColumnSensing() throws Exception
+    {
+        String xmlContent =
+            "<dataset>" +
+                "<CASED_COLUMNS COLUMN0='row 0 col 0' COLUMN1='row 0 col 1' />" +
+                "<CASED_COLUMNS column0='row 1 col 0' COLUMN1='row 1 col 1' />" +
+            "</dataset>";
+
+        FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
+        builder.setDtdMetadata(false);
+        builder.setColumnSensing(true);
+        IDataSet dataSet = builder.build(new StringReader(xmlContent));
+
+        ITableIterator tables = dataSet.iterator();
+
+        // there is only one table in the dataset
+        assertTrue(tables.next());
+        ITable table = tables.getTable();
+        assertFalse(tables.next());
+
+        ITableMetaData tableMetaData = table.getTableMetaData();
+        assertEquals(2, tableMetaData.getColumns().length);
+        assertEquals(2, table.getRowCount());
+
+        // first row has standard values
+        assertEquals("row 0 col 0", table.getValue(0, "COLUMN0"));
+        assertEquals("row 0 col 1", table.getValue(0, "COLUMN1"));
+        // second row should have proper values, no nulls
+        assertEquals("row 1 col 0", table.getValue(1, "COLUMN0"));
+        assertEquals("row 1 col 1", table.getValue(1, "COLUMN1"));
+    }
+
 }
 
 
