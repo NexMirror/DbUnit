@@ -55,7 +55,7 @@ public class UniqueIdentifierType extends AbstractDataType {
         try {
             return value != null && value.length() > 0 ? UUID.fromString(value)
                     : null;
-        } catch (NumberFormatException error) {
+        } catch (IllegalArgumentException error) {
             throw new TypeCastException("Invalid UUID: " + value, error);
         }
     }
