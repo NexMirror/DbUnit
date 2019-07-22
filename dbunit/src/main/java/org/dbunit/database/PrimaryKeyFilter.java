@@ -23,17 +23,8 @@ package org.dbunit.database;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
-import org.apache.commons.collections.map.ListOrderedMap;
 import org.dbunit.database.search.ForeignKeyRelationshipEdge;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
@@ -464,12 +455,12 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
      */
     public static class PkTableMap
     {
-        private final ListOrderedMap pksPerTable;
+        private final LinkedHashMap pksPerTable;
         private final Logger logger = LoggerFactory.getLogger(PkTableMap.class);
 
         public PkTableMap()
         {
-            this.pksPerTable = new ListOrderedMap();
+            this.pksPerTable = new LinkedHashMap();
         }
 
         /**
@@ -477,7 +468,7 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
          * @param allowedPKs
          */
         public PkTableMap(PkTableMap allowedPKs) {
-            this.pksPerTable = new ListOrderedMap(); 
+            this.pksPerTable = new LinkedHashMap();
             Iterator iterator = allowedPKs.pksPerTable.entrySet().iterator();
             while ( iterator.hasNext() ) {
                 Map.Entry entry = (Map.Entry) iterator.next();

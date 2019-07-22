@@ -23,10 +23,10 @@ package org.dbunit.util.search;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.SortedSet;
 
-import org.apache.commons.collections.set.ListOrderedSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.dbunit.util.CollectionsHelper;
@@ -52,7 +52,7 @@ public class DepthFirstSearch implements ISearchAlgorithm {
   protected final Logger logger = LoggerFactory.getLogger(getClass());
   
   // result of the search
-  private ListOrderedSet result;
+  private LinkedHashSet result;
   
   // input of the search
   private Set nodesFrom;
@@ -95,7 +95,7 @@ public class DepthFirstSearch implements ISearchAlgorithm {
    * Alternative option to search() that takes an array of nodes as input (instead of a Set)
    * @see ISearchAlgorithm
    */
-  public ListOrderedSet search(Object[] nodesFrom, ISearchCallback callback)
+  public Set search(Object[] nodesFrom, ISearchCallback callback)
       throws SearchException 
   {
       if(logger.isDebugEnabled())
@@ -107,7 +107,7 @@ public class DepthFirstSearch implements ISearchAlgorithm {
   /**
    * @see ISearchAlgorithm
    */
-  public ListOrderedSet search(Set nodesFrom, ISearchCallback callback)
+  public Set search(Set nodesFrom, ISearchCallback callback)
       throws SearchException {
       if(logger.isDebugEnabled())
           logger.debug("search(nodesFrom={}, callback={}) - start", nodesFrom, callback);
@@ -121,12 +121,12 @@ public class DepthFirstSearch implements ISearchAlgorithm {
 
     // set of tables that will be returned (i.e, the declared tables and its
     // dependencies)
-    this.result = new ListOrderedSet();
+    this.result = new LinkedHashSet();
 
     // callback used to help the search
     this.callback = callback;
         
-    this.nodesFrom = new ListOrderedSet();
+    this.nodesFrom = new LinkedHashSet();
     
     int sizeNodesFromBefore = 0;
     int sizeResultBefore = 0;

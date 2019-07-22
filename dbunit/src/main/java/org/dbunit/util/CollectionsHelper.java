@@ -21,9 +21,10 @@
 
 package org.dbunit.util;
 
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.apache.commons.collections.set.ListOrderedSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,11 +59,7 @@ public class CollectionsHelper {
         if ( objects == null ) {
             return null;
         }
-        Set set = new ListOrderedSet();
-        for (int i = 0; i < objects.length; i++) {
-            set.add(objects[i]);
-        }
-        return set;
+        return new LinkedHashSet(Arrays.asList(objects));
     }
 
     /**

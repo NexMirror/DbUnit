@@ -13,13 +13,14 @@
   </properties>
 
   <body>
-    <release version="2.7.1-SNAPSHOT" date="TBD" description="Apache POI 4.1.0, Maven relativePath warning, UniqueIdentifierType: change caught exception for Java 12, Set some dependencies optional, Remove commons-io dep, ">
+    <release version="2.7.1-SNAPSHOT" date="TBD" description="Apache POI 4.1.0, Maven relativePath warning, UniqueIdentifierType: change caught exception for Java 12, Set some dependencies optional, Remove commons-io, commons-collections deps, ">
       <action dev="jeffjensen" type="update" issue="231" system="sffeatures" due-to="felixknecht">Update Apache POI to version 4.1.0</action>
       <action dev="jeffjensen" type="update" issue="235" system="sffeatures" due-to="viczi">Eliminate the Maven's relativePath warning</action>
       <action dev="jeffjensen" type="update" issue="236" system="sffeatures" due-to="viczi">UniqueIdentifierType: change caught exception for Java 12's changed UUID validation</action>
       <action dev="jeffjensen" type="update" issue="237" system="sffeatures" due-to="viczi">Use optional in poi-ooxml and postgresql Maven dependencies</action>
       <action dev="jeffjensen" type="update" issue="238" system="sffeatures" due-to="viczi">Use optional in junit and hamcrest Maven dependencies</action>
       <action dev="jeffjensen" type="update" issue="239" system="sffeatures" due-to="viczi">Remove commons-io dependency</action>
+      <action dev="jeffjensen" type="update" issue="240" system="sffeatures" due-to="viczi">Remove commons-collections dependency</action>
     </release>
     <release version="2.7.0" date="Feb 23, 2020" description="DefaultPrepAndExpectedTestCase.makeAdditionalColumnInfo NPE, PostgreSQL driver update, DefaultPrepAndExpectedTestCase.verifyData() sorting, Relative date/time syntax, Travis CI, Fix MSSQL identity column filter, Fix CachedDataSet, IsActualContainingExpectedStringValueComparer, Fix FilteredDataSet case sensitivity, Fix DatabaseDataSet schema normalisation, Fix IsActualWithinToleranceOfExpectedTimestampValueComparer value casting, MSSQL datetimeoffset, Fix FlatXml set null value for different column name cases">
       <action dev="jeffjensen" type="fix" issue="417" system="sfbugs">NPE in DefaultPrepAndExpectedTestCase.makeAdditionalColumnInfo when excludeColumns is null</action>

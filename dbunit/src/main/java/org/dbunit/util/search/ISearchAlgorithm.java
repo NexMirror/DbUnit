@@ -23,8 +23,6 @@ package org.dbunit.util.search;
 
 import java.util.Set;
 
-import org.apache.commons.collections.set.ListOrderedSet;
-
 /**
  * Interface representing an algorithm that searches a graph.
  * 
@@ -43,6 +41,6 @@ public interface ISearchAlgorithm {
    * @return all nodes, in the right dependent order (like a LinkedHashSet)
    * @throws Exception exception wrapper
    */
-    ListOrderedSet search(Set nodesFrom, ISearchCallback callback) throws SearchException;
+    Set search(Set nodesFrom, ISearchCallback callback) throws SearchException;
 
 }

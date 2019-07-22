@@ -23,7 +23,6 @@ package org.dbunit.database.search;
 import java.sql.SQLException;
 import java.util.Set;
 
-import org.apache.commons.collections.set.ListOrderedSet;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.PrimaryKeyFilter.PkTableMap;
 import org.dbunit.dataset.DataSetException;
@@ -176,7 +175,7 @@ public class TablesDependencyHelper {
         ITableFilter filter = callback.getFilter();
         DepthFirstSearch search = new DepthFirstSearch();
         String[] tableNames = rootTables.getTableNames(); 
-        ListOrderedSet tmpTables = search.search( tableNames, callback );
+        Set tmpTables = search.search( tableNames, callback );
         String[] dependentTables  = CollectionsHelper.setToStrings( tmpTables );
         IDataSet tmpDataset = connection.createDataSet( dependentTables );
         FilteredDataSet dataset = new FilteredDataSet(filter, tmpDataset);

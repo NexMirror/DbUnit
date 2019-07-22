@@ -22,10 +22,9 @@ package org.dbunit.util;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
-
-import org.apache.commons.collections.set.ListOrderedSet;
 
 import junit.framework.TestCase;
 
@@ -113,7 +112,7 @@ public class CollectionsHelperTest extends TestCase {
   }
 
   public void testSetToObjectsSequencialSet() {
-    Set input = new ListOrderedSet();
+    Set input = new LinkedHashSet();
     input.add( A );
     input.add( C );
     input.add( B );
@@ -160,7 +159,7 @@ public class CollectionsHelperTest extends TestCase {
   }
 
   public void testSetToStringsSequencialSet() {
-    Set input = new ListOrderedSet();
+    Set input = new LinkedHashSet();
     input.add( A );
     input.add( C );
     input.add( B );
