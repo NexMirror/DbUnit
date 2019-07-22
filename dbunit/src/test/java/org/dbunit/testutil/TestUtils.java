@@ -26,7 +26,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
-import org.apache.commons.io.FilenameUtils;
 import org.dbunit.DatabaseEnvironment;
 
 /**
@@ -52,10 +51,8 @@ public class TestUtils
 
     public static File getFileForDatabaseEnvironment(String originalFileName) throws Exception
     {
-        String fullPath = FilenameUtils.getFullPath(originalFileName);
-        String baseName = FilenameUtils.getBaseName(originalFileName);
-        String extension = FilenameUtils.getExtension(originalFileName);
-        File profileFile = new File(fullPath + baseName + "-" + getProfileName() + "." + extension);
+        String profilePath = originalFileName.replace(".", "-" + getProfileName() + ".");
+        File profileFile = new File(profilePath);
         if (profileFile.exists())
         {
             return profileFile;
