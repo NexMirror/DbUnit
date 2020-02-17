@@ -186,7 +186,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
             preTest(verifyTables, prepDataFiles, expectedDataFiles);
             log.info("runTest: running test steps");
             result = testSteps.run();
-        } catch (final Exception e)
+        } catch (final Throwable e)
         {
             log.error(TEST_ERROR_MSG, e);
             // don't verify table data when test execution has errors as:
