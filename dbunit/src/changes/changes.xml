@@ -27,6 +27,7 @@
       <action dev="jeffjensen" type="fix" issue="428" system="sfbugs" due-to="lcann">IsActualWithinToleranceOfExpectedTimestampValueComparer assumes values are represented as Timestamps</action>
       <action dev="jeffjensen" type="add" issue="228" system="sffeatures" due-to="rcd">Add support for MSSQL's datetimeoffset data type</action>
       <action dev="jeffjensen" type="add" issue="243" system="sffeatures">DefaultPrepAndExpectedTestCase.runTest(): catch Throwable instead of Exception</action>
+      <action dev="quantas" type="add" issue="246" system="sffeatures">Update Oracle Dependency to ojdbc8 from Maven Central</action>
     </release>
     <release version="2.6.0" date="Oct 13, 2018" description="ValueComparers, PostgreSQL OID, POI 3.17, Java 8 tests, database integration tests, changes links, devguide.apt created, dbunit.properties, expected and definition tables verifier, JavaDoc gen, JDK 8">
       <action dev="jeffjensen" type="add" issue="208" system="sffeatures">DefaultPrepAndExpectedTestCase, VerifyTableDefinition: support ValueComparer.</action>

@@ -23,7 +23,7 @@ pipeline {
             steps {
                 echo 'Integration Tests...'
                 script {
-                    builds = [ 'derby', 'hsqldb', 'h2', 'mysql', 'postgresql', 'oracle-ojdbc14', 'oracle-ojdbc6', 'oracle10-ojdbc14', 'oracle10-ojdbc6', 'mssql41', 'db2'];
+                    builds = [ 'derby', 'hsqldb', 'h2', 'mysql', 'postgresql', 'oracle-ojdbc8', 'oracle10-ojdbc8', 'mssql41', 'db2'];
                     builds.each {
                         build ->
                             stage('test: integration: ' + build) {
