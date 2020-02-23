@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  * match.
  *
  * @author Jeff Jensen
- * @since 2.6.1
+ * @since 2.7.0
  */
 public class IsActualContainingExpectedStringValueComparer
         extends ValueComparerTemplateBase

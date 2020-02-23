@@ -139,9 +139,9 @@
         </tr>
       </table>
       </subsection>
-      <subsection name="Relative date, time and timestamp" id="relativedatetime">
+      <subsection name="Relative date, time, and timestamp" id="relativedatetime">
       <p>
-        It is possible to push date, time and timestamp that are relative to the current date/time by using the following syntax in a data set field (since 2.6.1):
+        It is possible to push date, time, and timestamp values relative to the current date/time by using the following syntax in a data set field (since 2.7.0):
       </p>
       <source>... field_name="[now{diff...}{time}]"</source>
       <p>

@@ -34,7 +34,7 @@ import org.dbunit.dataset.datatype.TypeCastException;
 
 /**
  * @author Richard DiCroce
- * @since 2.6.1
+ * @since 2.7.0
  */
 public class DateTimeOffsetType extends AbstractDataType
 {

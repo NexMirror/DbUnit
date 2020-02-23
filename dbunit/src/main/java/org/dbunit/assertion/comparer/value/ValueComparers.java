@@ -82,7 +82,7 @@ public abstract class ValueComparers
 
     /**
      * @see IsActualContainingExpectedStringValueComparer
-     * @since 2.6.1
+     * @since 2.7.0
      */
     public static final ValueComparer isActualContainingExpectedStringValueComparer =
             new IsActualContainingExpectedStringValueComparer();
