@@ -1,11 +1,11 @@
  ----
-Building DbUnit
+Developers Guide
  ----
 Felipe Leme
  ----
 2006-12-23
 
-Developer's Guide
+Developers Guide
 
   Here you find all information needed to contribute good code. These are
   naming conventions, heading comments, javadoc and unit tests.

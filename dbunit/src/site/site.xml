@@ -100,9 +100,11 @@
     </menu>
 
     <menu name="Developing DbUnit">
-      <item name="Building DbUnit"   href="/building.html"/>
-      <item name="Developers Guide"  href="/devguide.html"/>
-      <item name="Integration Tests" href="/integrationtests.html"/>
+      <item name="Building"             href="/building.html"/>
+      <item name="Contributing"         href="/contributing.html"/>
+      <item name="Developers Guide"     href="/devguide.html"/>
+      <item name="Integration Tests"    href="/integrationtests.html"/>
+      <item name="Releasing"            href="/releasing.html"/>
     </menu>
 
     <menu ref="parent"/>

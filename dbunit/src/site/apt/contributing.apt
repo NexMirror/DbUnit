@@ -1,0 +1,26 @@
+ ----
+ Contributing
+ ----
+
+How to Contribute
+
+  Notes on contributing changes to dbUnit.
+  Also, please refer to
+  {{{/devguide.html}Developers Guide}}
+
+  [[1]] Base your work off of master head.
+
+  [[2]] The easier you make it for dbUnit committers to apply your changes,
+        the more likely they will apply your changes.
+        
+  [[3]] For problems, your changes should include tests proving the problem exists
+        and proving your changes fix it.
+
+  [[4]] For new features, your changes should include tests proving the feature
+        works.  Your tests should prove future changes do not break your feature.
+
+  [[5]] Run Maven using the profiled for each database under test, e.g. <<<mvn -Pderby clean install>>>.
+        The default active profile is hsqldb.
+
+  [[6]] Once you finish your modifications, create a merge request or 
+        create a patch and attach to the bug or feature request SourceForge tracker item.
