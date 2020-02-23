@@ -302,13 +302,4 @@ public class FlatXmlDataSetTest extends AbstractDataSetTest
         assertEquals("row 1 col 0", table.getValue(1, "COLUMN0"));
         assertEquals("row 1 col 1", table.getValue(1, "COLUMN1"));
     }
-
 }
-
-
-
-
-
-
-
-

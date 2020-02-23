@@ -452,7 +452,8 @@ public class FlatXmlProducer extends DefaultHandler implements IDataSetProducer,
             }
 
             // Row notification
-            if (attributes.getLength() > 0)
+            int attributesLength = attributes.getLength();
+            if (attributesLength > 0)
             {
                 // If we do not have a DTD
             	if (_dtdHandler == null || !_dtdHandler.isDtdPresent())
@@ -464,26 +465,12 @@ public class FlatXmlProducer extends DefaultHandler implements IDataSetProducer,
 
             	_lineNumber++;
             	_lineNumberGlobal++;
-                Object[] rowValues = new Object[activeMetaData.getColumns().length];
-                for (int i = 0; i < attributes.getLength(); i++)
+                Column[] columns = activeMetaData.getColumns();
+                Object[] rowValues = new Object[columns.length];
+                for (int i = 0; i < attributesLength; i++)
                 {
-                    String attributeQName = attributes.getQName(i);
-                    String attributeValue = attributes.getValue(i);
-                    try
-                    {
-                        int colIndex = activeMetaData.getColumnIndex(attributeQName);
-                        rowValues[colIndex] = attributeValue;
-                    }
-                    catch (NoSuchColumnException e)
-                    {
-                        // since missing columns have already been handled above, we will only need
-                        // to care about NoSuchColumnExceptions if something's gone wrong and we're
-                        // looking for a nonexistant column that should have been sensed
-                        if (_columnSensing)
-                        {
-                            throw e;
-                        }
-                    }
+                    determineAndSetRowValue(attributes, activeMetaData,
+                            rowValues, i);
                 }
                 _consumer.row(rowValues);
             }
@@ -491,6 +478,29 @@ public class FlatXmlProducer extends DefaultHandler implements IDataSetProducer,
         catch (DataSetException e)
         {
             throw new SAXException(e);
+        }
+    }
+
+    protected void determineAndSetRowValue(Attributes attributes,
+            ITableMetaData activeMetaData, Object[] rowValues, int i)
+            throws DataSetException, NoSuchColumnException
+    {
+        String attributeQName = attributes.getQName(i);
+        String attributeValue = attributes.getValue(i);
+        try
+        {
+            int colIndex = activeMetaData.getColumnIndex(attributeQName);
+            rowValues[colIndex] = attributeValue;
+        }
+        catch (NoSuchColumnException e)
+        {
+            // since missing columns have already been handled above, we will only need
+            // to care about NoSuchColumnExceptions if something's gone wrong and we're
+            // looking for a nonexistant column that should have been sensed
+            if (_columnSensing)
+            {
+                throw e;
+            }
         }
     }
 
