@@ -13,10 +13,8 @@
   </properties>
 
   <body>
-<!--
     <release version="2.7.1-SNAPSHOT" date="TBD" description="">
     </release>
--->
     <release version="2.7.0" date="Feb 23, 2020" description="DefaultPrepAndExpectedTestCase.makeAdditionalColumnInfo NPE, PostgreSQL driver update, DefaultPrepAndExpectedTestCase.verifyData() sorting, Relative date/time syntax, Travis CI, Fix MSSQL identity column filter, Fix CachedDataSet, IsActualContainingExpectedStringValueComparer, Fix FilteredDataSet case sensitivity, Fix DatabaseDataSet schema normalisation, Fix IsActualWithinToleranceOfExpectedTimestampValueComparer value casting, MSSQL datetimeoffset, Fix FlatXml set null value for different column name cases">
       <action dev="jeffjensen" type="fix" issue="417" system="sfbugs">NPE in DefaultPrepAndExpectedTestCase.makeAdditionalColumnInfo when excludeColumns is null</action>
       <action dev="jeffjensen" type="update" issue="221" system="sffeatures" due-to="aklemp">Update PostgreSQL driver version</action>
