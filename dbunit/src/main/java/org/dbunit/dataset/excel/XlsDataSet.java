@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.dbunit.dataset.AbstractDataSet;
@@ -77,7 +77,7 @@ public class XlsDataSet extends AbstractDataSet
         Workbook workbook;
         try {
             workbook = WorkbookFactory.create(in);
-        } catch (InvalidFormatException e) {
+        } catch (EncryptedDocumentException e) {
             throw new IOException(e);
         }
 		

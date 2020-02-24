@@ -30,6 +30,7 @@ import java.util.TimeZone;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -145,10 +146,10 @@ class XlsTable extends AbstractTable
             return null;
         }
 
-        int type = cell.getCellType();
+        CellType type = cell.getCellType();
         switch (type)
         {
-            case Cell.CELL_TYPE_NUMERIC:
+            case NUMERIC:
                 CellStyle style = cell.getCellStyle();
                 if (DateUtil.isCellDateFormatted(cell))
                 {
@@ -164,20 +165,20 @@ class XlsTable extends AbstractTable
                     return getNumericValue(cell);
                 }
 
-            case Cell.CELL_TYPE_STRING:
+            case STRING:
                 return cell.getRichStringCellValue().getString();
 
-            case Cell.CELL_TYPE_FORMULA:
+            case FORMULA:
                 throw new DataTypeException("Formula not supported at row=" +
                         row + ", column=" + column);
 
-            case Cell.CELL_TYPE_BLANK:
+            case BLANK:
                 return null;
 
-            case Cell.CELL_TYPE_BOOLEAN:
+            case BOOLEAN:
                 return cell.getBooleanCellValue() ? Boolean.TRUE : Boolean.FALSE;
 
-            case Cell.CELL_TYPE_ERROR:
+            case ERROR:
                 throw new DataTypeException("Error at row=" + row +
                         ", column=" + column);
 
