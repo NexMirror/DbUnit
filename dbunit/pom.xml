@@ -56,6 +56,7 @@
     <jdependPluginVersion>2.0</jdependPluginVersion>
     <javadocPluginVersion>3.0.0</javadocPluginVersion>
     <jxrPluginVersion>2.5</jxrPluginVersion>
+    <modernizer-maven-plugin>2.0.0</modernizer-maven-plugin>
     <pmdPluginVersion>3.8</pmdPluginVersion>
     <projectInfoReportsPluginVersion>2.9</projectInfoReportsPluginVersion>
     <propertiesPluginVersion>1.0.0</propertiesPluginVersion>
@@ -639,6 +640,25 @@ enable this to generate coverage report HTML files during build (same as site)
           <version>${jxrPluginVersion}</version>
         </plugin>
         <plugin>
+          <groupId>org.gaul</groupId>
+          <artifactId>modernizer-maven-plugin</artifactId>
+          <version>${modernizer-maven-plugin}</version>
+          <configuration>
+            <javaVersion>${compileSource}</javaVersion>
+            <!-- TODO enable failOnViolations after fixing failures-->
+            <failOnViolations>false</failOnViolations>
+          </configuration>
+          <executions>
+            <execution>
+              <id>modernizer</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>modernizer</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-pmd-plugin</artifactId>
           <version>${pmdPluginVersion}</version>
@@ -764,6 +784,10 @@ enable this to generate coverage report HTML files during build (same as site)
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.gaul</groupId>
+        <artifactId>modernizer-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
