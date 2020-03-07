@@ -17,7 +17,7 @@
       <p>While feature flags are always boolean, property values are arbitrary objects.
          Note that starting with dbunit 2.4.6 features can also be set using the setProperty method.</p>
         <p>The following sample displays the <code>batched statement</code> feature status:
-      <source><![CDATA[  String id = "http://www.dbunit.org/features/batchedStatements"; 
+      <source><![CDATA[  String id = DatabaseConfig.FEATURE_BATCHED_STATEMENTS; 
   DatabaseConfig config = connection.getConfig(); 
   if (config.getFeature(id)) 
   { 
@@ -29,8 +29,16 @@
   } 
 ]]></source></p>
 
-      <br /><br />
+      <br />
     </section>
+
+  <section name="Constants">
+    <p>
+      Each Feature Flag ID and Property ID has a corresponding constant on
+      <a href="apidocs/org/dbunit/database/DatabaseConfig.html">DatabaseConfig</a>.
+    </p>
+    <br />
+  </section>
 
     <section name="Feature Flags">
       <subsection name="Batched Statements" id="batchstatement">
