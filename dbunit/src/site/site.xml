@@ -102,7 +102,6 @@
 
     <menu name="Developing DbUnit">
       <item name="Building"             href="/building.html"/>
-      <item name="Contributing"         href="/contributing.html"/>
       <item name="Developers Guide"     href="/devguide.html"/>
       <item name="Integration Tests"    href="/integrationtests.html"/>
       <item name="Releasing"            href="/releasing.html"/>

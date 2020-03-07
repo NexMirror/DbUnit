@@ -80,6 +80,9 @@ Track Changes with Tickets
 
 Merge Requests or Patches
 
+  The easier you make it for dbUnit committers to apply changes,
+  the more likely they will apply the changes.
+
   Contribute changes using
   {{{https://sourceforge.net/p/dbunit/code.git/merge-requests}merge requests}}
   from your fork (preferred) or patches attached to tickets.
@@ -87,7 +90,8 @@ Merge Requests or Patches
 Tests are Critical
 
   Include tests proving the change fixes the issue or the new feature works.
-  They especially help with understanding and long term quality.
+  They especially help with understanding and long term quality,
+  proving future changes do not break the feature.
 
 Update Docs
 
