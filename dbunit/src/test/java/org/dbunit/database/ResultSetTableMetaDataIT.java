@@ -78,7 +78,7 @@ public class ResultSetTableMetaDataIT extends AbstractDatabaseIT
     public void testMetadataCoherence() throws Exception 
     {
         Connection jdbcConnection = HypersonicEnvironment.createJdbcConnection("tempdb");
-        HypersonicEnvironment.executeDdlFile(TestUtils.getFile("sql/hypersonic_dataset_metadata_coherence.sql"), jdbcConnection);
+        DdlExecutor.executeDdlFile(TestUtils.getFile("sql/hypersonic_dataset_metadata_coherence.sql"), jdbcConnection);
         IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
 
         try {
