@@ -129,8 +129,13 @@ public class DatabaseEnvironment
             final DatabaseProfile profile =
                     new DatabaseProfile(getProperties());
 
-            final String profileName = profile.getActiveProfile();
-            if (profileName == null || profileName.equals("hsqldb"))
+            final String activeProfile = profile.getActiveProfile();
+            final String profileName =
+                    (activeProfile == null) ? "hsqldb" : activeProfile;
+
+            logger.info("getInstance: activeProfile={}", profileName);
+
+            if (profileName.equals("hsqldb"))
             {
                 INSTANCE = new HypersonicEnvironment(profile);
             } else if (profileName.equals("oracle"))
@@ -156,6 +161,8 @@ public class DatabaseEnvironment
                 INSTANCE = new MsSqlEnvironment(profile);
             } else
             {
+                logger.warn("getInstance: activeProfile={} not known,"
+                        + " using generic profile", profileName);
                 INSTANCE = new DatabaseEnvironment(profile);
             }
         }
