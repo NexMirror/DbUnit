@@ -101,25 +101,31 @@ docker-compose down
 
 *** Starting One Database
 
- If desired, start only one database using the following commands:
+ If desired, start only one database by also specifying the name, as in the following table.
 
-*---------------*-----------------------------------------------------------------------------------*---------------------------*---------------------------------------*
-|<<Database>>   |<<Start Command>>                                                                  |<<Stop Command>>           |<<DB Ready Messages>>                  |
-*---------------*-----------------------------------------------------------------------------------*---------------------------*---------------------------------------*
-|DB2            |TODO                                                                               |                           |                                       |
-*---------------*-----------------------------------------------------------------------------------*---------------------------*---------------------------------------*
-|MySQL          |docker-compose up -d mysql                                                         |docker-compose down        |Creating dbunitdocker_mysql_1 [v]      |
-*---------------*-----------------------------------------------------------------------------------*---------------------------*---------------------------------------*
-|Oracle 11g     |docker run --rm --name oracle11g -t -p 1521:1521 dbunit/dbunit-it-oracle11g:1.0.1  |Press ctrl+c         \     |User altered. \                        |
-|               |                                                                                   |docker stop oracle11g      |              \                        |
-|               |                                                                                   |                           |SQL> Disconnected from Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production   |
-*---------------*-----------------------------------------------------------------------------------*---------------------------*---------------------------------------*
-|PostgreSQL     |docker-compose up -d postgres                                                      |docker-compose down        |Creating dbunitdocker_postgres_1 [v]   |
-*---------------*-----------------------------------------------------------------------------------*---------------------------*---------------------------------------*
-|SQLServer      |docker-compose up -d mssql                                                         |docker-compose down        |Creating dbunitdocker_mssql_1 [v]      |
-*---------------*-----------------------------------------------------------------------------------*---------------------------*---------------------------------------*
+*---------------*-----------------------------------*---------------------------------------*
+|<<Database>>   |<<Start Command>>                  |<<DB Ready Messages>>                  |
+*---------------*-----------------------------------*---------------------------------------*
+|DB2            |TODO                               |                                       |
+*---------------*-----------------------------------*---------------------------------------*
+|MySQL          |docker-compose up -d mysql         |Creating dbunitdocker_mysql_1 [v]      |
+*---------------*-----------------------------------*---------------------------------------*
+|Oracle 11g     |docker-compose up -d oracle11      |User altered. \                        |
+|               |                                   |              \                        |
+|               |                                   |SQL> Disconnected from Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production   |
+*---------------*-----------------------------------*---------------------------------------*
+|PostgreSQL     |docker-compose up -d postgres      |Creating dbunitdocker_postgres_1 [v]   |
+*---------------*-----------------------------------*---------------------------------------*
+|SQLServer      |docker-compose up -d mssql         |Creating dbunitdocker_mssql_1 [v]      |
+*---------------*-----------------------------------*---------------------------------------*
 Docker Database Start Commands
 
+
+ Stopping them is the same as with starting all:
+
+---
+docker-compose down
+---
 
 * Using Databases Directly
 
@@ -289,26 +295,28 @@ mvn -Pit-config,derby verify
 
 ** Maven Commands
 
-*---------------*-------------------------------------------*
-|<<Database>>   |<<Maven Command>>                          |
-*---------------*-------------------------------------------*
-|Apache Derby   |mvn -e -Pit-config,derby verify            |
-*---------------*-------------------------------------------*
-|DB2            |TODO                                       |
-*---------------*-------------------------------------------*
-|H2             |mvn -e -Pit-config,h2 verify               |
-*---------------*-------------------------------------------*
-|HSQLDB         |mvn -e -Pit-config,hsqldb verify           |
-*---------------*-------------------------------------------*
-|MySQL          |mvn -e -Pit-config,mysql verify            |
-*---------------*-------------------------------------------*
-|Oracle         |mvn -e -Pit-config,oracle-ojdbc8 verify  \ |
-|               |mvn -e -Pit-config,oracle10-ojdbc8 verify  |
-*---------------*-------------------------------------------*
-|PostgreSQL     |mvn -e -Pit-config,postgresql verify       |
-*---------------*-------------------------------------------*
-|SQLServer      |mvn -e -Pit-config,mssql41 verify          |
-*---------------*-------------------------------------------*
+*---------------*-----------------------------------------------*
+|<<Database>>   |<<Maven Command>>                              |
+*---------------*-----------------------------------------------*
+|Apache Derby   |mvn -e -Pit-config,derby verify                |
+*---------------*-----------------------------------------------*
+|DB2            |mvn -e -Pit-config,db2 verify                  |
+*---------------*-----------------------------------------------*
+|H2             |mvn -e -Pit-config,h2 verify                   |
+*---------------*-----------------------------------------------*
+|HSQLDB         |mvn -e -Pit-config,hsqldb verify               |
+*---------------*-----------------------------------------------*
+|MySQL          |mvn -e -Pit-config,mysql verify                |
+*---------------*-----------------------------------------------*
+|Oracle         |mvn -e -Pit-config,oracle-ojdbc8 verify      \ |
+|               |mvn -e -Pit-config,oracle10-ojdbc8 verify    \ |
+|               |mvn -e -Pit-config,oracle10-ojdbc8v12 verify \ |
+|               |mvn -e -Pit-config,oracle-ojdbc6 verify        |
+*---------------*-----------------------------------------------*
+|PostgreSQL     |mvn -e -Pit-config,postgresql verify           |
+*---------------*-----------------------------------------------*
+|SQLServer      |mvn -e -Pit-config,mssql41 verify              |
+*---------------*-----------------------------------------------*
 
 * Running Integration Tests with IDEs
 
