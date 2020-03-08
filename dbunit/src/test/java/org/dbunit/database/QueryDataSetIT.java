@@ -161,7 +161,7 @@ public class QueryDataSetIT extends AbstractDataSetTest
     {
 
         QueryDataSet ptds = new QueryDataSet(_connection);
-        ptds.addTable("PK_TABLE", "SELECT PK0 FROM PK_TABLE");
+        ptds.addTable("PK_TABLE", "SELECT PK0 FROM PK_TABLE ORDER BY PK0");
 
         ITable table = ptds.getTable("PK_TABLE");
         assertEquals("", "0", table.getValue(0, "PK0").toString());
