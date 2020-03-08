@@ -29,8 +29,8 @@ jobs:
       script: mvn -f dbunit/pom.xml -B -e -Pit-config,mssql41 verify
       before_install:
         - docker-compose -f dbunit-docker/docker-compose.yml up -d mssql
-# Oracle Commented out - there are broken unit tests at present
-#    - name: "Oracle 11"
-#      script: mvn -f dbunit/pom.xml -B -e -Pit-config,oracle-ojdbc8 verify
-#      before_install:
-#        - docker-compose -f dbunit-docker/docker-compose.yml up -d oracle11
+    - name: "Oracle 11"
+      script: mvn -f dbunit/pom.xml -B -e -Pit-config,oracle-ojdbc8 verify
+      before_install:
+        - docker-compose -f dbunit-docker/docker-compose.yml up -d oracle11
+        - sleep 1m
