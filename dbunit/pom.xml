@@ -85,6 +85,8 @@
     <h2DriverVersion>1.1.118</h2DriverVersion>
     <hsqldbDriverVersion>1.8.0.1</hsqldbDriverVersion>
     <mysqlDriverVersion>5.1.6</mysqlDriverVersion>
+    <!-- Oracle JDBC Driver compatible with JDK6, JDK7, and JDK8 -->
+    <oracleJ6DriverVersion>11.2.0.4</oracleJ6DriverVersion>
     <!-- Oracle JDBC Driver compatible with JDK8 -->
     <oracleJ8v12DriverVersion>12.2.0.1</oracleJ8v12DriverVersion>
     <!-- Oracle JDBC Driver compatible with JDK8, JDK9,JDK10,and JDK11 -->
@@ -1313,6 +1315,37 @@ enable this to generate coverage report HTML files during build (same as site)
       </dependencies>
     </profile>
     <profile>
+      <!-- "original" OracleDataTypeFactory (NOT 10g) with Oracle 11 JDBC driver for Java 6-8 -->
+      <id>oracle-ojdbc6</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <configuration>
+              <urls>
+                <url>file:///${basedir}/src/test/resources/oracle6-dbunit.properties</url>
+              </urls>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+        <dependency>
+          <groupId>com.oracle.database.jdbc</groupId>
+          <artifactId>ojdbc6</artifactId>
+          <version>${oracleJ6DriverVersion}</version>
+          <optional>true</optional>
+        </dependency>
+        <dependency>
+          <groupId>com.oracle.database.xml</groupId>
+          <artifactId>xdb</artifactId>
+          <version>${oracleXdbVersion}</version>
+          <optional>true</optional>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
       <!-- "original" OracleDataTypeFactory (NOT 10g) with Oracle 11 JDBC driver for Java 8 -->
       <id>oracle-ojdbc8</id>
       <build>
@@ -1364,6 +1397,68 @@ enable this to generate coverage report HTML files during build (same as site)
           <groupId>com.oracle.database.jdbc</groupId>
           <artifactId>ojdbc8</artifactId>
           <version>${oracleJ8v19DriverVersion}</version>
+          <optional>true</optional>
+        </dependency>
+        <dependency>
+          <groupId>com.oracle.database.xml</groupId>
+          <artifactId>xdb</artifactId>
+          <version>${oracleXdbVersion}</version>
+          <optional>true</optional>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <!-- "newer" Oracle10DataTypeFactory with older Oracle 11 JDBC driver for Java 8 -->
+      <id>oracle10-ojdbc8v12</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <configuration>
+              <urls>
+                <url>file:///${basedir}/src/test/resources/oracle10-dbunit.properties</url>
+              </urls>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+        <dependency>
+          <groupId>com.oracle.database.jdbc</groupId>
+          <artifactId>ojdbc8</artifactId>
+          <version>${oracleJ8v12DriverVersion}</version>
+          <optional>true</optional>
+        </dependency>
+        <dependency>
+          <groupId>com.oracle.database.xml</groupId>
+          <artifactId>xdb</artifactId>
+          <version>${oracleXdbVersion}</version>
+          <optional>true</optional>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <!-- "newer" Oracle10DataTypeFactory with current Oracle 11 JDBC driver for Java 10 -->
+      <id>oracle10-ojdbc10</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <configuration>
+              <urls>
+                <url>file:///${basedir}/src/test/resources/oracle10-dbunit.properties</url>
+              </urls>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+        <dependency>
+          <groupId>com.oracle.database.jdbc</groupId>
+          <artifactId>ojdbc10</artifactId>
+          <version>${oracleJ10v19DriverVersion}</version>
           <optional>true</optional>
         </dependency>
         <dependency>
