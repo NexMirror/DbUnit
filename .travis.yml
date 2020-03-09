@@ -29,7 +29,7 @@ jobs:
       script: mvn -f dbunit/pom.xml -B -e -Pit-config,mssql41 verify
       before_install:
         - docker-compose -f dbunit-docker/docker-compose.yml up -d mssql
-    - name: "Oracle 11"
+    - name: "Oracle 11 JDK 8 Driver"
       script: mvn -f dbunit/pom.xml -B -e -Pit-config,oracle-ojdbc8 verify
       before_install:
         - docker-compose -f dbunit-docker/docker-compose.yml up -d oracle11
