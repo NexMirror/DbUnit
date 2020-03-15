@@ -43,6 +43,7 @@
     <links>
       <item name="JUnit" href="http://www.junit.org/index.htm"/>
       <item name="DBUnit" href="http://dbunit.sourceforge.net/"/>
+      <item name="" href="https://travis-ci.com/dbunit" img="https://travis-ci.com/dbunit/dbunit-mirror.svg?branch=master"/>
     </links>
 
     <menu name="Quick Links">
