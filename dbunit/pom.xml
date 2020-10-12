@@ -72,7 +72,7 @@
     <gsbaseVersion>2.0.1</gsbaseVersion>
     <hamcrestVersion>1.3</hamcrestVersion>
     <junitAddonsVersion>1.4</junitAddonsVersion>
-    <junitVersion>4.12</junitVersion>
+    <junitVersion>4.13.1</junitVersion>
     <logbackVersion>1.2.3</logbackVersion>
     <mmmockobjectsVersion>1.12.0</mmmockobjectsVersion>
     <mockObjectsVersion>0.09</mockObjectsVersion>
