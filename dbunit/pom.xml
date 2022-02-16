@@ -96,7 +96,7 @@
     <!-- Oracle JDBC Driver compatible with JDK10 and JDK11 -->
     <oracleJ10v19DriverVersion>19.3.0.0</oracleJ10v19DriverVersion>
     <oracleXdbVersion>19.3.0.0</oracleXdbVersion>
-    <postgresqlDriverVersion>42.2.5</postgresqlDriverVersion>
+    <postgresqlDriverVersion>42.3.3</postgresqlDriverVersion>
     <sqlServer41DriverVersion>7.2.1.jre8</sqlServer41DriverVersion>
 
     <!-- Other versions -->
